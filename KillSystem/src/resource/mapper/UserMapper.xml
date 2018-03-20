@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.KillSystem.DAO.mapper.UserMapper">
+	
+    <select id="login" resultType="com.KillSystem.domain.User">
+        SELECT tel_num, username, passwd, register_date FROM user WHERE tel_num = #{tel_num} AND passwd = #{passwd}
+    </select>
+    
+    <insert id="insert" useGeneratedKeys="true">
+   		INSERT INTO user VALUES(#{tel_num},#{username},#{passwd},CURDATE())
+   		<selectKey resultType="java.lang.String" order="AFTER" keyProperty="tel_num">
+			SELECT LAST_INSERT_ID() AS tel_num
+   		</selectKey>
+	</insert>
+    
+    <select id="select" resultType="java.util.HashMap">
+        SELECT tel_num, username, passwd, register_date FROM user
+    </select>
+    
+     
+</mapper>

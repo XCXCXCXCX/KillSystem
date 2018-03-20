@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.KillSystem.DAO.mapper.GoodsMapper">
+	
+    <select id="select" resultType="java.util.HashMap">
+        SELECT goods_id,goods_name,goods_price,goods_stock,begin_time,end_time FROM goods
+        <if test="goods_name != null or goods_price != null or begin_time != null">     
+        <where>
+        	<if test="goods_name != null and goods_name != ''">
+        	<bind name="pattern" value="'%' + goods_name + '%'" />
+        		goods_name LIKE #{pattern}
+        	</if>
+        	<if test="goods_price != null and goods_price != ''">
+        		AND goods_price <![CDATA[
+					<=
+				]]> #{goods_price}
+        	</if> 
+        	<if test="begin_time != null and begin_time != ''">
+        		AND begin_time <![CDATA[
+					<=
+				]]> #{begin_time}
+        	</if>
+        </where>
+        </if>
+        order by begin_time desc
+    </select>
+    
+    <select id="selectById" parameterType="com.KillSystem.domain.Goods" resultType="java.util.HashMap">
+        SELECT goods_id,goods_name,goods_price,goods_stock,begin_time,end_time FROM goods
+        order by goods_id
+    </select>
+     
+     <select id="getGoodsById" resultType="com.KillSystem.domain.Goods">
+     	SELECT goods_id,goods_name,goods_price,goods_stock,begin_time,end_time,goods_info FROM goods
+     		WHERE goods_id = #{goods_id}
+     </select>
+     
+    <insert id="insert" parameterType="com.KillSystem.domain.Goods" useGeneratedKeys="true" keyProperty="goods_id">
+
+		INSERT INTO goods(goods_name,goods_price,goods_stock,begin_time,end_time) 
+			VALUES (#{goods_name},#{goods_price},#{goods_stock},#{begin_time},#{end_time})
+
+	</insert>
+     
+    <delete id="delete" parameterType="com.KillSystem.domain.Goods">  
+        DELETE FROM goods WHERE goods_id = #{goods_id}  
+    </delete>
+    
+    <update id="update"  parameterType="com.KillSystem.domain.Goods">  
+        UPDATE goods
+        <trim prefix="set" suffixOverrides=","> 
+        	<if test="goods_name != null and goods_name != ''">
+            goods_name = #{goods_name},
+            </if>
+            <if test="goods_price != null and goods_price !=''">
+            goods_price = #{goods_price},
+        	</if>
+        	<if test="goods_stock != null and goods_stock != ''">
+            goods_stock = #{goods_stock},
+        	</if>
+        	<if test="begin_time != null and begin_time != ''">
+            begin_time = #{begin_time},
+        	</if>
+        	<if test="end_time != null and end_time != ''">
+            end_time = #{end_time},
+        	</if>
+        	<if test="goods_info != null and goods_info != ''">
+            goods_info = #{goods_info},
+        	</if>
+        </trim>  
+        WHERE goods_id = #{goods_id}     
+	</update>
+     
+</mapper>
