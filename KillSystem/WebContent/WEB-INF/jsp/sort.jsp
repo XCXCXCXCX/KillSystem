@@ -15,8 +15,8 @@
 .box{width:400px;margin:450px auto;}
 </style>
 
-<link rel="stylesheet" href="http://lzy1158840657.vicp.net/layui/css/layui.css" media="all">
-<script src="http://lzy1158840657.vicp.net/layui/layui.js" charset="utf-8"></script>
+<link rel="stylesheet" href="http://localhost/layui/css/layui.css" media="all">
+<script src="http://localhost/layui/layui.js" charset="utf-8"></script>
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -75,10 +75,10 @@ $(function(){
 
 	<ul class="layui-nav">
 		<li class="layui-nav-item">
-			<a href="http://lzy1158840657.vicp.net/KillSystem/sort.do">控制台<span class="layui-badge">9</span></a>
+			<a href="http://localhost/KillSystem/sort.do">控制台<span class="layui-badge">9</span></a>
 		</li>
 		<li class="layui-nav-item">
-			<a href="http://lzy1158840657.vicp.net/KillSystem/sort.do">去抢购<span class="layui-badge-dot"></span></a>
+			<a href="http://localhost/KillSystem/sort.do">去抢购<span class="layui-badge-dot"></span></a>
 		</li>
 		<li class="layui-nav-item">
 			<a id="username" href="javascript:;"><img src="http://t.cn/RCzsdCq" class="layui-nav-img"><%=session.getAttribute("username")%></a>
@@ -89,7 +89,7 @@ $(function(){
 		</li>
 	</ul> 
 
- 	<form action="http://lzy1158840657.vicp.net/KillSystem/sort.do" method="post">
+ 	<form action="http://localhost/KillSystem/sort.do" method="post">
         商品名:<input type="text" name="goods_name" value="${goods_name}" />
         价格低于(请输入数字):<input type="text" name="goods_price" value="${goods_price}" />
         活动时间早于(格式为yy-MM-dd HH:mm:ss 可省略时分秒):<input type="text" name="begin_time" value="${begin_time}" />

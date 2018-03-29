@@ -10,7 +10,7 @@ public interface GoodsMapper {
 	int delete(Goods goods);
 	int update(Goods goods);
 	List<Map<String, Goods>> select(Goods goods);
-	Map<String,Goods> selectById(Goods goods);
+	List<Map<String, Goods>> selectById(Goods goods);
 	Goods getGoodsById(Goods goods);
 	int updateGoodsStock(int goods_id);
 	int updateGoodsStockback(int goods_id);

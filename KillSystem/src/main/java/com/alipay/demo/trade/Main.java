@@ -25,6 +25,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.PropertyConfigurator;
 
 import java.util.*;
 
@@ -61,7 +62,7 @@ public class Main {
 
         /** 如果需要在程序中覆盖Configs提供的默认参数, 可以使用ClientBuilder类的setXXX方法修改默认参数 否则使用代码中的默认设置 */
         monitorService = new AlipayMonitorServiceImpl.ClientBuilder()
-            .setGatewayUrl("https://openapi.alipaydev.com/gateway.do").setCharset("GBK")
+            .setGatewayUrl("https://openapi.alipaydev.com/gateway.do").setCharset("UTF-8")
             .setFormat("json").build();
     }
 
@@ -79,7 +80,9 @@ public class Main {
 
     public static void main(String[] args) {
         Main main = new Main();
-
+       
+        //PropertyConfigurator.configure("log4j.properties");
+        
         // 系统商商测试交易保障接口api
         //        main.test_monitor_sys();
 

@@ -1,6 +1,7 @@
 package com.KillSystem.util;
 
 import org.apache.commons.net.ftp.FTPClient;
+import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +30,7 @@ public class FTPUtil {
     public static boolean uploadFile(List<File> fileList) throws IOException {
         FTPUtil ftpUtil = new FTPUtil(ftpIp,21,ftpUser,ftpPass);
         logger.info("开始连接ftp服务器");
-        boolean result = ftpUtil.uploadFile("img",fileList);
+        boolean result = ftpUtil.uploadFile("FTP",fileList);
         logger.info("开始连接ftp服务器,结束上传,上传结果:{}");
         return result;
     }
@@ -60,6 +61,7 @@ public class FTPUtil {
                 ftpClient.disconnect();
             }
         }
+        System.out.println(uploaded+fileList.get(0).getPath());
         return uploaded;
     }
 
@@ -72,12 +74,12 @@ public class FTPUtil {
         try {
             ftpClient.connect(ip);
             isSuccess = ftpClient.login(user,pwd);
+            System.out.println(isSuccess);
         } catch (IOException e) {
             logger.error("连接FTP服务器异常",e);
         }
         return isSuccess;
     }
-
 
 
 

@@ -18,11 +18,11 @@ width:500px; /* 给个宽度 顶到浏览器的两边就看不出居中效果了
 text-align:center; /* 文字等内容居中 */ 
 } 
 </style>
-<link rel="stylesheet" href="http://lzy1158840657.vicp.net/layui/css/layui.css" media="all">
-<link rel="stylesheet" type="text/css" href="http://lzy1158840657.vicp.net/css2/style.css">
-<link rel="stylesheet" type="text/css" href="http://lzy1158840657.vicp.net/css2/css.css">
-<script type="text/javascript" src="http://lzy1158840657.vicp.net/js/jquery-1.7.2.min.js"></script>
-<script src="http://lzy1158840657.vicp.net/layui/layui.js" charset="utf-8"></script>
+<link rel="stylesheet" href="http://localhost/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="http://localhost/css2/style.css">
+<link rel="stylesheet" type="text/css" href="http://localhost/css2/css.css">
+<script type="text/javascript" src="http://localhost/js/jquery-1.7.2.min.js"></script>
+<script src="http://localhost/layui/layui.js" charset="utf-8"></script>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 		<title>我的收货地址</title>
@@ -155,7 +155,7 @@ text-align:center; /* 文字等内容居中 */
 				})
 				$('.Caddress .add_mi').click(function() {
 					alert(selectedAddressId);
-					$(this).css('background', 'url("http://lzy1158840657.vicp.net/images/mail_1.jpg") no-repeat').siblings('.add_mi').css('background', 'url("http://lzy1158840657.vicp.net/images/mail.jpg") no-repeat');
+					$(this).css('background', 'url("http://localhost/images/mail_1.jpg") no-repeat').siblings('.add_mi').css('background', 'url("http://localhost/images/mail.jpg") no-repeat');
 				})
 			})
 			var x = Array();
@@ -225,10 +225,10 @@ text-align:center; /* 文字等内容居中 */
 		
 	<ul class="layui-nav">
 		<li class="layui-nav-item">
-			<a href="http://lzy1158840657.vicp.net/KillSystem/sort.do">控制台<span class="layui-badge">9</span></a>
+			<a href="http://localhost/KillSystem/sort.do">控制台<span class="layui-badge">9</span></a>
 		</li>
 		<li class="layui-nav-item">
-			<a href="http://lzy1158840657.vicp.net/KillSystem/sort.do">去抢购<span class="layui-badge-dot"></span></a>
+			<a href="http://localhost/KillSystem/sort.do">去抢购<span class="layui-badge-dot"></span></a>
 		</li>
 		<li class="layui-nav-item">
 			<a id="username" href="javascript:;"><img src="http://t.cn/RCzsdCq" class="layui-nav-img"><%=session.getAttribute("username")%></a>

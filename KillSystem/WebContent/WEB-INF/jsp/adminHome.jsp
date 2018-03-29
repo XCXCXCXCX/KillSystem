@@ -7,23 +7,23 @@
     <head>
         <title>Admin Home Page</title>
         <!-- Bootstrap -->
-        <link href="http://lzy1158840657.vicp.net/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
-        <link href="http://lzy1158840657.vicp.net/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
-        <link href="http://lzy1158840657.vicp.net/vendors/easypiechart/jquery.easy-pie-chart.css" rel="stylesheet" media="screen">
-        <link href="http://lzy1158840657.vicp.net/assets/styles.css" rel="stylesheet" media="screen">
+        <link href="http://localhost/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link href="http://localhost/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
+        <link href="http://localhost/vendors/easypiechart/jquery.easy-pie-chart.css" rel="stylesheet" media="screen">
+        <link href="http://localhost/assets/styles.css" rel="stylesheet" media="screen">
         
 
-    	<link media="all" rel="stylesheet" type="text/css" href="http://lzy1158840657.vicp.net/assets/styles/app.css" />
-    	<link media="all" rel="stylesheet" type="text/css" href="http://lzy1158840657.vicp.net/assets/styles/simditor.css" />
+    	<link media="all" rel="stylesheet" type="text/css" href="http://localhost/assets/styles/app.css" />
+    	<link media="all" rel="stylesheet" type="text/css" href="http://localhost/assets/styles/simditor.css" />
 
-    	<script type="text/javascript" src="http://lzy1158840657.vicp.net/assets/scripts/jquery.min.js"></script>
-    	<script type="text/javascript" src="http://lzy1158840657.vicp.net/assets/scripts/mobilecheck.js"></script>
+    	<script type="text/javascript" src="http://localhost/assets/scripts/jquery.min.js"></script>
+    	<script type="text/javascript" src="http://localhost/assets/scripts/mobilecheck.js"></script>
         
         <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
         <!--[if lt IE 9]>
             <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
-        <script src="http://lzy1158840657.vicp.net/vendors/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+        <script src="http://localhost/vendors/modernizr-2.6.2-respond-1.1.0.min.js"></script>
         <script>
         window.onload=function(){
         	var delHandler = function(counter) {
@@ -34,11 +34,11 @@
                   			alert("goodsid为空");
                   			return;
                   		}
-                  		$.post("/KillSystem/adminDelete.do", { goods_id: goods_id },  
+                  		$.post("/KillSystem/admin/adminDelete.do", { goods_id: goods_id },  
                   	            function (response) {  
                   					alert(response.msg);
                   	                if (response.status == "0") {  
-                  						window.location.href="/KillSystem/toAdminHome.do";
+                  						window.location.href="/KillSystem/admin/toAdminHome.do";
                   	                }
                   	            }, 'json');  
               		}
@@ -76,7 +76,7 @@
         	    pasteImage: true,
         	    defaultImage: '/simditor/images/image.png',
         		upload: {
-                url: '/KillSystem/upload.do',
+                url: '/KillSystem/admin/upload.do',
                 params: null,
                 fileKey: "upload_file",
                 connectionCount: 1,
@@ -87,7 +87,7 @@
         		var goods_id = $("#inputGoodsId").val();
         		$("#inputGoodsId").val(goods_id);
         		$("#whichGoods").val(goods_id);
-        		$.post("/KillSystem/addGoodsInfo.do", { goods_id: goods_id, goods_info: editor.getValue() },  
+        		$.post("/KillSystem/admin/addGoodsInfo.do", { goods_id: goods_id, goods_info: editor.getValue() },  
         	            function (response) {  
         					alert(response.msg);
         					editor.setValue('');
@@ -290,7 +290,7 @@
 						                  <td><a id="info9" href="#">detailed</a></td>
 						                </tr>
 						                </c:if>
-						                <form action="http://lzy1158840657.vicp.net/KillSystem/adminUpdateOrInsert.do" method="post">
+						                <form action="http://localhost/KillSystem/admin/adminUpdateOrInsert.do" method="post">
 						                <tr>
 						                  <td><input id="inputGoodsId" style="width:40px;" type="text" name="goods_id" /></td>
 						                  <td><input id="inputGoodsName" style="width:60px;" type="text" name="goods_name" /></td>
@@ -357,11 +357,11 @@ hahaha
 
 
 
-<script type="text/javascript" src="http://lzy1158840657.vicp.net/assets/scripts/module.js"></script>
-<script type="text/javascript" src="http://lzy1158840657.vicp.net/assets/scripts/uploader.js"></script>
-<script type="text/javascript" src="http://lzy1158840657.vicp.net/assets/scripts/hotkeys.js"></script>
-<script type="text/javascript" src="http://lzy1158840657.vicp.net/assets/scripts/simditor.js"></script>
-<script type="text/javascript" src="http://lzy1158840657.vicp.net/assets/scripts/page-demo.js"></script>
+<script type="text/javascript" src="http://localhost/assets/scripts/module.js"></script>
+<script type="text/javascript" src="http://localhost/assets/scripts/uploader.js"></script>
+<script type="text/javascript" src="http://localhost/assets/scripts/hotkeys.js"></script>
+<script type="text/javascript" src="http://localhost/assets/scripts/simditor.js"></script>
+<script type="text/javascript" src="http://localhost/assets/scripts/page-demo.js"></script>
             
             
             <footer>
@@ -369,10 +369,10 @@ hahaha
             </footer>
         </div>
         <!--/.fluid-container-->
-        <script src="http://lzy1158840657.vicp.net/vendors/jquery-1.9.1.min.js"></script>
-        <script src="http://lzy1158840657.vicp.net/bootstrap/js/bootstrap.min.js"></script>
-        <script src="http://lzy1158840657.vicp.net/vendors/easypiechart/jquery.easy-pie-chart.js"></script>
-        <script src="http://lzy1158840657.vicp.net/assets/scripts.js"></script>
+        <script src="http://localhost/vendors/jquery-1.9.1.min.js"></script>
+        <script src="http://localhost/bootstrap/js/bootstrap.min.js"></script>
+        <script src="http://localhost/vendors/easypiechart/jquery.easy-pie-chart.js"></script>
+        <script src="http://localhost/assets/scripts.js"></script>
     </body>
 
 </html>

@@ -58,10 +58,10 @@ $(function(){
 
 	<ul class="layui-nav">
 		<li class="layui-nav-item">
-			<a href="http://lzy1158840657.vicp.net/KillSystem/sort.do">控制台<span class="layui-badge">9</span></a>
+			<a href="http://localhost/KillSystem/sort.do">控制台<span class="layui-badge">9</span></a>
 		</li>
 		<li class="layui-nav-item">
-			<a href="http://lzy1158840657.vicp.net/KillSystem/sort.do">去抢购<span class="layui-badge-dot"></span></a>
+			<a href="http://localhost/KillSystem/sort.do">去抢购<span class="layui-badge-dot"></span></a>
 		</li>
 		<li class="layui-nav-item">
 			<a id="username" href="javascript:;"><img src="http://t.cn/RCzsdCq" class="layui-nav-img"><%=session.getAttribute("username")%></a>

@@ -7,23 +7,23 @@
     <head>
         <title>Admin Order Page</title>
         <!-- Bootstrap -->
-        <link href="http://lzy1158840657.vicp.net/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
-        <link href="http://lzy1158840657.vicp.net/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
-        <link href="http://lzy1158840657.vicp.net/vendors/easypiechart/jquery.easy-pie-chart.css" rel="stylesheet" media="screen">
-        <link href="http://lzy1158840657.vicp.net/assets/styles.css" rel="stylesheet" media="screen">
+        <link href="http://localhost/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link href="http://localhost/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
+        <link href="http://localhost/vendors/easypiechart/jquery.easy-pie-chart.css" rel="stylesheet" media="screen">
+        <link href="http://localhost/assets/styles.css" rel="stylesheet" media="screen">
         
 
-    	<link media="all" rel="stylesheet" type="text/css" href="http://lzy1158840657.vicp.net/assets/styles/app.css" />
-    	<link media="all" rel="stylesheet" type="text/css" href="http://lzy1158840657.vicp.net/assets/styles/simditor.css" />
+    	<link media="all" rel="stylesheet" type="text/css" href="http://localhost/assets/styles/app.css" />
+    	<link media="all" rel="stylesheet" type="text/css" href="http://localhost/assets/styles/simditor.css" />
 
-    	<script type="text/javascript" src="http://lzy1158840657.vicp.net/assets/scripts/jquery.min.js"></script>
-    	<script type="text/javascript" src="http://lzy1158840657.vicp.net/assets/scripts/mobilecheck.js"></script>
+    	<script type="text/javascript" src="http://localhost/assets/scripts/jquery.min.js"></script>
+    	<script type="text/javascript" src="http://localhost/assets/scripts/mobilecheck.js"></script>
         
         <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
         <!--[if lt IE 9]>
             <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
-        <script src="http://lzy1158840657.vicp.net/vendors/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+        <script src="http://localhost/vendors/modernizr-2.6.2-respond-1.1.0.min.js"></script>
         <script>
         window.onload=function(){
         	var delHandler = function(counter) {
@@ -35,11 +35,11 @@
                   			alert("order_id为空");
                   			return;
                   		}
-                  		$.post("/KillSystem/orderDelete.do", { order_id: order_id },  
+                  		$.post("/KillSystem/admin/orderDelete.do", { order_id: order_id },  
                   	            function (response) {  
                   					alert(response.msg);
                   	                if (response.status == "0") {  
-                  						window.location.href="/KillSystem/toAdminOrder.do";
+                  						window.location.href="/KillSystem/admin/toAdminOrder.do";
                   	                }
                   	            }, 'json');  
               		}
@@ -65,11 +65,11 @@
         			var order_id = $("#order" + counter + "id").text();
         			var is_success = $("#is" + counter + "success").text();
             		$("#inputOrderId").val(order_id);
-            		$.post("/KillSystem/orderUpdateOrderState.do", { order_id: order_id, is_success: is_success },  
+            		$.post("/KillSystem/admin/orderUpdateOrderState.do", { order_id: order_id, is_success: is_success },  
               	            function (response) {  
               					alert(response.msg);
               	                if (response.status == "0") {  
-              						window.location.href="/KillSystem/toAdminOrder.do";
+              						window.location.href="/KillSystem/admin/toAdminOrder.do";
               	                }
               	            }, 'json'); 
       		  };
@@ -83,11 +83,11 @@
         		var order_id = $("#inputOrderId").val();
         		var tel_num = $("#inputTelNum").val();
         		var address = $("#inputAddress").val();
-        		$.post("/KillSystem/orderUpdate.do", {order_id: order_id, tel_num: tel_num, address: address },  
+        		$.post("/KillSystem/admin/orderUpdate.do", {order_id: order_id, tel_num: tel_num, address: address },  
           	            function (response) {  
           					alert(response.msg);
           	                if (response.status == "0") {  
-          						window.location.href="/KillSystem/toAdminOrder.do";
+          						window.location.href="/KillSystem/admin/toAdminOrder.do";
           	                }
           	            }, 'json'); 
         	});
@@ -97,7 +97,7 @@
         		var goods_id = $("#inputGoodsId").val();
         		var create_time = $("#inputCreateTime").val();
         		var is_success = $("#inputIsSuccess").val();
-        		var url = "/KillSystem/toAdminOrder.do?";
+        		var url = "/KillSystem/admin/toAdminOrder.do?";
         		if (order_id != null && order_id != ""){
         			url = url + "order_id=" + order_id + "&";
         		}
@@ -357,11 +357,11 @@
 
 
 
-<script type="text/javascript" src="http://lzy1158840657.vicp.net/assets/scripts/module.js"></script>
-<script type="text/javascript" src="http://lzy1158840657.vicp.net/assets/scripts/uploader.js"></script>
-<script type="text/javascript" src="http://lzy1158840657.vicp.net/assets/scripts/hotkeys.js"></script>
-<script type="text/javascript" src="http://lzy1158840657.vicp.net/assets/scripts/simditor.js"></script>
-<script type="text/javascript" src="http://lzy1158840657.vicp.net/assets/scripts/page-demo.js"></script>
+<script type="text/javascript" src="http://localhost/assets/scripts/module.js"></script>
+<script type="text/javascript" src="http://localhost/assets/scripts/uploader.js"></script>
+<script type="text/javascript" src="http://localhost/assets/scripts/hotkeys.js"></script>
+<script type="text/javascript" src="http://localhost/assets/scripts/simditor.js"></script>
+<script type="text/javascript" src="http://localhost/assets/scripts/page-demo.js"></script>
             
             
             <footer>
@@ -369,10 +369,10 @@
             </footer>
         </div>
         <!--/.fluid-container-->
-        <script src="http://lzy1158840657.vicp.net/vendors/jquery-1.9.1.min.js"></script>
-        <script src="http://lzy1158840657.vicp.net/bootstrap/js/bootstrap.min.js"></script>
-        <script src="http://lzy1158840657.vicp.net/vendors/easypiechart/jquery.easy-pie-chart.js"></script>
-        <script src="http://lzy1158840657.vicp.net/assets/scripts.js"></script>
+        <script src="http://localhost/vendors/jquery-1.9.1.min.js"></script>
+        <script src="http://localhost/bootstrap/js/bootstrap.min.js"></script>
+        <script src="http://localhost/vendors/easypiechart/jquery.easy-pie-chart.js"></script>
+        <script src="http://localhost/assets/scripts.js"></script>
     </body>
 
 </html>

@@ -8,6 +8,6 @@ import com.github.pagehelper.PageInfo;
 
 public interface GoodsService extends BaseService<Goods>{
 	PageInfo<Map<String, Goods>> select(Goods goods,int pageNum,int pageSize);
-	Map<String,Goods> selectById(Goods goods);
+	PageInfo<Map<String, Goods>> selectById(Goods goods,int pageNum,int pageSize);
 	Goods getGoodsById(Goods goods);
 }

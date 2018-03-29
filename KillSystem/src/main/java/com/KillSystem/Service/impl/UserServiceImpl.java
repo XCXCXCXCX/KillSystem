@@ -44,5 +44,26 @@ public class UserServiceImpl implements UserService{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public User checkAdminRole(String username, String passwd) {
+		// TODO Auto-generated method stub
+		if("admin".equals(username)&&"admin".equals(passwd)) {
+			User user = new User();
+			user.setUsername(username);
+			user.setPasswd(passwd);
+			return user;
+		}
+		return null;
+	}
+
+	@Override
+	public int register(User user) {
+		// TODO Auto-generated method stub
+		if(userDaoImpl.selectByTel_num(user)==null&&userDaoImpl.insert(user)==1) {
+			return 1;
+		}
+		return 0;
+	}
 	
 }

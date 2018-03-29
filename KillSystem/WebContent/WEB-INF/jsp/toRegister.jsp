@@ -7,6 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-<meta http-equiv="refresh" content="0;url=http://lzy1158840657.vicp.net/sign-up.html"> 
+<meta http-equiv="refresh" content="0;url=http://localhost/sign-up.html"> 
 </body>
 </html>

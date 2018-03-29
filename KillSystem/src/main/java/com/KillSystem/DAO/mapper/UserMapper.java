@@ -9,5 +9,6 @@ import com.KillSystem.domain.User;
 public interface UserMapper {
 	User login(User user);
 	int insert(User user);
-	List<Map<String,Goods>> select(User user);
+	List<Map<String, User>> select(User user);
+	User selectByTel_num(User user);
 }

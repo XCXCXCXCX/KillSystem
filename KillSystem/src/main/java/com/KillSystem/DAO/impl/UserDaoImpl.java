@@ -32,7 +32,7 @@ public class UserDaoImpl implements UserDao{
 		return 0;
 	}
 
-	public List<Map<String, Goods>> select(User user) {
+	public List<Map<String, User>> select(User user) {
 		// TODO Auto-generated method stub
 		return userMapper.select(user);
 	}
@@ -40,6 +40,11 @@ public class UserDaoImpl implements UserDao{
 	public User login(User user) {
 		// TODO Auto-generated method stub
 		return userMapper.login(user);
+	}
+
+	public User selectByTel_num(User user) {
+		// TODO Auto-generated method stub
+		return userMapper.selectByTel_num(user);
 	}
 	
 }

@@ -7,6 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-<meta http-equiv="refresh" content="0;url=http://lzy1158840657.vicp.net"> 
+<meta http-equiv="refresh" content="0;url=http://localhost"> 
 </body>
 </html>

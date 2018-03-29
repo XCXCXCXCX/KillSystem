@@ -8,6 +8,9 @@ import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+
 /**
  * Redis distributed lock implementation.
  *
@@ -17,7 +20,7 @@ public class RedisLock {
 
     private static Logger logger = LoggerFactory.getLogger(RedisLock.class);
 
-    private RedisTemplate redisTemplate;
+    private Jedis jedis;
 
     private static final int DEFAULT_ACQUIRY_RESOLUTION_MILLIS = 100;
 
@@ -43,8 +46,7 @@ public class RedisLock {
      *
      * @param lockKey lock key (ex. account:1, ...)
      */
-    public RedisLock(RedisTemplate redisTemplate, String lockKey) {
-        this.redisTemplate = redisTemplate;
+    public RedisLock(String lockKey) {
         this.lockKey = lockKey + "_lock";
     }
 
@@ -52,8 +54,8 @@ public class RedisLock {
      * Detailed constructor with default lock expiration of 60000 msecs.
      *
      */
-    public RedisLock(RedisTemplate redisTemplate, String lockKey, int timeoutMsecs) {
-        this(redisTemplate, lockKey);
+    public RedisLock(String lockKey, int timeoutMsecs) {
+        this(lockKey);
         this.timeoutMsecs = timeoutMsecs;
     }
 
@@ -61,8 +63,8 @@ public class RedisLock {
      * Detailed constructor.
      *
      */
-    public RedisLock(RedisTemplate redisTemplate, String lockKey, int timeoutMsecs, int expireMsecs) {
-        this(redisTemplate, lockKey, timeoutMsecs);
+    public RedisLock(String lockKey, int timeoutMsecs, int expireMsecs) {
+        this(lockKey, timeoutMsecs);
         this.expireMsecs = expireMsecs;
     }
 
@@ -74,60 +76,76 @@ public class RedisLock {
     }
 
     private String get(final String key) {
-        Object obj = null;
+    	String obj = null;
         try {
-            obj = redisTemplate.execute(new RedisCallback<Object>() {
-                @Override
-                public Object doInRedis(RedisConnection connection) throws DataAccessException {
-                    StringRedisSerializer serializer = new StringRedisSerializer();
-                    byte[] data = connection.get(serializer.serialize(key));
-                    connection.close();
-                    if (data == null) {
-                        return null;
-                    }
-                    return serializer.deserialize(data);
-                }
-            });
+        	jedis = JedisUtil.getConn();
+        	obj = jedis.get(key);
+//            obj = redisTemplate.execute(new RedisCallback<Object>() {
+//                @Override
+//                public Object doInRedis(RedisConnection connection) throws DataAccessException {
+//                    StringRedisSerializer serializer = new StringRedisSerializer();
+//                    byte[] data = connection.get(serializer.serialize(key));
+//                    connection.close();
+//                    if (data == null) {
+//                        return null;
+//                    }
+//                    return serializer.deserialize(data);
+//                }
+//            });
         } catch (Exception e) {
+        	jedis.close();
             logger.error("get redis error, key : {}", key);
+        } finally {
+        	jedis.close();
         }
-        return obj != null ? obj.toString() : null;
+        return obj != null ? obj : null;
     }
 
     private boolean setNX(final String key, final String value) {
-        Object obj = null;
-        try {
-            obj = redisTemplate.execute(new RedisCallback<Object>() {
-                @Override
-                public Object doInRedis(RedisConnection connection) throws DataAccessException {
-                    StringRedisSerializer serializer = new StringRedisSerializer();
-                    Boolean success = connection.setNX(serializer.serialize(key), serializer.serialize(value));
-                    connection.close();
-                    return success;
-                }
-            });
+    	long obj = 0;
+    	try {
+    		jedis = JedisUtil.getConn();
+        	obj = jedis.setnx(key, value);
+//            obj = redisTemplate.execute(new RedisCallback<Object>() {
+//                @Override
+//                public Object doInRedis(RedisConnection connection) throws DataAccessException {
+//                    StringRedisSerializer serializer = new StringRedisSerializer();
+//                    Boolean success = connection.setNX(serializer.serialize(key), serializer.serialize(value));
+//                    connection.close();
+//                    return success;
+//                }
+//            });
         } catch (Exception e) {
+        	jedis.close();
             logger.error("setNX redis error, key : {}", key);
+        }finally {
+        	jedis.close();
         }
-        return obj != null ? (Boolean) obj : false;
+        return obj == 1 ? true : false;
     }
 
     private String getSet(final String key, final String value) {
-        Object obj = null;
+        String obj = null;
         try {
-            obj = redisTemplate.execute(new RedisCallback<Object>() {
-                @Override
-                public Object doInRedis(RedisConnection connection) throws DataAccessException {
-                    StringRedisSerializer serializer = new StringRedisSerializer();
-                    byte[] ret = connection.getSet(serializer.serialize(key), serializer.serialize(value));
-                    connection.close();
-                    return serializer.deserialize(ret);
-                }
-            });
+        	jedis = JedisUtil.getConn();
+        	obj = jedis.getSet(key, value);
+//            obj = redisTemplate.execute(new RedisCallback<Object>() {
+//                @Override
+//                public Object doInRedis(RedisConnection connection) throws DataAccessException {
+//                    StringRedisSerializer serializer = new StringRedisSerializer();
+//                    byte[] ret = connection.getSet(serializer.serialize(key), serializer.serialize(value));
+//                    connection.close();
+//                    return serializer.deserialize(ret);
+//                }
+//            });
         } catch (Exception e) {
+        	jedis.close();
             logger.error("setNX redis error, key : {}", key);
+        }finally {
+        	jedis.close();
         }
-        return obj != null ? (String) obj : null;
+        
+        return obj != null ? obj : null;
     }
 
     /**
@@ -188,7 +206,9 @@ public class RedisLock {
      */
     public synchronized void unlock() {
         if (locked) {
-            redisTemplate.delete(lockKey);
+        	jedis = JedisUtil.getConn();
+            jedis.del(lockKey);
+            jedis.close();
             locked = false;
         }
     }

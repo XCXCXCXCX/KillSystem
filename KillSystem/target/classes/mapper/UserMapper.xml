@@ -17,5 +17,9 @@
         SELECT tel_num, username, passwd, register_date FROM user
     </select>
     
+    <select id="selectByTel_num" resultType="com.KillSystem.domain.User">
+        SELECT tel_num, username, passwd, register_date FROM user WHERE tel_num = #{tel_num}
+    </select>
+    
      
 </mapper>

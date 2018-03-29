@@ -11,7 +11,7 @@
 	http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
 	http://www.springframework.org/schema/aop 
 	http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
-
+	
 <!-- 对象资源池初始化配置  -->  
 <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">  
     <property name="maxTotal" value="1000"/>  
@@ -34,15 +34,19 @@
     <constructor-arg  index="4"  value="xc1996" type="java.lang.String" /> 
 </bean>  
 
+<!-- 
 <bean id="connectionFactory"  
     	class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"  
     	p:host-name="localhost" p:port="6379" p:password="xc1996"  
     	p:pool-config-ref="jedisPoolConfig" /> 
-     
+-->
+<!-- 
 	<bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">  
     	<property name="connectionFactory" ref="connectionFactory" />  
+ -->
     	<!-- 如果不配置Serializer，那么存储的时候智能使用String，如果用User类型存储，那么会提示错误User can't cast   
         	to String！！！ -->  
+<!--     	
     	<property name="keySerializer">  
     	    <bean  
     	        class="org.springframework.data.redis.serializer.StringRedisSerializer" />  
@@ -51,6 +55,6 @@
     	    <bean  
     	        class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" />  
     	</property>  
-</bean> 
-
+	</bean> 
+ -->
 </beans>

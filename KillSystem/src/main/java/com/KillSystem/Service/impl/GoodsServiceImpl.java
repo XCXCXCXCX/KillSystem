@@ -44,14 +44,23 @@ public class GoodsServiceImpl implements GoodsService{
 	
 	public PageInfo<Map<String, Goods>> select(Goods goods,int pageNum,int pageSize){
 		PageHelper.startPage(pageNum, pageSize);
-		List<Map<String, Goods>> goodsMap = (List<Map<String, Goods>>) select(goods);
+		List<Map<String, Goods>> goodsMap = select(goods);
 	    PageInfo<Map<String, Goods>> p=new PageInfo<Map<String, Goods>>(goodsMap);
 	    return p;
 	}
 
-	public Map<String, Goods> selectById(Goods goods) {
+	public List<Map<String, Goods>> selectById(Goods goods) {
 		// TODO Auto-generated method stub
 		return goodsDaoImpl.selectById(goods);
+	}
+	
+	@Override
+	public PageInfo<Map<String, Goods>> selectById(Goods goods, int pageNum, int pageSize) {
+		// TODO Auto-generated method stub
+		PageHelper.startPage(pageNum, pageSize);
+		List<Map<String, Goods>> goodsMap = selectById(goods);
+	    PageInfo<Map<String, Goods>> p=new PageInfo<Map<String, Goods>>(goodsMap);
+	    return p;
 	}
 
 	public Goods getGoodsById(Goods goods) {
