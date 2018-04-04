@@ -34,7 +34,6 @@ $(function(){
 		var goodsname = $("#goodsname").text();
 		var goodsstock = $("#goodsstock").text();
 		var goodsprice = $("#goodsprice").text();
-		alert(goodsname+","+goodsstock+","+goodsprice);
 		window.location.href="getShippingAddress.do?goods_id="+goodsid+"&goods_name="+goodsname+"&goods_stock="+goodsstock+"&goods_price="+goodsprice;
 	})
 	

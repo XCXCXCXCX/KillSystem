@@ -3,7 +3,7 @@
 <mapper namespace="com.KillSystem.DAO.mapper.OrderMapper">
      
     <insert id="createOrder" useGeneratedKeys="true">
-   		INSERT INTO goods_order VALUES(#{order_id},#{tel_num},#{address},#{goods_id},NOW(),#{is_success})
+   		INSERT INTO goods_order VALUES(#{order_id},#{tel_num},#{address},#{goods_id},NOW(),1)
 	</insert>
      
     <select id="select" resultType="java.util.HashMap">

@@ -3,6 +3,8 @@ package com.KillSystem.DAO.mapper;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.KillSystem.domain.Goods;
 
 public interface GoodsMapper {
@@ -12,6 +14,6 @@ public interface GoodsMapper {
 	List<Map<String, Goods>> select(Goods goods);
 	List<Map<String, Goods>> selectById(Goods goods);
 	Goods getGoodsById(Goods goods);
-	int updateGoodsStock(int goods_id);
-	int updateGoodsStockback(int goods_id);
+	int updateGoodsStock(Goods goods);
+	int updateGoodsStockback(Goods goods);
 }

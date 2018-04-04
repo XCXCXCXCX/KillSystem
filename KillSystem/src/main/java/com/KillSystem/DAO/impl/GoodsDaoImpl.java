@@ -10,9 +10,11 @@ import com.KillSystem.DAO.GoodsDao;
 import com.KillSystem.DAO.mapper.GoodsMapper;
 import com.KillSystem.domain.Goods;
 import com.KillSystem.domain.Order;
+import com.KillSystem.util.JedisPoolManager;
 import com.KillSystem.util.JedisUtil;
 
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 @Repository
 public class GoodsDaoImpl implements GoodsDao {
@@ -21,7 +23,7 @@ public class GoodsDaoImpl implements GoodsDao {
 	private GoodsMapper goodsMapper;
 
 	private Jedis jedis;
-	
+
 	@Override
 	public int insert(Goods goods) {
 		// TODO Auto-generated method stub
@@ -53,46 +55,68 @@ public class GoodsDaoImpl implements GoodsDao {
 		return goodsMapper.getGoodsById(goods);
 	}
 
-	public int updateGoodsStock(int goods_id) {
-		return goodsMapper.updateGoodsStock(goods_id);
+	public int updateGoodsStock(Goods goods) {
+		return goodsMapper.updateGoodsStock(goods);
 	}
 
-	public int updateGoodsStockBack(int goods_id) {
+	public int updateGoodsStockBack(Goods goods) {
 		// TODO Auto-generated method stub
-		return goodsMapper.updateGoodsStockback(goods_id);
+		return goodsMapper.updateGoodsStockback(goods);
 	}
 
-	// todo setGoodsStock
-	public long setGoodsStock(Order order) {
-		long obj = 0;
+	public long createPayInRedis(Order order) {
 		try {
 			jedis = JedisUtil.getConn();
-			obj = jedis.decr(String.valueOf(order.getGoods_id()));
-			if(obj == -1) {
-				jedis.incr(String.valueOf(order.getGoods_id()));
-				return -1;
-			}
+			return jedis.setnx(order.getOrder_id()+"_pay", "0");
 		} finally {
-			jedis.close();
+			
+			if(jedis == null) {
+				jedis.close();
+			}else {
+				JedisUtil.returnConn(jedis);
+			}
+			
 		}
-		return obj;
+		
+	}
+	
+	// todo setGoodsStock
+	public long setGoodsStock(Order order) {
+		try {
+			jedis = JedisUtil.getConn();
+			return jedis.decr(String.valueOf(order.getGoods_id()));
+		} finally {
+			System.out.println("getNumActive:"+JedisPoolManager.getInstance().getJedisPool().getNumActive());
+			System.out.println("getNumIdle:"+JedisPoolManager.getInstance().getJedisPool().getNumIdle());
+			System.out.println("getNumWaiters:"+JedisPoolManager.getInstance().getJedisPool().getNumWaiters());
+			if(jedis == null) {
+				jedis.close();				
+			}else {
+				JedisUtil.returnConn(jedis);
+				System.out.println("库存减少的时候归还了连接！");
+			}
+			
+		}
 	}
 	
 	//todo setBack
 	public long setBackGoodsStock(Order order) {
-		long obj = 0;
 		try {
 			jedis = JedisUtil.getConn();
-			obj = jedis.incr(String.valueOf(order.getGoods_id()));
+			return jedis.incr(String.valueOf(order.getGoods_id()));
 		} finally {
-			jedis.close();
+			if(jedis == null) {
+				jedis.close();
+			}else {
+				JedisUtil.returnConn(jedis);
+				System.out.println("库存撤回的时候归还了连接！");
+			}
+			
 		}
-		return obj;
 	}
 	
 	//init stock
-	public long initGoodsStock() {
-		long obj = 0;
+	public void initGoodsStock() {
 		try {
 			jedis = JedisUtil.getConn();
 			for(int i = 1;i < 100;i++) {
@@ -104,8 +128,14 @@ public class GoodsDaoImpl implements GoodsDao {
 				}
 			}
 		} finally {
-			jedis.close();
+			if(jedis == null) {
+				jedis.close();
+			}else {
+				JedisUtil.returnConn(jedis);
+			}
+			
 		}
-		return obj;
 	}
+
+	
 }

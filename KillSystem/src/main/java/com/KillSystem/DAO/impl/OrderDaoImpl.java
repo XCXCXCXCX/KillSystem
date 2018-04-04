@@ -3,12 +3,12 @@ package com.KillSystem.DAO.impl;
 import java.util.List;
 import java.util.Map;
 
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.KillSystem.DAO.OrderDao;
 import com.KillSystem.DAO.mapper.OrderMapper;
-import com.KillSystem.domain.Goods;
 import com.KillSystem.domain.Order;
 import com.KillSystem.util.JedisPoolManager;
 import com.KillSystem.util.JedisUtil;
@@ -22,6 +22,7 @@ public class OrderDaoImpl implements OrderDao {
 	private OrderMapper orderMapper;
 
 	private Jedis jedis;
+	
 
 	public int insert(Order t) {
 		// TODO Auto-generated method stub
@@ -47,8 +48,21 @@ public class OrderDaoImpl implements OrderDao {
 		return orderMapper.select(order);
 	}
 
-	public Order orderIsExist(Order order) {
-		return orderMapper.selectByorderid(order);
+	public boolean orderIsExist(Order order) {
+		return orderMapper.selectByorderid(order)==null ? false : true;
+	}
+	
+	public boolean orderIsExistInRedis(Order order) {
+		try {
+			jedis = JedisUtil.getConn();
+			return jedis.get(order.getOrder_id()) == "nil" ? false : true;
+		}finally {
+			if(jedis == null) {
+				jedis.close();
+			}else {
+				JedisUtil.returnConn(jedis);
+			}
+		}
 	}
 
 	public int createOrder(Order order) {
@@ -56,44 +70,61 @@ public class OrderDaoImpl implements OrderDao {
 		return orderMapper.createOrder(order);
 	}
 
-	public String createOrderInRedis(Order order) {
-		jedis = JedisUtil.getConn();
-		long obj = jedis.setnx(order.getOrder_id(), order.getTel_num() + "," + order.getAddress() + ","
-				+ order.getGoods_id() + "," + order.getCreate_time() + "," + order.getIs_success());
-		jedis.close();
-		return obj == 1 ? order.getOrder_id() : null;
-	}
-	
-	public String deleteOrderInRedis(Order order) {
-		jedis = JedisUtil.getConn();
-		long obj = jedis.del(order.getOrder_id());
-		jedis.close();
-		return obj == 1 ? order.getOrder_id() : null;
-	}
-
-	public String createOrderPayInRedis(Order order) {
+	public long createOrderInRedis(Order order) {
 		try {
 			jedis = JedisUtil.getConn();
-			long obj = jedis.setnx(order.getOrder_id() + "_pay", "0");
-			if(obj == 1) {
-				return order.getOrder_id() + "_pay创建成功";
-			}
-			return order.getOrder_id() + "_pay已存在";
+			return jedis.setnx(order.getOrder_id(), order.getTel_num() + "," + order.getAddress() + ","
+					+ order.getGoods_id() + "," + DateTime.now().toString("YYYY-MM-dd HH-mm-ss") + "," + order.getIs_success());
 		}finally {
-			jedis.close();
+			if(jedis == null) {
+				jedis.close();
+			}else {
+				JedisUtil.returnConn(jedis);
+				System.out.println("创建订单的时候归还了连接！");
+			}
+			
 		}
 	}
 	
-	public String deleteOrderPayInRedis(Order order) {
+	public long deleteOrderInRedis(Order order) {
 		try {
 			jedis = JedisUtil.getConn();
-			long obj = jedis.del(order.getOrder_id() + "_pay");
-			if(obj == 1) {
-				return order.getOrder_id() + "_pay删除成功";
-			}
-			return order.getOrder_id() + "_pay不存在";
+			return jedis.del(order.getOrder_id());
 		}finally {
-			jedis.close();
+			if(jedis == null) {
+				jedis.close();
+			}else {
+				JedisUtil.returnConn(jedis);
+			}
+			
+		}
+	}
+
+	public long createOrderPayInRedis(Order order) {
+		try {
+			jedis = JedisUtil.getConn();
+			return jedis.setnx(order.getOrder_id() + "_pay", "0");
+		}finally {
+			if(jedis == null) {
+				jedis.close();
+			}else {
+				JedisUtil.returnConn(jedis);
+			}
+			
+		}
+	}
+	
+	public long deleteOrderPayInRedis(Order order) {
+		try {
+			jedis = JedisUtil.getConn();
+			return jedis.del(order.getOrder_id() + "_pay");
+		}finally {
+			if(jedis == null) {
+				jedis.close();
+			}else {
+				JedisUtil.returnConn(jedis);
+			}
+			
 		}
 	}
 	
@@ -101,16 +132,33 @@ public class OrderDaoImpl implements OrderDao {
 		try {
 			jedis = JedisUtil.getConn();
 			String obj = jedis.getSet(order.getOrder_id() + "_pay", "1");
-			if (obj == "1") {
-				return order.getOrder_id() + "_pay已支付";
-			} else if (obj == "0") {
-				return order.getOrder_id() + "_pay支付成功";
+			if ("1".equals(obj)) {
+				return "已支付";
+			} else if ("0".equals(obj)) {
+				return "支付成功";
 			} else {
 				jedis.del(order.getOrder_id() + "_pay");
-				return order.getOrder_id() + "_pay不存在";
+				return "不存在";
 			}
 		} finally { 
-			jedis.close();
+			if(jedis == null) {
+				jedis.close();
+			}else {
+				JedisUtil.returnConn(jedis);
+			}
+		}
+	}
+	
+	public String getPayState(Order order) {
+		try {
+			jedis = JedisUtil.getConn();
+			return jedis.get(order.getOrder_id() + "_pay");
+		}finally { 
+			if(jedis == null) {
+				jedis.close();
+			}else {
+				JedisUtil.returnConn(jedis);
+			}
 		}
 	}
 	

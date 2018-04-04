@@ -47,59 +47,53 @@ public class AdminController {
 		if (session.getAttribute("username") == null && session.getAttribute("passwd") == null) {
 			return new ModelAndView("fail", null);
 		} else {
-			if (userService.checkAdminRole((String) session.getAttribute("username"),
-					(String) session.getAttribute("passwd")) != null) {
-				// todo
-				int pageno = 1;
-				if (pageNo == null) {
-					pageno = 1;
-				} else {
-					pageno = Integer.parseInt(pageNo);
-				}
-				PageInfo<Map<String, Goods>> p = goodsService.selectById(goods, pageno, 10);
-				int k = 0;
-				while (k < p.getSize()) {
-					DateTime begin = new DateTime(p.getList().get(k).get("begin_time"));
-					DateTime end = new DateTime(p.getList().get(k).get("end_time"));
-					if (end.isAfterNow() && begin.isBeforeNow()) {
-						request.setAttribute("msg" + k, "上线中");
-					} else if (begin.isAfterNow()) {
-						request.setAttribute("msg" + k, "未上线");
-					} else if (end.isBeforeNow()) {
-						request.setAttribute("msg" + k, "已下线");
-					}
-					k++;
-				}
-				request.setAttribute("totalPageCount", p.getPages());
-				request.setAttribute("pageNo", pageno);
-				return new ModelAndView("adminHome", "page", p);
+			// todo
+			int pageno = 1;
+			if (pageNo == null) {
+				pageno = 1;
+			} else {
+				pageno = Integer.parseInt(pageNo);
 			}
-			return new ModelAndView("fail", null);
+			PageInfo<Map<String, Goods>> p = goodsService.selectById(goods, pageno, 10);
+			int k = 0;
+			while (k < p.getSize()) {
+				DateTime begin = new DateTime(p.getList().get(k).get("begin_time"));
+				DateTime end = new DateTime(p.getList().get(k).get("end_time"));
+				if (end.isAfterNow() && begin.isBeforeNow()) {
+					request.setAttribute("msg" + k, "上线中");
+				} else if (begin.isAfterNow()) {
+					request.setAttribute("msg" + k, "未上线");
+				} else if (end.isBeforeNow()) {
+					request.setAttribute("msg" + k, "已下线");
+				}
+				k++;
+			}
+			request.setAttribute("totalPageCount", p.getPages());
+			request.setAttribute("pageNo", pageno);
+			return new ModelAndView("adminHome", "page", p);
+
 		}
 
 	}
 
 	@RequestMapping("/toAdminOrder.do")
 	public ModelAndView toAdminOrder(Order order, String pageNo, HttpSession session, HttpServletRequest request) {
-		if(session.getAttribute("username")==null && session.getAttribute("passwd")==null) {
-			return new ModelAndView("fail",null);
-		}else {
-			if(userService.checkAdminRole((String)session.getAttribute("username"), (String)session.getAttribute("passwd"))!=null) {
-				//todo
-				int pageno = 1;
-				if (pageNo == null) {
-					pageno = 1;
-				} else {
-					pageno = Integer.parseInt(pageNo);
-				}
-				PageInfo<Map<String, Order>> p = orderService.select(order, pageno, 10);
-				request.setAttribute("totalPageCount", p.getPages());
-				request.setAttribute("pageNo", pageno);
-				return new ModelAndView("adminOrder", "page", p);
+		if (session.getAttribute("username") == null && session.getAttribute("passwd") == null) {
+			return new ModelAndView("fail", null);
+		} else {
+			// todo
+			int pageno = 1;
+			if (pageNo == null) {
+				pageno = 1;
+			} else {
+				pageno = Integer.parseInt(pageNo);
 			}
-			return new ModelAndView("fail",null);
+			PageInfo<Map<String, Order>> p = orderService.select(order, pageno, 10);
+			request.setAttribute("totalPageCount", p.getPages());
+			request.setAttribute("pageNo", pageno);
+			return new ModelAndView("adminOrder", "page", p);
 		}
-		
+
 	}
 
 	@RequestMapping("/adminLogin.do")
@@ -108,7 +102,7 @@ public class AdminController {
 		if (username == null && passwd == null) {
 			return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录,请登录管理员");
 		}
-		System.out.println(username+","+passwd);
+		System.out.println(username + "," + passwd);
 		if (userService.checkAdminRole(username, passwd) != null) {
 			session.setAttribute("username", username);
 			session.setAttribute("passwd", passwd);
@@ -143,8 +137,8 @@ public class AdminController {
 
 	@RequestMapping("/adminDelete.do")
 	@ResponseBody
-	public ServerResponse adminDelete(Goods goods,HttpSession session) {
-		if(session.getAttribute("username")==null && session.getAttribute("passwd")==null) {
+	public ServerResponse adminDelete(Goods goods, HttpSession session) {
+		if (session.getAttribute("username") == null && session.getAttribute("passwd") == null) {
 			return ServerResponse.createByErrorMessage("无权限操作！");
 		}
 		if (goodsService.delete(goods) == 1) {
@@ -156,8 +150,8 @@ public class AdminController {
 
 	@RequestMapping("/addGoodsInfo.do")
 	@ResponseBody
-	public ServerResponse addGoodsInfo(Goods goods,HttpSession session) {
-		if(session.getAttribute("username")==null && session.getAttribute("passwd")==null) {
+	public ServerResponse addGoodsInfo(Goods goods, HttpSession session) {
+		if (session.getAttribute("username") == null && session.getAttribute("passwd") == null) {
 			return ServerResponse.createByErrorMessage("无权限操作！");
 		}
 		if (goodsService.update(goods) == 1) {
@@ -169,8 +163,8 @@ public class AdminController {
 
 	@RequestMapping("/adminUpdateOrInsert.do")
 	@ResponseBody
-	public ServerResponse adminUpdateOrInsert(Goods goods,HttpSession session) {
-		if(session.getAttribute("username")==null && session.getAttribute("passwd")==null) {
+	public ServerResponse adminUpdateOrInsert(Goods goods, HttpSession session) {
+		if (session.getAttribute("username") == null && session.getAttribute("passwd") == null) {
 			return ServerResponse.createByErrorMessage("无权限操作！");
 		}
 		if (goods == null) {
@@ -178,9 +172,9 @@ public class AdminController {
 		}
 		if (goods.getGoods_id() == 0) {
 			if (goodsService.insert(goods) == 1) {
-				return ServerResponse.createBySuccessMessage("删除商品成功！");
+				return ServerResponse.createBySuccessMessage("添加商品成功！");
 			}
-			return ServerResponse.createByErrorMessage("删除商品失败！");
+			return ServerResponse.createByErrorMessage("添加商品失败！");
 		} else {
 			if (goodsService.update(goods) == 1) {
 				return ServerResponse.createBySuccessMessage("更新商品信息成功！");
@@ -192,8 +186,8 @@ public class AdminController {
 
 	@RequestMapping("/orderDelete.do")
 	@ResponseBody
-	public ServerResponse orderDelete(Order order,HttpSession session) {
-		if(session.getAttribute("username")==null && session.getAttribute("passwd")==null) {
+	public ServerResponse orderDelete(Order order, HttpSession session) {
+		if (session.getAttribute("username") == null && session.getAttribute("passwd") == null) {
 			return ServerResponse.createByErrorMessage("无权限操作！");
 		}
 		if (orderService.delete(order) == 1) {
@@ -204,8 +198,8 @@ public class AdminController {
 
 	@RequestMapping("/orderUpdate.do")
 	@ResponseBody
-	public ServerResponse orderUpdate(Order order,HttpSession session) {
-		if(session.getAttribute("username")==null && session.getAttribute("passwd")==null) {
+	public ServerResponse orderUpdate(Order order, HttpSession session) {
+		if (session.getAttribute("username") == null && session.getAttribute("passwd") == null) {
 			return ServerResponse.createByErrorMessage("无权限操作！");
 		}
 		if (orderService.update(order) == 1) {
@@ -216,8 +210,8 @@ public class AdminController {
 
 	@RequestMapping("/orderUpdateOrderState.do")
 	@ResponseBody
-	public ServerResponse orderUpdateOrderState(Order order,HttpSession session) {
-		if(session.getAttribute("username")==null && session.getAttribute("passwd")==null) {
+	public ServerResponse orderUpdateOrderState(Order order, HttpSession session) {
+		if (session.getAttribute("username") == null && session.getAttribute("passwd") == null) {
 			return ServerResponse.createByErrorMessage("无权限操作！");
 		}
 		if (orderService.updateOrderState(order) == 1) {

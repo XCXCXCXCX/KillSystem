@@ -13,4 +13,18 @@ public class JedisUtil {
 		return jedisPool.getResource();
 	}
 	
+	public static void returnConn(Jedis jedis) {
+		jedisPool.returnResource(jedis);
+	}
+	
+	
+    /**
+     * 关闭连接池
+     */
+    public static void closePool() {
+        if (jedisPool != null) {
+            jedisPool.close();
+        }
+    }
+	
 }

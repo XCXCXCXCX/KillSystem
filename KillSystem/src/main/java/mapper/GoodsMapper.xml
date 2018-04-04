@@ -71,4 +71,16 @@
         WHERE goods_id = #{goods_id}     
 	</update>
      
+    <update id="updateGoodsStock" parameterType="com.KillSystem.domain.Goods">  
+        UPDATE goods
+        SET goods_stock = goods_stock - 1
+        WHERE goods_id = #{goods_id}     
+	</update>
+	
+	<update id="updateGoodsStockback"  parameterType="com.KillSystem.domain.Goods">  
+        UPDATE goods
+        SET goods_stock = goods_stock + 1
+        WHERE goods_id = #{goods_id}     
+	</update>
+     
 </mapper>

@@ -28,6 +28,21 @@ text-align:center; /* 文字等内容居中 */
 		<title>我的收货地址</title>
 		<script type="text/javascript">
 			$(function() {
+				
+				function StandardPost(url,args){
+			        var form = $("<form method='post'></form>"),
+			            input;
+			        form.attr({"action":url});
+			        $.each(args,function(key,value){
+			            input = $("<input type='hidden'>");
+			            input.attr({"name":key});
+			            input.val(value);
+			            form.append(input);
+			        });
+			        $(document.body).append(form);
+			        form.submit();
+			    }
+				
 				function getParam(paramName) { 
 				    paramValue = "", isFound = !1; 
 				    if (this.location.search.indexOf("?") == 0 && this.location.search.indexOf("=") > 1) { 
@@ -37,6 +52,7 @@ text-align:center; /* 文字等内容居中 */
 				    return paramValue == "" && (paramValue = null), paramValue 
 				} 
 				var selectedAddressId = 0;
+				var selectedAddress = null;
 				var delHandler = function(counter) {
 	        		  return function(){
 	        			  if(confirm("真的要删除吗?")){
@@ -57,7 +73,7 @@ text-align:center; /* 文字等内容居中 */
 	        		};
 	        	var selectedAddressIdHandler = function(counter){
 	        		return function(){
-	        				selectedAddressId = $("#addressid" + counter).text();
+	        				selectedAddress = $("#selectedAddressName" + counter).text()+","+$("#selectedAddressAndTel" + counter).text();
 	        		  };
 	        	};
 	        	for(var i=0; i<5; i++) {
@@ -71,7 +87,6 @@ text-align:center; /* 文字等内容居中 */
 					var address = $("#address").val();
 					var tel_num = $("#tel_num").val();
 					var name = $("#name_").val();
-					alert(user_id+","+address+","+tel_num+","+name);
 					$.post("/KillSystem/insertShippingAddress.do", { user_id: user_id, address: address, tel_num: tel_num, name: name },  
               	            function (response) {  
               					alert(response.msg);
@@ -82,22 +97,29 @@ text-align:center; /* 文字等内容居中 */
 				})
 				$("#toAlipay").click(function(){
 					//tel_num | address | goods_id | create_time
-					var shippingAddressId = selectedAddressId;
+					var tel_num = $("#userid").text();
+					var address = selectedAddress;
 					var goods_id = getParam("goods_id");
-					if(shippingAddressId==0||shippingAddressId==null){
+					if(address==null){
 						alert("请选择收货地址!");
+					}else if(tel_num == null){
+						alert("tel_num为空!");
 					}else{
-					if(goods_id==0||goods_id==null){
-						alert("未选择商品!");
-					}else{
-						$.post("/KillSystem/pay.do", { address_id: shippingAddressId, goods_id: goods_id},  
-	              	            function (response) {  
-	              					alert(response.msg);
-	              	                if (response.status == "0") {  
-	              						alert(response.data);
-	              	                }
-	              	            }, 'json'); 
-					}
+						if(goods_id==0||goods_id==null){
+							alert("未选择商品!");
+						}else{
+							$.post("/KillSystem/createOrder.do", {tel_num: tel_num, address: address, goods_id: goods_id},  
+	              	            	function (response) {  
+	              						alert(response.msg);
+	              	                	if (response.status == "0") {  
+	              	                		var order_id = response.data.order_id;
+	              	                		var tel_num = response.data.tel_num;
+	              	                		var address = response.data.address;
+	              	                		var goods_id = response.data.goods_id;
+	              	                		StandardPost('/KillSystem/alipay.do',{order_id: order_id, tel_num: tel_num, address: address, goods_id: goods_id});
+	              	                	}
+	              	            	}, 'json'); 
+						}
 					}
 				})
 	            
@@ -154,7 +176,7 @@ text-align:center; /* 文字等内容居中 */
 					$('input[name=num]').val(parseInt($('input[name=num]').val()) - 1);
 				})
 				$('.Caddress .add_mi').click(function() {
-					alert(selectedAddressId);
+					alert(selectedAddress);
 					$(this).css('background', 'url("http://localhost/images/mail_1.jpg") no-repeat').siblings('.add_mi').css('background', 'url("http://localhost/images/mail.jpg") no-repeat');
 				})
 			})
@@ -249,40 +271,40 @@ text-align:center; /* 文字等内容居中 */
 	    	<div id="selectedAddressId0" class="add_mi">
 				<button id="del0">移除</button>
 				<p id="addressid0" hidden>${page.getList().get(0).get("address_id")}</p>
-				<p style="border-bottom:1px dashed #ccc;line-height:28px;">${page.getList().get(0).get("name")}</p>
-				<p>${page.getList().get(0).get("address")},${page.getList().get(0).get("tel_num")}</p>
+				<p id="selectedAddressName0" style="border-bottom:1px dashed #ccc;line-height:28px;">${page.getList().get(0).get("name")}</p>
+				<p id="selectedAddressAndTel0">${page.getList().get(0).get("address")},${page.getList().get(0).get("tel_num")}</p>
 			</div>
 			</c:if>
 			<c:if test="${page.getList().size() > 1}">
 			<div id="selectedAddressId1" class="add_mi">
 				<button id="del1">移除</button>
 				<p id="addressid1" hidden>${page.getList().get(1).get("address_id")}</p>
-				<p style="border-bottom:1px dashed #ccc;line-height:28px;">${page.getList().get(1).get("name")}</p>
-				<p>${page.getList().get(1).get("address")},${page.getList().get(1).get("tel_num")}</p>
+				<p id="selectedAddressName1" style="border-bottom:1px dashed #ccc;line-height:28px;">${page.getList().get(1).get("name")}</p>
+				<p id="selectedAddressAndTel1">${page.getList().get(1).get("address")},${page.getList().get(1).get("tel_num")}</p>
 			</div>
 			</c:if>
 			<c:if test="${page.getList().size() > 2}">
 			<div id="selectedAddressId2" class="add_mi">
 				<button id="del2">移除</button>
 				<p id="addressid2" hidden>${page.getList().get(1).get("address_id")}</p>
-				<p style="border-bottom:1px dashed #ccc;line-height:28px;">${page.getList().get(2).get("name")}</p>
-				<p>${page.getList().get(2).get("address")},${page.getList().get(2).get("tel_num")}</p>
+				<p id="selectedAddressName2" style="border-bottom:1px dashed #ccc;line-height:28px;">${page.getList().get(2).get("name")}</p>
+				<p id="selectedAddressAndTel2">${page.getList().get(2).get("address")},${page.getList().get(2).get("tel_num")}</p>
 			</div>
 			</c:if>
 			<c:if test="${page.getList().size() > 3}">
 			<div id="selectedAddressId3" class="add_mi">
 				<button id="del3">移除</button>
 				<p id="addressid3" hidden>${page.getList().get(1).get("address_id")}</p>
-				<p style="border-bottom:1px dashed #ccc;line-height:28px;">${page.getList().get(3).get("name")}</p>
-				<p>${page.getList().get(3).get("address")},${page.getList().get(3).get("tel_num")}</p>
+				<p id="selectedAddressName3" style="border-bottom:1px dashed #ccc;line-height:28px;">${page.getList().get(3).get("name")}</p>
+				<p id="selectedAddressAndTel3">${page.getList().get(3).get("address")},${page.getList().get(3).get("tel_num")}</p>
 			</div>
 			</c:if>
 			<c:if test="${page.getList().size() > 4}">
 			<div id="selectedAddressId4" class="add_mi">
 				<button id="del4">移除</button>
 				<p id="addressid4" hidden>${page.getList().get(1).get("address_id")}</p>
-				<p style="border-bottom:1px dashed #ccc;line-height:28px;">${page.getList().get(4).get("name")}</p>
-				<p>${page.getList().get(4).get("address")},${page.getList().get(4).get("tel_num")}</p>
+				<p id="selectedAddressName4" style="border-bottom:1px dashed #ccc;line-height:28px;">${page.getList().get(4).get("name")}</p>
+				<p id="selectedAddressAndTel4">${page.getList().get(4).get("address")},${page.getList().get(4).get("tel_num")}</p>
 			</div>
 			</c:if>
 		</div>

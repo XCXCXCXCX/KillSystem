@@ -1,4 +1,5 @@
 eclipse.preferences.version=1
+encoding//WebContent/WEB-INF/jsp/alipay.jsp=UTF-8
 encoding//src/main/java/KillSystem.properties=UTF-8
 encoding//src/main/java/com/KillSystem/common/ServerResponse.java=UTF-8
 encoding//src/main/java/com/KillSystem/controller/GoodsController.java=UTF-8

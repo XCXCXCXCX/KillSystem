@@ -9,14 +9,18 @@ import org.springframework.stereotype.Service;
 import com.KillSystem.DAO.impl.GoodsDaoImpl;
 import com.KillSystem.Service.GoodsService;
 import com.KillSystem.domain.Goods;
+import com.KillSystem.domain.Order;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+
+import redis.clients.jedis.Jedis;
 
 @Service("GoodsServiceImpl")
 public class GoodsServiceImpl implements GoodsService{
 
 	@Autowired
 	private GoodsDaoImpl goodsDaoImpl;
+	
 	
 	@Override
 	public int insert(Goods goods) {
@@ -67,5 +71,20 @@ public class GoodsServiceImpl implements GoodsService{
 		// TODO Auto-generated method stub
 		return goodsDaoImpl.getGoodsById(goods);
 	}
+	
+	@Override
+	public long decrGoodsStock(Order order) {
+		return goodsDaoImpl.setGoodsStock(order);
+	}
+
+	@Override
+	public long incrGoodsStock(Order order) {
+		// TODO Auto-generated method stub
+		return goodsDaoImpl.setBackGoodsStock(order);
+	}
+
+	
+
+	
 	
 }
