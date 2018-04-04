@@ -56,10 +56,9 @@ public class InitFIFOListener implements Runnable{
 			if(!toContinue) {
 				continue;
 			}
+			System.out.println("FIFO队列开始处理一个请求了！");
 			Goods goods = new Goods();
 			goods.setGoods_id(order.getGoods_id());
-			System.out.println(goodsDaoImpl==null);
-			System.out.println(goodsDaoImpl.updateGoodsStock(goods));
 			//令mysql中的库存减一
 			RedisLock lock = new RedisLock(String.valueOf(order.getGoods_id()), 10000, 20000);
 			try {

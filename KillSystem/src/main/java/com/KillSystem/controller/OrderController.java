@@ -48,15 +48,16 @@ public class OrderController {
 	@Autowired
 	private GoodsService goodsService;
 	
-	private boolean hasPay = false;
+	//private boolean hasPay = false;
 	
 	/**
 	 * 计时器:创建订单、减少库存后，需要在6分钟之内完成==>预支付==>支付成功，
 	 * 		若无法完成后续支付流程，删除订单、撤销库存减少
 	 * 目的:防止过多的无效的、长期不支付订单占据秒杀库存量
+	 * 测试后发现开启了过多线程所以放弃该方法
 	 * 										
 	 */		
-	class MyTask extends TimerTask{
+	/*class MyTask extends TimerTask{
 
 		private Order order;
 		
@@ -89,7 +90,7 @@ public class OrderController {
 	    	}
 	    }
 	    
-	}
+	}*/
 	
 	@RequestMapping("/createOrder.do")
 	@ResponseBody
@@ -114,10 +115,6 @@ public class OrderController {
 			
 			//2.在redis中库存减一，若失败，撤回创建订单操作并返回“创建订单失败”
 			if(goodsService.decrGoodsStock(order) < 0) {
-				if(orderService.deleteOrderInRedis(order)==0) {
-					System.out.println("撤回创建订单失败：订单不存在");
-				}
-
 				return ServerResponse.createByErrorMessage("库存减一失败！");
 			}
 			
@@ -129,9 +126,9 @@ public class OrderController {
 		}
 		System.out.println("创建订单成功！");
 		//创建定时器对象
-        Timer t=new Timer();
+        //Timer t=new Timer();
         //在3秒后执行MyTask类中的run方法
-        t.schedule(new MyTask(order), 360000);
+        //t.schedule(new MyTask(order), 360000);
 		return ServerResponse.createBySuccess("创建订单成功！", order);
 		
 	}
@@ -147,7 +144,11 @@ public class OrderController {
 //		if (session.getAttribute("tel_num") == null && session.getAttribute("passwd") == null) {
 //			return ServerResponse.createByErrorMessage("请先登陆！");
 //		}
-		hasPay = true;
+		//hasPay = true;
+		
+		if(!orderService.orderIsExist(order)) {
+			return ServerResponse.createByErrorMessage(order.getOrder_id() + "订单已失效，请重新 创建订单");
+		}
 		//todo
 		//1.在redis中创建支付订单，若失败，返回“订单已存在”
 		if(orderService.createPayInRedis(order)==0) {

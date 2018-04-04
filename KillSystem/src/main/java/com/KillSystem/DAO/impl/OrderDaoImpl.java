@@ -12,6 +12,7 @@ import com.KillSystem.DAO.mapper.OrderMapper;
 import com.KillSystem.domain.Order;
 import com.KillSystem.util.JedisPoolManager;
 import com.KillSystem.util.JedisUtil;
+import com.alibaba.druid.support.logging.Log;
 
 import redis.clients.jedis.Jedis;
 
@@ -74,8 +75,11 @@ public class OrderDaoImpl implements OrderDao {
 		try {
 			jedis = JedisUtil.getConn();
 			return jedis.setnx(order.getOrder_id(), order.getTel_num() + "," + order.getAddress() + ","
-					+ order.getGoods_id() + "," + DateTime.now().toString("YYYY-MM-dd HH-mm-ss") + "," + order.getIs_success());
+					+ order.getGoods_id() + "," + DateTime.now().toString("YYYY-MM-dd HH-mm-ss"));
 		}finally {
+			if(jedis.expire(order.getOrder_id(), 180)!=1) {
+				System.out.println("设置超时时间失败！");
+			}
 			if(jedis == null) {
 				jedis.close();
 			}else {
@@ -85,26 +89,15 @@ public class OrderDaoImpl implements OrderDao {
 			
 		}
 	}
-	
-	public long deleteOrderInRedis(Order order) {
-		try {
-			jedis = JedisUtil.getConn();
-			return jedis.del(order.getOrder_id());
-		}finally {
-			if(jedis == null) {
-				jedis.close();
-			}else {
-				JedisUtil.returnConn(jedis);
-			}
-			
-		}
-	}
 
-	public long createOrderPayInRedis(Order order) {
+	public long createPayInRedis(Order order) {
 		try {
 			jedis = JedisUtil.getConn();
 			return jedis.setnx(order.getOrder_id() + "_pay", "0");
 		}finally {
+			if(jedis.expire(order.getOrder_id() + "_pay", 300) != 1) {
+				System.out.println("支付订单设置有效时间失败！");
+			}
 			if(jedis == null) {
 				jedis.close();
 			}else {
@@ -114,19 +107,6 @@ public class OrderDaoImpl implements OrderDao {
 		}
 	}
 	
-	public long deleteOrderPayInRedis(Order order) {
-		try {
-			jedis = JedisUtil.getConn();
-			return jedis.del(order.getOrder_id() + "_pay");
-		}finally {
-			if(jedis == null) {
-				jedis.close();
-			}else {
-				JedisUtil.returnConn(jedis);
-			}
-			
-		}
-	}
 	
 	public String updateOrderPayInRedis(Order order) {
 		try {

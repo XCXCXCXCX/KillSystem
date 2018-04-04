@@ -112,23 +112,13 @@ public class OrderServiceImpl implements OrderService{
 		return orderDaoImpl.createOrderInRedis(order);
 	}
 	
-	@Override
-	public long deleteOrderInRedis(Order order) {
-		// TODO Auto-generated method stub
-		return orderDaoImpl.deleteOrderInRedis(order);
-	}
 	
 	@Override
 	public long createPayInRedis(Order order) {
 		// TODO Auto-generated method stub
-		return orderDaoImpl.createOrderPayInRedis(order);
+		return orderDaoImpl.createPayInRedis(order);
 	}
 	
-	@Override
-	public long deletePayInRedis(Order order) {
-		// TODO Auto-generated method stub
-		return orderDaoImpl.deleteOrderPayInRedis(order);
-	}
 	
 	@Override
 	public String updateOrderPayInRedis(Order order) {
@@ -259,13 +249,8 @@ public class OrderServiceImpl implements OrderService{
                 //库存加一
                 goodsDaoImpl.setBackGoodsStock(order);
                 //删除订单
-                if(orderDaoImpl.deleteOrderInRedis(order) == 0) {
-                	System.out.println("预支付失败后，删除订单失败！");
-                }
+                
                 //删除支付订单
-                if(orderDaoImpl.deleteOrderPayInRedis(order) == 0) {
-                	System.out.println("预支付失败后，删除支付订单失败！");
-                }
                 
                 return ServerResponse.createByErrorMessage("支付宝预下单失败!!!");
 
@@ -275,13 +260,8 @@ public class OrderServiceImpl implements OrderService{
                 //库存加一
                 goodsDaoImpl.setBackGoodsStock(order);
                 //删除订单
-                if(orderDaoImpl.deleteOrderInRedis(order) == 0) {
-                	System.out.println("预支付失败后，删除订单失败！");
-                }
+
                 //删除支付订单
-                if(orderDaoImpl.deleteOrderPayInRedis(order) == 0) {
-                	System.out.println("预支付失败后，删除支付订单失败！");
-                }
                 
                 return ServerResponse.createByErrorMessage("系统异常，预下单状态未知!!!");
 
@@ -291,13 +271,8 @@ public class OrderServiceImpl implements OrderService{
                 //库存加一
                 goodsDaoImpl.setBackGoodsStock(order);
                 //删除订单
-                if(orderDaoImpl.deleteOrderInRedis(order) == 0) {
-                	System.out.println("预支付失败后，删除订单失败！");
-                }
+
                 //删除支付订单
-                if(orderDaoImpl.deleteOrderPayInRedis(order) == 0) {
-                	System.out.println("预支付失败后，删除支付订单失败！");
-                }
                 
                 return ServerResponse.createByErrorMessage("不支持的交易状态，交易返回异常!!!");
         }
@@ -321,10 +296,10 @@ public class OrderServiceImpl implements OrderService{
         String tradeStatus = params.get("trade_status");
         System.out.println(tradeStatus);
         Order order = new Order();
-        order.setOrder_id(orderNo);
+        order.setOrder_id(orderNo+"_pay");
         if(!orderDaoImpl.orderIsExistInRedis(order)){
-        	System.out.println("非KillSystem的订单,回调忽略");
-            return ServerResponse.createByErrorMessage("非KillSystem的订单,回调忽略");
+        	System.out.println("该支付订单已失效，请重新下单！");
+            return ServerResponse.createByErrorMessage("该支付订单已失效，请重新下单！");
         }
         if(Integer.parseInt(orderDaoImpl.getPayState(order))>=1){
         	System.out.println("支付宝重复调用");
@@ -334,9 +309,7 @@ public class OrderServiceImpl implements OrderService{
         	System.out.println("回调成功啦！");
         	String flag = orderDaoImpl.updateOrderPayInRedis(order);
         	System.out.println(flag);
-        	if(!InitFIFOListener.queue.offer(order)) {
-				log.error("创建订单请求未能成功加入mysql队列!");
-			}
+        	InitFIFOListener.queue.offer(order);
             if("已支付".equals(flag)) {
             	return ServerResponse.createByErrorMessage("订单已支付，回调忽略");
             }else if("不存在".equals(flag)) {

@@ -12,10 +12,10 @@ public class CyclicBarrierTest {
     public static void main(String[] args) throws IOException, InterruptedException {  
         //如果将参数改为4，但是下面只加入了3个选手，这永远等待下去  
         //Waits until all parties have invoked await on this barrier.   
-        CyclicBarrier barrier = new CyclicBarrier(1000);  
+        CyclicBarrier barrier = new CyclicBarrier(800);  
   
         ExecutorService executor = Executors.newFixedThreadPool(2000);  
-        for (int i = 0;i < 1000;i++) {
+        for (int i = 0;i < 800;i++) {
         	Runner a = new Runner(barrier, i+"号选手");
         	executor.submit(new Thread(a)); 
         }

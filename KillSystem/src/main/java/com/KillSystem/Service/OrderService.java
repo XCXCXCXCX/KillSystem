@@ -13,9 +13,7 @@ public interface OrderService extends BaseService<Order>{
 	int updateOrderState(Order order);
 	PageInfo<Map<String,Order>> select(Order order,int pageNum,int pageSize);
 	long createOrderInRedis(Order order);
-	long deleteOrderInRedis(Order order);
 	long createPayInRedis(Order order);
-	long deletePayInRedis(Order order);
 	String updateOrderPayInRedis(Order order);
 	boolean orderIsExist(Order order);
 	String getPayState(Order order);
