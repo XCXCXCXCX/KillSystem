@@ -1,5 +1,14 @@
 package com.KillSystem.domain;
 
+
+/**
+ * @author xcxcxcxcx
+ * 
+ * OrderBean
+ * 
+ * 2018年4月5日
+ *
+ */
 public class Order {
 
 	private String order_id;

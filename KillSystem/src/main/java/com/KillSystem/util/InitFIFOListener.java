@@ -12,6 +12,19 @@ import com.KillSystem.DAO.impl.OrderDaoImpl;
 import com.KillSystem.domain.Goods;
 import com.KillSystem.domain.Order;
 
+
+/**
+ * @author xcxcxcxcx
+ * 
+ * 先进先出队列
+ * 启动先进先出队列，并反复在队列中poll出order对象，
+ * 如果order不为空，向mysql创建该order并令库存减一
+ * 
+ * todo 接下来使用事务管理来实现创建订单、库存减一的事务
+ * 
+ * 2018年4月5日
+ *
+ */
 @Repository
 public class InitFIFOListener implements Runnable{
 	
@@ -48,6 +61,7 @@ public class InitFIFOListener implements Runnable{
 	public void run() {
 		// TODO Auto-generated method stub
 		while(true) {
+			System.out.println("FIFO，我在正常运行");
 			Order order = queue.poll();
 			boolean toContinue = true;
 			if(order==null) {

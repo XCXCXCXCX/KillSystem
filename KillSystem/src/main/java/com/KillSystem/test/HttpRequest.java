@@ -1,4 +1,5 @@
 package com.KillSystem.test;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -8,6 +9,14 @@ import java.net.URLConnection;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author xcxcxcxcx
+ * 
+ * 用于模拟发起http请求的封装类
+ * 
+ * 2018年4月5日
+ *
+ */
 public class HttpRequest {
     /**
      * 向指定URL发送GET方法的请求

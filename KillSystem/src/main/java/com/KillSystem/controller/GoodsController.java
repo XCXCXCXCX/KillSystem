@@ -13,10 +13,21 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.KillSystem.Service.GoodsService;
+import com.KillSystem.common.ResponseCode;
 import com.KillSystem.common.ServerResponse;
 import com.KillSystem.domain.Goods;
 import com.github.pagehelper.PageInfo;
 
+
+/**
+ * @author xcxcxcxcx
+ * 
+ * 商品controller
+ * 包括商品的搜索，查看商品详情，最新商品数和最新商品条目的查询
+ * 
+ * 2018年4月5日
+ *
+ */
 @Controller
 public class GoodsController {
 
@@ -25,7 +36,7 @@ public class GoodsController {
 
 	@RequestMapping("/sort.do")
 	public ModelAndView sort(Goods goods, String pageNo, HttpSession session, HttpServletRequest request) {
-		if (session.getAttribute("username") == null) {
+		if (session.getAttribute("tel_num") == null || session.getAttribute("passwd") == null) {
 			return new ModelAndView("fail", null);
 		}
 		int pageno = 1;
@@ -58,6 +69,9 @@ public class GoodsController {
 
 	@RequestMapping("/getGoodsInfo.do")
 	public ModelAndView getGoodsInfo(Goods goods, String pageNo, HttpSession session, HttpServletRequest request) {
+		if (session.getAttribute("tel_num") == null || session.getAttribute("passwd") == null) {
+			return new ModelAndView("fail", null);
+		}
 		goods = goodsService.getGoodsById(goods);
 		return new ModelAndView("goodsInfo","thisGoods",goods);
 	}

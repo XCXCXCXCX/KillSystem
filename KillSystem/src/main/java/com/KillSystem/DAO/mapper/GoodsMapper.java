@@ -3,10 +3,17 @@ package com.KillSystem.DAO.mapper;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.annotations.Param;
-
 import com.KillSystem.domain.Goods;
 
+/**
+ * @author xcxcxcxcx
+ * 
+ * 商品mapper
+ * 连接mybatis的GoodsMapper.xml文件
+ * 
+ * 2018年4月5日
+ *
+ */
 public interface GoodsMapper {
 	int insert(Goods goods);
 	int delete(Goods goods);

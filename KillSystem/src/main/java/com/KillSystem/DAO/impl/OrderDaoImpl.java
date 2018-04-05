@@ -10,12 +10,20 @@ import org.springframework.stereotype.Repository;
 import com.KillSystem.DAO.OrderDao;
 import com.KillSystem.DAO.mapper.OrderMapper;
 import com.KillSystem.domain.Order;
-import com.KillSystem.util.JedisPoolManager;
 import com.KillSystem.util.JedisUtil;
-import com.alibaba.druid.support.logging.Log;
-
 import redis.clients.jedis.Jedis;
 
+
+/**
+ * @author xcxcxcxcx
+ * 
+ * 订单Dao实现类
+ * Dao接口只是实现基本功能
+ * 需要添加功能时，直接在这里添加实现方法。
+ * 
+ * 2018年4月5日
+ *
+ */
 @Repository
 public class OrderDaoImpl implements OrderDao {
 

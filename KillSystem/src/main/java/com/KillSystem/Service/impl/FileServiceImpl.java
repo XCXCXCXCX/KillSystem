@@ -13,6 +13,16 @@ import com.KillSystem.Service.IFileService;
 import com.KillSystem.util.FTPUtil;
 import com.google.common.collect.Lists;
 
+
+/**
+ * @author xcxcxcxcx
+ * 
+ * 文件服务实现类
+ * 封装了文件上传的服务
+ * 
+ * 2018年4月5日
+ *
+ */
 @Service("iFileService")
 public class FileServiceImpl implements IFileService {
 

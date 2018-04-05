@@ -14,8 +14,19 @@ import com.KillSystem.util.JedisPoolManager;
 import com.KillSystem.util.JedisUtil;
 
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
 
+/**
+ * @author xcxcxcxcx
+ * 
+ * 商品Dao实现类
+ * Dao接口只是实现基本功能
+ * 需要添加功能时，直接在这里添加实现方法。
+ * 1.与数据库之间的交互使用mybatis的mapper接口，包括增删改查，主要是为管理员提供服务
+ * 2.与redis之间的交互使用单例的jedisPool，包括商品库存的初始化、减一、撤回，主要为用户提供服务
+ * 
+ * 2018年4月5日
+ *
+ */
 @Repository
 public class GoodsDaoImpl implements GoodsDao {
 
@@ -42,6 +53,7 @@ public class GoodsDaoImpl implements GoodsDao {
 		return goodsMapper.update(goods);
 	}
 
+	@Override
 	public List<Map<String, Goods>> select(Goods goods) {
 		// TODO Auto-generated method stub
 		return goodsMapper.select(goods);
@@ -63,22 +75,6 @@ public class GoodsDaoImpl implements GoodsDao {
 		// TODO Auto-generated method stub
 		return goodsMapper.updateGoodsStockback(goods);
 	}
-
-	public long createPayInRedis(Order order) {
-		try {
-			jedis = JedisUtil.getConn();
-			return jedis.setnx(order.getOrder_id()+"_pay", "0");
-		} finally {
-			
-			if(jedis == null) {
-				jedis.close();
-			}else {
-				JedisUtil.returnConn(jedis);
-			}
-			
-		}
-		
-	}
 	
 	// todo setGoodsStock
 	public long setGoodsStock(Order order) {
@@ -86,9 +82,9 @@ public class GoodsDaoImpl implements GoodsDao {
 			jedis = JedisUtil.getConn();
 			return jedis.decr(String.valueOf(order.getGoods_id()));
 		} finally {
-			System.out.println("getNumActive:"+JedisPoolManager.getInstance().getJedisPool().getNumActive());
-			System.out.println("getNumIdle:"+JedisPoolManager.getInstance().getJedisPool().getNumIdle());
-			System.out.println("getNumWaiters:"+JedisPoolManager.getInstance().getJedisPool().getNumWaiters());
+			System.out.println("getNumActive:"+JedisPoolManager.INSTANCE.getJedisPool().getNumActive());
+			System.out.println("getNumIdle:"+JedisPoolManager.INSTANCE.getJedisPool().getNumIdle());
+			System.out.println("getNumWaiters:"+JedisPoolManager.INSTANCE.getJedisPool().getNumWaiters());
 			if(jedis == null) {
 				jedis.close();				
 			}else {

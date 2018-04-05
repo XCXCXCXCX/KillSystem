@@ -3,10 +3,16 @@ package com.KillSystem.util;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
-import redis.clients.util.Pool;
 
+/**
+ * @author xcxcxcxcx
+ * 
+ * JedisPoolManager枚举类实现线程安全的单例JedisPool
+ * 
+ * 2018年4月5日
+ *
+ */
 public enum JedisPoolManager {
 	
 	INSTANCE;
@@ -20,9 +26,6 @@ public enum JedisPoolManager {
 		//System.out.println("2");
 		jedisPool = (JedisPool) context.getBean("jedisPool");
 		//System.out.println("3");
-	}
-	public static JedisPoolManager getInstance() {
-		return INSTANCE;
 	}
 	
 	public JedisPool getJedisPool() {

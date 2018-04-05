@@ -7,8 +7,16 @@ import com.KillSystem.common.ServerResponse;
 import com.KillSystem.domain.Order;
 import com.github.pagehelper.PageInfo;
 
-import redis.clients.jedis.Jedis;
 
+/**
+ * @author xcxcxcxcx
+ * 
+ * 订单服务
+ * 提供了管理员的订单分页查询、获取支付订单状态、验证订单是否存在、订单支付、支付宝回调等接口
+ * 
+ * 2018年4月5日
+ *
+ */
 public interface OrderService extends BaseService<Order>{
 	int updateOrderState(Order order);
 	PageInfo<Map<String,Order>> select(Order order,int pageNum,int pageSize);

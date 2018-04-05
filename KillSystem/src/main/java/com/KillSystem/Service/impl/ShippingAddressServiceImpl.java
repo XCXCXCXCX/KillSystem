@@ -8,13 +8,23 @@ import org.springframework.stereotype.Service;
 
 import com.KillSystem.DAO.impl.ShippingAddressDaoImpl;
 import com.KillSystem.Service.ShippingAddressService;
-import com.KillSystem.domain.Goods;
 import com.KillSystem.domain.ShippingAddress;
 import com.KillSystem.domain.User;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
-@Service("ShippingAddressServiceImpl")
+
+/**
+ * @author xcxcxcxcx
+ * 
+ * 收货地址服务实现类
+ * 
+ * 提供了用户的收货地址增删改查接口
+ * 
+ * 2018年4月5日
+ *
+ */
+@Service("ShippingAddressService")
 public class ShippingAddressServiceImpl implements ShippingAddressService{
 
 	@Autowired

@@ -1,5 +1,14 @@
 package com.KillSystem.domain;
 
+
+/**
+ * @author xcxcxcxcx
+ * 
+ * GoodsBean
+ * 
+ * 2018年4月5日
+ *
+ */
 public class Goods {
 	
 	private int goods_id;

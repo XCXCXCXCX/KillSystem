@@ -14,12 +14,14 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.KillSystem.Service.GoodsService;
 import com.KillSystem.Service.OrderService;
+import com.KillSystem.common.ResponseCode;
 import com.KillSystem.common.ServerResponse;
 import com.KillSystem.domain.Order;
 import com.KillSystem.util.MD5Util;
@@ -33,6 +35,8 @@ import com.google.common.collect.Maps;
 /**
  * @author xcxcxcxcx
  * 
+ * 订单controller
+ * 包括订单的创建、订单的支付、支付宝回调的接口、支付订单状态的轮询
  * 
  * 2018年4月4日
  *
@@ -95,8 +99,8 @@ public class OrderController {
 	@RequestMapping("/createOrder.do")
 	@ResponseBody
 	public ServerResponse createOrder(Order order,HttpServletRequest request,HttpSession session) {
-//		if (session.getAttribute("tel_num") == null && session.getAttribute("passwd") == null) {
-//			return ServerResponse.createByErrorMessage("请先登陆！");
+//		if (session.getAttribute("tel_num") == null || session.getAttribute("passwd") == null) {
+//			return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录");
 //		}
 		//构造不重复order_id
 		String order_id = MD5Util.MD5EncodeUtf8(order.getTel_num()+order.getGoods_id()+DateTime.now().toString());
@@ -141,8 +145,8 @@ public class OrderController {
 	@RequestMapping("/pay.do")
 	@ResponseBody
 	public ServerResponse pay(Order order,HttpServletRequest request,HttpSession session) {
-//		if (session.getAttribute("tel_num") == null && session.getAttribute("passwd") == null) {
-//			return ServerResponse.createByErrorMessage("请先登陆！");
+//		if (session.getAttribute("tel_num") == null || session.getAttribute("passwd") == null) {
+//			return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录");
 //		}
 		//hasPay = true;
 		
@@ -206,6 +210,9 @@ public class OrderController {
 	@RequestMapping("/payIsSuccess.do")
 	@ResponseBody
 	public ServerResponse payIsSuccess(Order order,HttpServletRequest request,HttpSession session) {
+//		if (session.getAttribute("tel_num") == null || session.getAttribute("passwd") == null) {
+//			return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录");
+//		}
 		//查询该订单是否支付成功：在redis中查询key{订单号+pay}的value值是否为1，若为1，返回支付成功，若为0，返回未支付。
 		String flag = orderService.getPayState(order);
 		if(flag == null) {

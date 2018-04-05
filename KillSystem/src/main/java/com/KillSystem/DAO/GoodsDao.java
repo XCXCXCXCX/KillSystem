@@ -1,11 +1,17 @@
 package com.KillSystem.DAO;
 
-import java.util.List;
-import java.util.Map;
-
 import com.KillSystem.domain.Goods;
 
+/**
+ * @author xcxcxcxcx
+ * 
+ * 商品Dao
+ * 
+ * 2018年4月5日
+ *
+ */
 public interface GoodsDao extends BaseDao<Goods>{
+
 	
 
 }

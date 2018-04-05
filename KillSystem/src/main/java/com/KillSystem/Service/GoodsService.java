@@ -6,8 +6,15 @@ import com.KillSystem.domain.Goods;
 import com.KillSystem.domain.Order;
 import com.github.pagehelper.PageInfo;
 
-import redis.clients.jedis.Jedis;
-
+/**
+ * @author xcxcxcxcx
+ * 
+ * 商品服务接口
+ * 包括管理员查询商品的分页和用户查询商品的分页等
+ * 
+ * 2018年4月5日
+ *
+ */
 public interface GoodsService extends BaseService<Goods>{
 	PageInfo<Map<String, Goods>> select(Goods goods,int pageNum,int pageSize);
 	PageInfo<Map<String, Goods>> selectById(Goods goods,int pageNum,int pageSize);

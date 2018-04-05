@@ -1,5 +1,14 @@
 package com.KillSystem.domain;
 
+
+/**
+ * @author xcxcxcxcx
+ * 
+ * UserBean
+ * 
+ * 2018年4月5日
+ *
+ */
 public class User {
 
 	private String tel_num;

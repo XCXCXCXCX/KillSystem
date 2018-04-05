@@ -26,6 +26,16 @@ import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Maps;
 import com.KillSystem.util.PropertiesUtil;
 
+
+/**
+ * @author xcxcxcxcx
+ * 
+ * 管理员controller
+ * 包括管理员登陆，商品的增删改查，订单的删改查
+ * 
+ * 2018年4月5日
+ *
+ */
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
@@ -117,7 +127,7 @@ public class AdminController {
 			@RequestParam(value = "upload_file", required = false) MultipartFile file) {
 		String username = (String) session.getAttribute("username");
 		String passwd = (String) session.getAttribute("passwd");
-		if (username == null && passwd == null) {
+		if (username == null || passwd == null) {
 			return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录,请登录管理员");
 		}
 		if (userService.checkAdminRole(username, passwd) != null) {
@@ -138,8 +148,8 @@ public class AdminController {
 	@RequestMapping("/adminDelete.do")
 	@ResponseBody
 	public ServerResponse adminDelete(Goods goods, HttpSession session) {
-		if (session.getAttribute("username") == null && session.getAttribute("passwd") == null) {
-			return ServerResponse.createByErrorMessage("无权限操作！");
+		if (session.getAttribute("username") == null || session.getAttribute("passwd") == null) {
+			return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录,请登录管理员");
 		}
 		if (goodsService.delete(goods) == 1) {
 			return ServerResponse.createBySuccessMessage("删除商品成功！");
@@ -151,8 +161,8 @@ public class AdminController {
 	@RequestMapping("/addGoodsInfo.do")
 	@ResponseBody
 	public ServerResponse addGoodsInfo(Goods goods, HttpSession session) {
-		if (session.getAttribute("username") == null && session.getAttribute("passwd") == null) {
-			return ServerResponse.createByErrorMessage("无权限操作！");
+		if (session.getAttribute("username") == null || session.getAttribute("passwd") == null) {
+			return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录,请登录管理员");
 		}
 		if (goodsService.update(goods) == 1) {
 			return ServerResponse.createBySuccessMessage("更新商品详情成功！");
@@ -164,8 +174,8 @@ public class AdminController {
 	@RequestMapping("/adminUpdateOrInsert.do")
 	@ResponseBody
 	public ServerResponse adminUpdateOrInsert(Goods goods, HttpSession session) {
-		if (session.getAttribute("username") == null && session.getAttribute("passwd") == null) {
-			return ServerResponse.createByErrorMessage("无权限操作！");
+		if (session.getAttribute("username") == null || session.getAttribute("passwd") == null) {
+			return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录,请登录管理员");
 		}
 		if (goods == null) {
 			return ServerResponse.createByErrorMessage("商品信息为空！");
@@ -187,8 +197,8 @@ public class AdminController {
 	@RequestMapping("/orderDelete.do")
 	@ResponseBody
 	public ServerResponse orderDelete(Order order, HttpSession session) {
-		if (session.getAttribute("username") == null && session.getAttribute("passwd") == null) {
-			return ServerResponse.createByErrorMessage("无权限操作！");
+		if (session.getAttribute("username") == null || session.getAttribute("passwd") == null) {
+			return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录,请登录管理员");
 		}
 		if (orderService.delete(order) == 1) {
 			return ServerResponse.createBySuccessMessage("删除订单成功！");
@@ -199,8 +209,8 @@ public class AdminController {
 	@RequestMapping("/orderUpdate.do")
 	@ResponseBody
 	public ServerResponse orderUpdate(Order order, HttpSession session) {
-		if (session.getAttribute("username") == null && session.getAttribute("passwd") == null) {
-			return ServerResponse.createByErrorMessage("无权限操作！");
+		if (session.getAttribute("username") == null || session.getAttribute("passwd") == null) {
+			return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录,请登录管理员");
 		}
 		if (orderService.update(order) == 1) {
 			return ServerResponse.createBySuccessMessage("更新订单信息成功！");
@@ -211,8 +221,8 @@ public class AdminController {
 	@RequestMapping("/orderUpdateOrderState.do")
 	@ResponseBody
 	public ServerResponse orderUpdateOrderState(Order order, HttpSession session) {
-		if (session.getAttribute("username") == null && session.getAttribute("passwd") == null) {
-			return ServerResponse.createByErrorMessage("无权限操作！");
+		if (session.getAttribute("username") == null || session.getAttribute("passwd") == null) {
+			return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录,请登录管理员");
 		}
 		if (orderService.updateOrderState(order) == 1) {
 			return ServerResponse.createBySuccessMessage("更新订单状态成功！");

@@ -1,10 +1,16 @@
 package com.KillSystem.util;
 
-import org.springframework.util.StringUtils;
-
 import java.security.MessageDigest;
 
 
+/**
+ * @author xcxcxcxcx
+ * 
+ * 借用了别人的代码，封装了MD5加密字符串
+ * 
+ * 2018年4月5日
+ *
+ */
 public class MD5Util {
 
     private static String byteArrayToHexString(byte b[]) {

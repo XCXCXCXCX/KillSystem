@@ -1,13 +1,19 @@
 package com.KillSystem.util;
 
-import org.springframework.stereotype.Repository;
-
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
+/**
+ * @author xcxcxcxcx
+ * 
+ * JedisUtil提供获取连接、返回连接、关闭连接池方法
+ * 
+ * 2018年4月5日
+ *
+ */
 public class JedisUtil {
 	
-	private static JedisPool jedisPool = JedisPoolManager.INSTANCE.getInstance().getJedisPool();
+	private static JedisPool jedisPool = JedisPoolManager.INSTANCE.getJedisPool();
 	
 	public static Jedis getConn() {
 		return jedisPool.getResource();

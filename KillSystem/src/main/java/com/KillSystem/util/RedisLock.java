@@ -2,19 +2,19 @@ package com.KillSystem.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.DataAccessException;
-import org.springframework.data.redis.connection.RedisConnection;
-import org.springframework.data.redis.core.RedisCallback;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
+
 
 /**
- * Redis distributed lock implementation.
+ * @author xcxcxcxcx
+ * 
+ * 学习了csdn上一篇博客，结合我使用的JedisPool
+ * 
+ * 使用redis的setnx特性实现分布式锁
+ * 
+ * 2018年4月5日
  *
- * @author zhengcanrui
  */
 public class RedisLock {
 
@@ -80,18 +80,6 @@ public class RedisLock {
         try {
         	jedis = JedisUtil.getConn();
         	obj = jedis.get(key);
-//            obj = redisTemplate.execute(new RedisCallback<Object>() {
-//                @Override
-//                public Object doInRedis(RedisConnection connection) throws DataAccessException {
-//                    StringRedisSerializer serializer = new StringRedisSerializer();
-//                    byte[] data = connection.get(serializer.serialize(key));
-//                    connection.close();
-//                    if (data == null) {
-//                        return null;
-//                    }
-//                    return serializer.deserialize(data);
-//                }
-//            });
         } catch (Exception e) {
         	jedis.close();
             logger.error("get redis error, key : {}", key);
@@ -106,15 +94,6 @@ public class RedisLock {
     	try {
     		jedis = JedisUtil.getConn();
         	obj = jedis.setnx(key, value);
-//            obj = redisTemplate.execute(new RedisCallback<Object>() {
-//                @Override
-//                public Object doInRedis(RedisConnection connection) throws DataAccessException {
-//                    StringRedisSerializer serializer = new StringRedisSerializer();
-//                    Boolean success = connection.setNX(serializer.serialize(key), serializer.serialize(value));
-//                    connection.close();
-//                    return success;
-//                }
-//            });
         } catch (Exception e) {
         	jedis.close();
             logger.error("setNX redis error, key : {}", key);
@@ -129,15 +108,6 @@ public class RedisLock {
         try {
         	jedis = JedisUtil.getConn();
         	obj = jedis.getSet(key, value);
-//            obj = redisTemplate.execute(new RedisCallback<Object>() {
-//                @Override
-//                public Object doInRedis(RedisConnection connection) throws DataAccessException {
-//                    StringRedisSerializer serializer = new StringRedisSerializer();
-//                    byte[] ret = connection.getSet(serializer.serialize(key), serializer.serialize(value));
-//                    connection.close();
-//                    return serializer.deserialize(ret);
-//                }
-//            });
         } catch (Exception e) {
         	jedis.close();
             logger.error("setNX redis error, key : {}", key);

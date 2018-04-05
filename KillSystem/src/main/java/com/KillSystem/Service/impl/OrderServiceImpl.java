@@ -18,7 +18,6 @@ import com.KillSystem.Service.OrderService;
 import com.KillSystem.common.ServerResponse;
 import com.KillSystem.domain.Goods;
 import com.KillSystem.domain.Order;
-import com.KillSystem.util.DateTimeUtil;
 import com.KillSystem.util.FTPUtil;
 import com.KillSystem.util.InitFIFOListener;
 import com.KillSystem.util.PropertiesUtil;
@@ -37,9 +36,19 @@ import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import redis.clients.jedis.Jedis;
 
-@Service("OrderServiceImpl")
+/**
+ * @author xcxcxcxcx
+ * 
+ * 订单服务实现类
+ * 
+ * 提供了管理员的增删改查接口
+ * 提供了用户的创建订单、创建支付订单、支付订单、支付宝回调接口
+ * 
+ * 2018年4月5日
+ *
+ */
+@Service("OrderService")
 public class OrderServiceImpl implements OrderService{
 
 	

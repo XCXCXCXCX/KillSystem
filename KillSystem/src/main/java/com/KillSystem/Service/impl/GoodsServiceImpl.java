@@ -13,9 +13,19 @@ import com.KillSystem.domain.Order;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
-import redis.clients.jedis.Jedis;
 
-@Service("GoodsServiceImpl")
+/**
+ * @author xcxcxcxcx
+ * 
+ * 商品服务实现类
+ * 
+ * 提供管理员对商品的增删改查接口
+ * 提供用户对商品的分页查询和对商品库存的操作接口
+ * 
+ * 2018年4月5日
+ *
+ */
+@Service("GoodsService")
 public class GoodsServiceImpl implements GoodsService{
 
 	@Autowired

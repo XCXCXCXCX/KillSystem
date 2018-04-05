@@ -9,7 +9,12 @@ import java.io.InputStreamReader;
 import java.util.Properties;
 
 /**
- * Created by geely
+ * @author xcxcxcxcx
+ * 
+ * 读取配置文件的工具类
+ * 
+ * 2018年4月5日
+ *
  */
 public class PropertiesUtil {
 

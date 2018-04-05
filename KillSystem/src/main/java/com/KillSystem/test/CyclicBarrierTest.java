@@ -7,6 +7,20 @@ import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+
+/**
+ * @author xcxcxcxcx
+ * 
+ * 屏障测试类
+ * 
+ * 创建800个线程进入屏障准备就绪后同时启动
+ * 每个线程的run方法是向createOrder发起请求，并计算发起请求到获得数据的响应时间。
+ * 
+ * 测试发现，发起的大多数请求都被网关过滤，网上查资料指出可能是端口被占用。
+ * 
+ * 2018年4月5日
+ *
+ */
 public class CyclicBarrierTest {  
 	  
     public static void main(String[] args) throws IOException, InterruptedException {  

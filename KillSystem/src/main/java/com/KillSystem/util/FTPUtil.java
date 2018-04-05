@@ -1,7 +1,6 @@
 package com.KillSystem.util;
 
 import org.apache.commons.net.ftp.FTPClient;
-import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +11,9 @@ import java.util.List;
 
 /**
  * Created by geely
+ * 
+ * 借用别人的代码，封装了上传文件到FTP的操作。
+ * 
  */
 public class FTPUtil {
 
@@ -74,7 +76,6 @@ public class FTPUtil {
         try {
             ftpClient.connect(ip);
             isSuccess = ftpClient.login(user,pwd);
-            System.out.println(isSuccess);
         } catch (IOException e) {
             logger.error("连接FTP服务器异常",e);
         }

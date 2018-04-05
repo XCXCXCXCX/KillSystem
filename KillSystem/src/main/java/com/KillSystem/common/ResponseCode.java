@@ -1,5 +1,14 @@
 package com.KillSystem.common;
 
+
+/**
+ * @author xcxcxcxcx
+ * 
+ * 响应码枚举类
+ * 
+ * 2018年4月5日
+ *
+ */
 public enum ResponseCode {
 
     SUCCESS(0,"SUCCESS"),

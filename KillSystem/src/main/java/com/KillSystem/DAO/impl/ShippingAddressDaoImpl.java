@@ -8,10 +8,17 @@ import org.springframework.stereotype.Repository;
 
 import com.KillSystem.DAO.ShippingAddressDao;
 import com.KillSystem.DAO.mapper.ShippingAddressMapper;
-import com.KillSystem.domain.Goods;
 import com.KillSystem.domain.ShippingAddress;
 import com.KillSystem.domain.User;
 
+/**
+ * @author xcxcxcxcx
+ * 
+ * 收货地址Dao实现类
+ * 
+ * 2018年4月5日
+ *
+ */
 @Repository
 public class ShippingAddressDaoImpl implements ShippingAddressDao{
 
@@ -19,25 +26,25 @@ public class ShippingAddressDaoImpl implements ShippingAddressDao{
 	private ShippingAddressMapper shippingAddressMapper;
 
 	@Override
-	public int insert(com.KillSystem.domain.ShippingAddress shippingAddress) {
+	public int insert(ShippingAddress shippingAddress) {
 		// TODO Auto-generated method stub
 		return shippingAddressMapper.insert(shippingAddress);
 	}
 
 	@Override
-	public int delete(com.KillSystem.domain.ShippingAddress shippingAddress) {
+	public int delete(ShippingAddress shippingAddress) {
 		// TODO Auto-generated method stub
 		return shippingAddressMapper.delete(shippingAddress);
 	}
 
 	@Override
-	public int update(com.KillSystem.domain.ShippingAddress t) {
+	public int update(ShippingAddress t) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public List<Map<String, com.KillSystem.domain.ShippingAddress>> select(com.KillSystem.domain.ShippingAddress t) {
+	public List<Map<String, ShippingAddress>> select(ShippingAddress t) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -49,8 +56,8 @@ public class ShippingAddressDaoImpl implements ShippingAddressDao{
 	}
 
 	@Override
-	public com.KillSystem.domain.ShippingAddress selectByaddressid(
-			com.KillSystem.domain.ShippingAddress shippingAddress) {
+	public ShippingAddress selectByaddressid(
+			ShippingAddress shippingAddress) {
 		// TODO Auto-generated method stub
 		return shippingAddressMapper.selectByaddressid(shippingAddress);
 	}

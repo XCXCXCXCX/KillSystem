@@ -11,6 +11,15 @@ import com.KillSystem.Service.UserService;
 import com.KillSystem.common.ServerResponse;
 import com.KillSystem.domain.User;
 
+/**
+ * @author xcxcxcxcx
+ * 
+ * 用户controller
+ * 包括用户的登陆、登出、注册
+ * 
+ * 2018年4月5日
+ *
+ */
 @Controller
 public class UserController {
 	

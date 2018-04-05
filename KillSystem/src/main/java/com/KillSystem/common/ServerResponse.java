@@ -4,6 +4,17 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+
+/**
+ * @author xcxcxcxcx
+ * 
+ * @param <T>
+ * 
+ * 响应对象的封装类
+ * 
+ * 2018年4月5日
+ *
+ */
 public class ServerResponse<T> implements Serializable {
 
     private int status;

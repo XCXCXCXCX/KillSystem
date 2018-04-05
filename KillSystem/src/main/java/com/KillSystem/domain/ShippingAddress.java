@@ -1,5 +1,14 @@
 package com.KillSystem.domain;
 
+
+/**
+ * @author xcxcxcxcx
+ * 
+ * ShippingAddressBean
+ * 
+ * 2018年4月5日
+ *
+ */
 public class ShippingAddress {
 
 	private int address_id;

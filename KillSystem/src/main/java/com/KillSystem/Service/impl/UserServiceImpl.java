@@ -10,12 +10,24 @@ import com.KillSystem.DAO.impl.UserDaoImpl;
 import com.KillSystem.Service.UserService;
 import com.KillSystem.domain.User;
 
-@Service("UserServiceImpl")
+
+/**
+ * @author xcxcxcxcx
+ * 
+ * 用户服务实现类
+ * 
+ * 提供了用户的登陆、注册、登出、检验管理员身份接口
+ * 
+ * 2018年4月5日
+ *
+ */
+@Service("UserService")
 public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	private UserDaoImpl userDaoImpl;
 	
+	@Override
 	public User login(User user) {
 		
 		return userDaoImpl.login(user);

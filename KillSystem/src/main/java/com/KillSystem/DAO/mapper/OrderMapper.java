@@ -3,9 +3,17 @@ package com.KillSystem.DAO.mapper;
 import java.util.List;
 import java.util.Map;
 
-import com.KillSystem.domain.Goods;
 import com.KillSystem.domain.Order;
 
+/**
+ * @author xcxcxcxcx
+ * 
+ * 商品mapper
+ * 连接mybatis的OrderMapper.xml文件
+ * 
+ * 2018年4月5日
+ *
+ */
 public interface OrderMapper {
 	int delete(Order order);
 	int update(Order order);
