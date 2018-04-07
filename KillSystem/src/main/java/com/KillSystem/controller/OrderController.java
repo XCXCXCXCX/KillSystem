@@ -23,6 +23,7 @@ import com.KillSystem.Service.GoodsService;
 import com.KillSystem.Service.OrderService;
 import com.KillSystem.common.ResponseCode;
 import com.KillSystem.common.ServerResponse;
+import com.KillSystem.domain.Goods;
 import com.KillSystem.domain.Order;
 import com.KillSystem.util.MD5Util;
 import com.alipay.api.AlipayApiException;
@@ -102,7 +103,20 @@ public class OrderController {
 //		if (session.getAttribute("tel_num") == null || session.getAttribute("passwd") == null) {
 //			return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录");
 //		}
+		//todo
+		//如果该订单关联商品是静态的，返回“商品已抢光”
+		//否则继续进行
+		if(!goodsService.checkGoodsStockInRedis(order)) {
+			return ServerResponse.createByErrorMessage("商品库存已抢光！秒杀接口已关闭！");
+		}
+		//判断商品是否存在
+		Goods goods = new Goods();
+		goods.setGoods_id(order.getGoods_id());
+		if(goodsService.getGoodsById(goods)==null) {
+			return ServerResponse.createByErrorMessage("商品不存在！");
+		}
 		//构造不重复order_id
+		//检查是否存在该订单
 		String order_id = MD5Util.MD5EncodeUtf8(order.getTel_num()+order.getGoods_id()+DateTime.now().toString());
 		order.setOrder_id(order_id);
 		if(orderService.orderIsExist(order)) {
@@ -118,8 +132,8 @@ public class OrderController {
 			}
 			
 			//2.在redis中库存减一，若失败，撤回创建订单操作并返回“创建订单失败”
-			if(goodsService.decrGoodsStock(order) < 0) {
-				return ServerResponse.createByErrorMessage("库存减一失败！");
+			if(goodsService.decrGoodsStock(order) == 0) {
+				return ServerResponse.createByErrorMessage("库存已抢光！");
 			}
 			
 		} catch (Exception e) {
@@ -151,7 +165,9 @@ public class OrderController {
 		//hasPay = true;
 		
 		if(!orderService.orderIsExist(order)) {
-			return ServerResponse.createByErrorMessage(order.getOrder_id() + "订单已失效，请重新 创建订单");
+			//撤回库存减一的操作
+			goodsService.incrGoodsStock(order);
+			return ServerResponse.createByErrorMessage(order.getOrder_id() + "订单已失效，请重新创建订单");
 		}
 		//todo
 		//1.在redis中创建支付订单，若失败，返回“订单已存在”

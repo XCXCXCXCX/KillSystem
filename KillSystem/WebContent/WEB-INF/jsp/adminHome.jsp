@@ -52,10 +52,13 @@
             			return;
             		}
             		$("#inputGoodsId").val(goods_id);
+            		$("#inputGoodsName").val($("#goods" + counter + "name").text());
             		$("#inputGoodsPrice").val($("#goods" + counter + "price").text());
             		$("#inputGoodsStock").val($("#goods" + counter + "stock").text());
-      		  };
-        	};
+            		$("#inputBeginTime").val($("#begin" + counter + "time").text());
+            		$("#inputEndTime").val($("#end" + counter + "time").text());
+        		};
+        	}; 
         	var infoHandler = function(counter) {
         		return function(){
         			var goods_id = $("#goods" + counter + "id").text();
@@ -93,8 +96,58 @@
         					editor.setValue('');
         					window.location.href="#";
         	            }, 'json');  
-        	})
+        	});
+        	$("#inputBeginTime").click(function(){
+        		if($("#inputBeginTime").val()==null||$("#inputBeginTime").val()==""){
+        			$("#inputBeginTime").val("2018-01-01 00:00:00.00");
+        		}
+        		
+        	});
+            $("#inputEndTime").click(function(){
+        		if($("#inputEndTime").val()==null||$("#inputEndTime").val()==""){
+        			$("#inputEndTime").val("2018-01-01 00:00:00.00");
+        		}
+        		
+        	});
         };
+        
+        
+        var now = new Date();
+    	$.post("/KillSystem/getSystemTime.do", {},  
+                  	            function (response) {  
+                  	                if (response.status == "0") {
+    									now = new Date(response.data);
+                  	                }
+                  	            }, 'json'); 
+    	
+    	var year = now.getFullYear();
+    	var month = now.getMonth() + 1;
+    	var day = now.getDay() + 1;
+    	var hour = now.getHours();
+    	var minute = now.getMinutes();
+    	var second = now.getSeconds();
+    	setInterval(function(){
+    		$("#year").text(year+"-");
+    		$("#month").text(month+"-");
+    		$("#day").text(day+" ");
+    		$("#hour").text(hour+":");
+    		$("#minute").text(minute+":");
+    		$("#second").text(second+".0");
+    		second = second + 1;
+    		if(second == 60){
+    			second = 0;
+    			minute = minute + 1;
+    		}
+    		if(minute == 60){
+    			minute = 0;
+    			hour = hour + 1;
+    		}
+    		if(hour == 25){
+    			hour = 1;
+    			window.location.reload();
+    		}
+    	},1000);
+        
         </script>
     </head>
     
@@ -127,6 +180,7 @@
                     	</div>
                     </c:if>
                     <div class="row-fluid">
+                    	<span id="year">yyyy</span><span id="month">MM</span><span id="day">dd</span><span id="hour">hh</span ><span id="minute">mm</span><span id="second">ss</span>
                         <!-- block -->
                         <div class="block">
                             <div class="navbar navbar-inner block-header">
@@ -153,11 +207,11 @@
 						              	<c:if test="${page.getList().size() > 0}">
 						                <tr>
 						                  <td id="goods0id" >${page.getList().get(0).get("goods_id")}</td>
-						                  <td>${page.getList().get(0).get("goods_name")}</td>
+						                  <td id="goods0name">${page.getList().get(0).get("goods_name")}</td>
 						                  <td id="goods0price">${page.getList().get(0).get("goods_price")}</td>
 						                  <td id="goods0stock">${page.getList().get(0).get("goods_stock")}</td>
-						                  <td>${page.getList().get(0).get("begin_time")}</td>
-						                  <td>${page.getList().get(0).get("end_time")}</td>
+						                  <td id="begin0time">${page.getList().get(0).get("begin_time")}</td>
+						                  <td id="end0time">${page.getList().get(0).get("end_time")}</td>
 						                  <td>${msg0}</td>
 						                  <td><a id="upd0" href="#">update</a></td>
 						                  <td><a id="del0" href="#">delete</a></td>
@@ -167,11 +221,11 @@
 						                <c:if test="${page.getList().size() > 1}">
 						                <tr>
 						                  <td id="goods1id">${page.getList().get(1).get("goods_id")}</td>
-						                  <td>${page.getList().get(1).get("goods_name")}</td>
+						                  <td id="goods1name">${page.getList().get(1).get("goods_name")}</td>
 						                  <td id="goods1price">${page.getList().get(1).get("goods_price")}</td>
 						                  <td id="goods1stock">${page.getList().get(1).get("goods_stock")}</td>
-						                  <td>${page.getList().get(1).get("begin_time")}</td>
-						                  <td>${page.getList().get(1).get("end_time")}</td>
+						                  <td id="begin1time">${page.getList().get(1).get("begin_time")}</td>
+						                  <td id="end1time">${page.getList().get(1).get("end_time")}</td>
 						                  <td>${msg1}</td>
 						                  <td><a id="upd1" href="#">update</a></td>
 						                  <td><a id="del1" href="#">delete</a></td>
@@ -181,11 +235,11 @@
 						                <c:if test="${page.getList().size() > 2}">
 						                <tr>
 						                  <td id="goods2id">${page.getList().get(2).get("goods_id")}</td>
-						                  <td>${page.getList().get(2).get("goods_name")}</td>
+						                  <td id="goods2name">${page.getList().get(2).get("goods_name")}</td>
 						                  <td id="goods2price">${page.getList().get(2).get("goods_price")}</td>
 						                  <td id="goods2stock">${page.getList().get(2).get("goods_stock")}</td>
-						                  <td>${page.getList().get(2).get("begin_time")}</td>
-						                  <td>${page.getList().get(2).get("end_time")}</td>
+						                  <td id="begin2time">${page.getList().get(2).get("begin_time")}</td>
+						                  <td id="end2time">${page.getList().get(2).get("end_time")}</td>
 						                  <td>${msg2}</td>
 						                  <td><a id="upd2" href="#">update</a></td>
 						                  <td><a id="del2" href="#">delete</a></td>
@@ -195,11 +249,11 @@
 						                <c:if test="${page.getList().size() > 3}">
 						                <tr>
 						                  <td id="goods3id">${page.getList().get(3).get("goods_id")}</td>
-						                  <td>${page.getList().get(3).get("goods_name")}</td>
+						                  <td id="goods3name">${page.getList().get(3).get("goods_name")}</td>
 						                  <td id="goods3price">${page.getList().get(3).get("goods_price")}</td>
 						                  <td id="goods3stock">${page.getList().get(3).get("goods_stock")}</td>
-						                  <td>${page.getList().get(3).get("begin_time")}</td>
-						                  <td>${page.getList().get(3).get("end_time")}</td>
+						                  <td id="begin3time">${page.getList().get(3).get("begin_time")}</td>
+						                  <td id="end3time">${page.getList().get(3).get("end_time")}</td>
 						                  <td>${msg3}</td>
 						                  <td><a id="upd3" href="#">update</a></td>
 						                  <td><a id="del3" href="#">delete</a></td>
@@ -209,11 +263,11 @@
 						                <c:if test="${page.getList().size() > 4}">
 						                <tr>
 						                  <td id="goods4id">${page.getList().get(4).get("goods_id")}</td>
-						                  <td>${page.getList().get(4).get("goods_name")}</td>
+						                  <td id="goods4name">${page.getList().get(4).get("goods_name")}</td>
 						                  <td id="goods4price">${page.getList().get(4).get("goods_price")}</td>
 						                  <td id="goods4stock">${page.getList().get(4).get("goods_stock")}</td>
-						                  <td>${page.getList().get(4).get("begin_time")}</td>
-						                  <td>${page.getList().get(4).get("end_time")}</td>
+						                  <td id="begin4time">${page.getList().get(4).get("begin_time")}</td>
+						                  <td id="end4time">${page.getList().get(4).get("end_time")}</td>
 						                  <td>${msg4}</td>
 						                  <td><a id="upd4" href="#">update</a></td>
 						                  <td><a id="del4" href="#">delete</a></td>
@@ -223,11 +277,11 @@
 						                <c:if test="${page.getList().size() > 5}">
 						                <tr>
 						                  <td id="goods5id">${page.getList().get(5).get("goods_id")}</td>
-						                  <td>${page.getList().get(5).get("goods_name")}</td>
+						                  <td id="goods5name">${page.getList().get(5).get("goods_name")}</td>
 						                  <td id="goods5price">${page.getList().get(5).get("goods_price")}</td>
 						                  <td id="goods5stock">${page.getList().get(5).get("goods_stock")}</td>
-						                  <td>${page.getList().get(5).get("begin_time")}</td>
-						                  <td>${page.getList().get(5).get("end_time")}</td>
+						                  <td id="begin5time">${page.getList().get(5).get("begin_time")}</td>
+						                  <td id="end5time">${page.getList().get(5).get("end_time")}</td>
 						                  <td>${msg5}</td>
 						                  <td><a id="upd5" href="#">update</a></td>
 						                  <td><a id="del5" href="#">delete</a></td>
@@ -237,11 +291,11 @@
 						                <c:if test="${page.getList().size() > 6}">
 						                <tr>
 						                  <td id="goods6id">${page.getList().get(6).get("goods_id")}</td>
-						                  <td>${page.getList().get(6).get("goods_name")}</td>
+						                  <td id="goods6name">${page.getList().get(6).get("goods_name")}</td>
 						                  <td id="goods6price">${page.getList().get(6).get("goods_price")}</td>
 						                  <td id="goods6stock">${page.getList().get(6).get("goods_stock")}</td>
-						                  <td>${page.getList().get(6).get("begin_time")}</td>
-						                  <td>${page.getList().get(6).get("end_time")}</td>
+						                  <td id="begin6time">${page.getList().get(6).get("begin_time")}</td>
+						                  <td id="end6time">${page.getList().get(6).get("end_time")}</td>
 						                  <td>${msg6}</td>
 						                  <td><a id="upd6" href="#">update</a></td>
 						                  <td><a id="del6" href="#">delete</a></td>
@@ -251,11 +305,11 @@
 						                <c:if test="${page.getList().size() > 7}">
 						                <tr>
 						                  <td id="goods7id">${page.getList().get(7).get("goods_id")}</td>
-						                  <td>${page.getList().get(7).get("goods_name")}</td>
+						                  <td id="goods7name">${page.getList().get(7).get("goods_name")}</td>
 						                  <td id="goods7price">${page.getList().get(7).get("goods_price")}</td>
 						                  <td id="goods7stock">${page.getList().get(7).get("goods_stock")}</td>
-						                  <td>${page.getList().get(7).get("begin_time")}</td>
-						                  <td>${page.getList().get(7).get("end_time")}</td>
+						                  <td id="begin7time">${page.getList().get(7).get("begin_time")}</td>
+						                  <td id="end7time">${page.getList().get(7).get("end_time")}</td>
 						                  <td>${msg7}</th>
 						                  <td><a id="upd7" href="#">update</a></td>
 						                  <td><a id="del7" href="#">delete</a></td>
@@ -265,11 +319,11 @@
 						                <c:if test="${page.getList().size() > 8}">
 						                <tr>
 						                  <td id="goods8id">${page.getList().get(8).get("goods_id")}</td>
-						                  <td>${page.getList().get(8).get("goods_name")}</td>
+						                  <td id="goods8name">${page.getList().get(8).get("goods_name")}</td>
 						                  <td id="goods8price">${page.getList().get(8).get("goods_price")}</td>
 						                  <td id="goods8stock">${page.getList().get(8).get("goods_stock")}</td>
-						                  <td>${page.getList().get(8).get("begin_time")}</td>
-						                  <td>${page.getList().get(8).get("end_time")}</td>
+						                  <td id="begin8time">${page.getList().get(8).get("begin_time")}</td>
+						                  <td id="end8time">${page.getList().get(8).get("end_time")}</td>
 						                  <td>${msg8}</td>
 						                  <td><a id="upd8" href="#">update</a></td>
 						                  <td><a id="del8" href="#">delete</a></td>
@@ -279,11 +333,11 @@
 						                <c:if test="${page.getList().size() > 9}">
 						                <tr>
 						                  <td id="goods9id">${page.getList().get(9).get("goods_id")}</td>
-						                  <td>${page.getList().get(9).get("goods_name")}</td>
+						                  <td id="goods9name">${page.getList().get(9).get("goods_name")}</td>
 						                  <td id="goods9price">${page.getList().get(9).get("goods_price")}</td>
 						                  <td id="goods9stock">${page.getList().get(9).get("goods_stock")}</td>
-						                  <td>${page.getList().get(9).get("begin_time")}</td>
-						                  <td>${page.getList().get(9).get("end_time")}</td>
+						                  <td id="begin9time">${page.getList().get(9).get("begin_time")}</td>
+						                  <td id="end9time">${page.getList().get(9).get("end_time")}</td>
 						                  <td>${msg9}</td>
 						                  <td><a id="upd9" href="#">update</a></td>
 						                  <td><a id="del9" href="#">delete</a></td>

@@ -1,0 +1,98 @@
+
+<!DOCTYPE html>
+	<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>时钟测试页面</title>
+	<!-- jQuery -->
+	<script src="js/jquery.min.js"></script>
+	<script>
+	
+	window.onload=function(){
+		var now = new Date();
+		$.post("/KillSystem/getSystemTime.do", {},  
+                  	            function (response) {  
+                  	                if (response.status == "0") {
+										now = new Date(response.data);
+                  	                }
+                  	            }, 'json'); 
+		
+		var year = now.getFullYear();
+		var month = now.getMonth() + 1;
+		var day = now.getDay() + 1;
+		var hour = now.getHours();
+		var minute = now.getMinutes();
+		var second = now.getSeconds();
+		setInterval(function(){
+			$("#year").text(year);
+			$("#month").text(month);
+			$("#day").text(day);
+			$("#hour").text(hour);
+			$("#minute").text(minute);
+			$("#second").text(second);
+			second = second + 1;
+			if(second == 60){
+				second = 0;
+				minute = minute + 1;
+			}
+			if(minute == 60){
+				minute = 0;
+				hour = hour + 1;
+			}
+			if(hour == 25){
+				hour = 1;
+				window.location.reload();
+			}
+		},1000);
+		
+		$.Select = { 
+//定义一个方法aa 
+del : function(obj,e){  
+if((e.keyCode||e.which||e.charCode) == 8){  
+var i = obj.selectedIndex;
+var opt = obj.options[i];  
+opt.text = opt.value = opt.value.substring(0, opt.value.length>0?opt.value.length-1:0);  
+}  
+}, 
+
+//定义一个方法bb 
+write : function(obj,e){  
+if((e.keyCode||e.which||e.charCode) == 8)return ;  
+var i = obj.selectedIndex;
+var opt = obj.options[i];  
+opt.selected = "selected";  
+opt.text = opt.value += String.fromCharCode(e.charCode||e.which||e.keyCode);  
+}
+ 
+} 
+  
+ 
+ 
+$("#test").click(function(){
+alert($("#select").val());  
+});  	
+		
+	}
+	</script>
+	</head>
+	<body>
+	哈哈哈
+	<div>
+		<span id="year">yyyy</span><span id="month">MM</span><span id="day">dd</span><span id="hour">hh</span ><span id="minute">mm</span><span id="second">ss</span>
+		
+		
+		<select id="select" onkeydown="$.Select.del(this,event)" onkeypress="$.Select.write(this,event)">  
+<option value=""></option>  
+<option value="aaa">aaa</option>  
+<option value="bbb">bbb</option>  
+<option value="ccc">ccc</option>  
+</select>  
+<input type="button" value="获取选择值" id="test"/>  
+		
+		
+	</div>
+		
+
+	</body>
+</html>
+

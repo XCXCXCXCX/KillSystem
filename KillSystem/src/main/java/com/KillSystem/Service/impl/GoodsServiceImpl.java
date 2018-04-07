@@ -84,13 +84,26 @@ public class GoodsServiceImpl implements GoodsService{
 	
 	@Override
 	public long decrGoodsStock(Order order) {
-		return goodsDaoImpl.setGoodsStock(order);
+		long flag = goodsDaoImpl.setGoodsStock(order);
+		if(flag < 0) {
+			goodsDaoImpl.setBackGoodsStock(order);
+			return 0;
+		}else {
+			return flag;
+		}
+		
 	}
 
 	@Override
 	public long incrGoodsStock(Order order) {
 		// TODO Auto-generated method stub
 		return goodsDaoImpl.setBackGoodsStock(order);
+	}
+
+	@Override
+	public boolean checkGoodsStockInRedis(Order order) {
+		// TODO Auto-generated method stub
+		return goodsDaoImpl.checkGoodsStockInRedis(order);
 	}
 
 	

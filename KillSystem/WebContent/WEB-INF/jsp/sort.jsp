@@ -26,6 +26,43 @@
 
 <script language="javascript" type="text/javascript">  
 $(function(){
+	
+	var now = new Date();
+	$.post("/KillSystem/getSystemTime.do", {},  
+              	            function (response) {  
+              	                if (response.status == "0") {
+									now = new Date(response.data);
+              	                }
+              	            }, 'json'); 
+	
+	var year = now.getFullYear();
+	var month = now.getMonth() + 1;
+	var day = now.getDay() + 1;
+	var hour = now.getHours();
+	var minute = now.getMinutes();
+	var second = now.getSeconds();
+	setInterval(function(){
+		$("#year").text(year+"年");
+		$("#month").text(month+"月");
+		$("#day").text(day+"日");
+		$("#hour").text(hour+"时");
+		$("#minute").text(minute+"分");
+		$("#second").text(second+"秒");
+		second = second + 1;
+		if(second == 60){
+			second = 0;
+			minute = minute + 1;
+		}
+		if(minute == 60){
+			minute = 0;
+			hour = hour + 1;
+		}
+		if(hour == 25){
+			hour = 1;
+			window.location.reload();
+		}
+	},1000);
+	
 	if($("#username").text()=="null"){
 		window.location.href="/";
 	}
@@ -87,6 +124,7 @@ $(function(){
 				<dd><a id="logout" href="javascript:;">退出登陆</a></dd>
 				</dl>
 		</li>
+		<span id="year">yyyy</span><span id="month">MM</span><span id="day">dd</span><span id="hour">hh</span ><span id="minute">mm</span><span id="second">ss</span>
 	</ul> 
 
  	<form action="http://localhost/KillSystem/sort.do" method="post">

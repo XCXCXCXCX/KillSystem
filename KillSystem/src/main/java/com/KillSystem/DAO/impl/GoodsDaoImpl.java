@@ -133,5 +133,19 @@ public class GoodsDaoImpl implements GoodsDao {
 		}
 	}
 
+	public boolean checkGoodsStockInRedis(Order order) {
+		try {
+			jedis = JedisUtil.getConn();
+			return "0".equals(jedis.get(order.getOrder_id())) ? false : true;
+		} finally {
+			if(jedis == null) {
+				jedis.close();
+			}else {
+				JedisUtil.returnConn(jedis);
+			}
+			
+		}
+	}
+
 	
 }

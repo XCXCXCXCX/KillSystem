@@ -28,7 +28,51 @@ text-align:center; /* 文字等内容居中 */
 <script src="https://ciphertrick.com/demo/jquerysession/js/jquerysession.js"></script>
 
 <script language="javascript" type="text/javascript">  
-$(function(){
+$(function(){ 
+	var nowTime = new Date(year,month,day,hour,minute,second);
+	var beginTime = $("#begintime").text();
+	var endTime = $("#endtime").text();
+	if(nowTime <= begintime && nowTime >= endtime){
+		$('#but').attr('disabled',"true");//添加disabled属性 
+	}else{
+		$('#but').attr('disabled',"false");//添加disabled属性 
+	}
+	var now = new Date();
+	$.post("/KillSystem/getSystemTime.do", {},  
+              	            function (response) {  
+              	                if (response.status == "0") {
+									now = new Date(response.data);
+              	                }
+              	            }, 'json'); 
+	
+	var year = now.getFullYear();
+	var month = now.getMonth() + 1;
+	var day = now.getDay() + 1;
+	var hour = now.getHours();
+	var minute = now.getMinutes();
+	var second = now.getSeconds();
+	setInterval(function(){
+		$("#year").text(year+"年");
+		$("#month").text(month+"月");
+		$("#day").text(day+"日");
+		$("#hour").text(hour+"时");
+		$("#minute").text(minute+"分");
+		$("#second").text(second+"秒");
+		second = second + 1;
+		if(second == 60){
+			second = 0;
+			minute = minute + 1;
+		}
+		if(minute == 60){
+			minute = 0;
+			hour = hour + 1;
+		}
+		if(hour == 25){
+			hour = 1;
+			window.location.reload();
+		}
+	},1000);
+	
 	$("#buy").click(function(){
 		var goodsid = ${thisGoods.getGoods_id()};
 		var goodsname = $("#goodsname").text();
@@ -69,6 +113,7 @@ $(function(){
 				<dd><a id="logout" href="javascript:;">退出登陆</a></dd>
 				</dl>
 		</li>
+		<span id="year">yyyy</span><span id="month">MM</span><span id="day">dd</span><span id="hour">hh</span ><span id="minute">mm</span><span id="second">ss</span>
 	</ul> 
  		
  	<div class="align-center">
@@ -76,8 +121,8 @@ $(function(){
  		商品名:<a id="goodsname" class="top">${thisGoods.getGoods_name()}</a>
 		价格:<a id="goodsprice" class="top">${thisGoods.getGoods_price()}</a>
 		库存:<a id="goodsstock" class="top">${thisGoods.getGoods_stock()}</a>
-		活动开始时间:<a class="top">${thisGoods.getBegin_time()}</a>
-		活动结束时间:<a class="top">${thisGoods.getEnd_time()}</a>
+		活动开始时间:<a id="begintime" class="top">${thisGoods.getBegin_time()}</a>
+		活动结束时间:<a id="endtime" class="top">${thisGoods.getEnd_time()}</a>
 		<a id="buy" class="top">!!立即抢购!!</a>
 		<a class="top">-</a>
  	</div>

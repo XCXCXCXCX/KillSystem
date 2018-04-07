@@ -55,6 +55,8 @@
             			return;
             		}
             		$("#inputOrderId").val(order_id);
+            		$("#inputTelNum").val($("#tel" + counter + "num").text());
+            		$("#inputAddress").val($("#address" + counter).text());
             		$("#inputGoodsId").val($("#goods" + counter + "id").text());
             		$("#inputCreateTime").val($("#create" + counter + "time").text());
             		$("#inputIsSuccess").val($("#is" + counter + "success").text());
@@ -115,6 +117,49 @@
         		}
         		window.location.href = url;
         	});
+        	$("#inputCreateTime").click(function(){
+        		if($("#inputCreateTime").val()==null||$("#inputCreateTime").val()==""){
+        			$("#inputCreateTime").val("2018-01-01 00:00:00.00");
+        		}
+        		
+        	});
+        	
+        	var now = new Date();
+        	$.post("/KillSystem/getSystemTime.do", {},  
+                      	            function (response) {  
+                      	                if (response.status == "0") {
+        									now = new Date(response.data);
+                      	                }
+                      	            }, 'json'); 
+        	
+        	var year = now.getFullYear();
+        	var month = now.getMonth() + 1;
+        	var day = now.getDay() + 1;
+        	var hour = now.getHours();
+        	var minute = now.getMinutes();
+        	var second = now.getSeconds();
+        	setInterval(function(){
+        		$("#year").text(year+"-");
+        		$("#month").text(month+"-");
+        		$("#day").text(day+" ");
+        		$("#hour").text(hour+":");
+        		$("#minute").text(minute+":");
+        		$("#second").text(second+".0");
+        		second = second + 1;
+        		if(second == 60){
+        			second = 0;
+        			minute = minute + 1;
+        		}
+        		if(minute == 60){
+        			minute = 0;
+        			hour = hour + 1;
+        		}
+        		if(hour == 25){
+        			hour = 1;
+        			window.location.reload();
+        		}
+        	},1000);
+        	
         };
         </script>
     </head>
@@ -148,6 +193,7 @@
                     	</div>
                     </c:if>
                     <div class="row-fluid">
+                    <span id="year">yyyy</span><span id="month">MM</span><span id="day">dd</span><span id="hour">hh</span ><span id="minute">mm</span><span id="second">ss</span>
                         <!-- block -->
                         <div class="block">
                             <div class="navbar navbar-inner block-header">
@@ -173,8 +219,8 @@
 						              	<c:if test="${page.getList().size() > 0}">
 						                <tr>
 						                  <td id="order0id">${page.getList().get(0).get("order_id")}</td>
-						                  <td>${page.getList().get(0).get("tel_num")}</td>
-						                  <td>${page.getList().get(0).get("address")}</td>
+						                  <td id="tel0num">${page.getList().get(0).get("tel_num")}</td>
+						                  <td id="address0">${page.getList().get(0).get("address")}</td>
 						                  <td id="goods0id">${page.getList().get(0).get("goods_id")}</td>
 						                  <td id="create0time">${page.getList().get(0).get("create_time")}</td>
 						                  <td id="is0success">${page.getList().get(0).get("is_success")}</td>
@@ -186,8 +232,8 @@
 						                <c:if test="${page.getList().size() > 1}">
 						                <tr>
 						                  <td id="order1id">${page.getList().get(1).get("order_id")}</td>
-						                  <td>${page.getList().get(1).get("tel_num")}</td>
-						                  <td>${page.getList().get(1).get("address")}</td>
+						                  <td id="tel1num">${page.getList().get(1).get("tel_num")}</td>
+						                  <td id="address1">${page.getList().get(1).get("address")}</td>
 						                  <td id="goods1id">${page.getList().get(1).get("goods_id")}</td>
 						                  <td id="create1time">${page.getList().get(1).get("create_time")}</td>
 						                  <td id="is1success">${page.getList().get(1).get("is_success")}</td>
@@ -199,8 +245,8 @@
 						                <c:if test="${page.getList().size() > 2}">
 						                <tr>
 						                  <td id="order2id">${page.getList().get(2).get("order_id")}</td>
-						                  <td>${page.getList().get(2).get("tel_num")}</td>
-						                  <td>${page.getList().get(2).get("address")}</td>
+						                  <td id="tel2num">${page.getList().get(2).get("tel_num")}</td>
+						                  <td id="address2">${page.getList().get(2).get("address")}</td>
 						                  <td id="goods2id">${page.getList().get(2).get("goods_id")}</td>
 						                  <td id="create2time">${page.getList().get(2).get("create_time")}</td>
 						                  <td id="is2success">${page.getList().get(2).get("is_success")}</td>
@@ -212,8 +258,8 @@
 						                <c:if test="${page.getList().size() > 3}">
 						                <tr>
 						                  <td id="order3id">${page.getList().get(3).get("order_id")}</td>
-						                  <td>${page.getList().get(3).get("tel_num")}</td>
-						                  <td>${page.getList().get(3).get("address")}</td>
+						                  <td id="tel3num">${page.getList().get(3).get("tel_num")}</td>
+						                  <td id="address3">${page.getList().get(3).get("address")}</td>
 						                  <td id="goods3id">${page.getList().get(3).get("goods_id")}</td>
 						                  <td id="create3time">${page.getList().get(3).get("create_time")}</td>
 						                  <td id="is3success">${page.getList().get(3).get("is_success")}</td>
@@ -225,8 +271,8 @@
 						                <c:if test="${page.getList().size() > 4}">
 						                <tr>
 						                  <td id="order4id">${page.getList().get(4).get("order_id")}</td>
-						                  <td>${page.getList().get(4).get("tel_num")}</td>
-						                  <td>${page.getList().get(4).get("address")}</td>
+						                  <td id="tel4num">${page.getList().get(4).get("tel_num")}</td>
+						                  <td id="address4">${page.getList().get(4).get("address")}</td>
 						                  <td id="goods4id">${page.getList().get(4).get("goods_id")}</td>
 						                  <td id="create4time">${page.getList().get(4).get("create_time")}</td>
 						                  <td id="is4success">${page.getList().get(4).get("is_success")}</td>
@@ -238,8 +284,8 @@
 						                <c:if test="${page.getList().size() > 5}">
 						                <tr>
 						                  <td id="order5id">${page.getList().get(5).get("order_id")}</td>
-						                  <td>${page.getList().get(5).get("tel_num")}</td>
-						                  <td>${page.getList().get(5).get("address")}</td>
+						                  <td id="tel5num">${page.getList().get(5).get("tel_num")}</td>
+						                  <td id="address5">${page.getList().get(5).get("address")}</td>
 						                  <td id="goods5id">${page.getList().get(5).get("goods_id")}</td>
 						                  <td id="create5time">${page.getList().get(5).get("create_time")}</td>
 						                  <td id="is5success">${page.getList().get(5).get("is_success")}</td>
@@ -251,8 +297,8 @@
 						                <c:if test="${page.getList().size() > 6}">
 						                <tr>
 						                  <td id="order6id">${page.getList().get(6).get("order_id")}</td>
-						                  <td>${page.getList().get(6).get("tel_num")}</td>
-						                  <td>${page.getList().get(6).get("address")}</td>
+						                  <td id="tel6num">${page.getList().get(6).get("tel_num")}</td>
+						                  <td id="address6">${page.getList().get(6).get("address")}</td>
 						                  <td id="goods6id">${page.getList().get(6).get("goods_id")}</td>
 						                  <td id="create6time">${page.getList().get(6).get("create_time")}</td>
 						                  <td id="is6success">${page.getList().get(6).get("is_success")}</td>
@@ -264,8 +310,8 @@
 						                <c:if test="${page.getList().size() > 7}">
 						                <tr>
 						                  <td id="order7id">${page.getList().get(7).get("order_id")}</td>
-						                  <td>${page.getList().get(7).get("tel_num")}</td>
-						                  <td>${page.getList().get(7).get("address")}</td>
+						                  <td id="tel7num">${page.getList().get(7).get("tel_num")}</td>
+						                  <td id="address7">${page.getList().get(7).get("address")}</td>
 						                  <td id="goods7id">${page.getList().get(7).get("goods_id")}</td>
 						                  <td id="create7time">${page.getList().get(7).get("create_time")}</td>
 						                  <td id="is7success">${page.getList().get(7).get("is_success")}</td>
@@ -277,8 +323,8 @@
 						                <c:if test="${page.getList().size() > 8}">
 						                <tr>
 						                  <td id="order8id">${page.getList().get(8).get("order_id")}</td>
-						                  <td>${page.getList().get(8).get("tel_num")}</td>
-						                  <td>${page.getList().get(8).get("address")}</td>
+						                  <td id="tel8num">${page.getList().get(8).get("tel_num")}</td>
+						                  <td id="address8">${page.getList().get(8).get("address")}</td>
 						                  <td id="goods8id">${page.getList().get(8).get("goods_id")}</td>
 						                  <td id="create8time">${page.getList().get(8).get("create_time")}</td>
 						                  <td id="is8success">${page.getList().get(8).get("is_success")}</td>
@@ -290,8 +336,8 @@
 						                <c:if test="${page.getList().size() > 9}">
 						                <tr>
 						                  <td id="order9id">${page.getList().get(9).get("order_id")}</td>
-						                  <td>${page.getList().get(9).get("tel_num")}</td>
-						                  <td>${page.getList().get(9).get("address")}</td>
+						                  <td id="tel9num">${page.getList().get(9).get("tel_num")}</td>
+						                  <td id="address9">${page.getList().get(9).get("address")}</td>
 						                  <td id="goods9id">${page.getList().get(9).get("goods_id")}</td>
 						                  <td id="create9time">${page.getList().get(9).get("create_time")}</td>
 						                  <td id="is9success">${page.getList().get(9).get("is_success")}</td>

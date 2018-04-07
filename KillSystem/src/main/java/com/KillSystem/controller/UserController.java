@@ -1,14 +1,22 @@
 package com.KillSystem.controller;
 
+import java.util.Date;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.KillSystem.Service.UserService;
+import com.KillSystem.common.ResponseCode;
 import com.KillSystem.common.ServerResponse;
+import com.KillSystem.domain.ShippingAddress;
 import com.KillSystem.domain.User;
 
 /**
@@ -61,5 +69,16 @@ public class UserController {
 	public String loginOut(HttpSession session) {
 		session.invalidate();
 		return "toLogin";
+	}
+	
+	@RequestMapping("/getSystemTime.do")
+	@ResponseBody
+	public ServerResponse getSystemTime(HttpSession session) {
+//		if (session.getAttribute("tel_num") == null || session.getAttribute("passwd") == null) {
+//			return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录");
+//		}
+
+		return ServerResponse.createBySuccess(new Date());
+		
 	}
 }

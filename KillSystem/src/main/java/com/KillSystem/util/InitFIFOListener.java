@@ -61,7 +61,7 @@ public class InitFIFOListener implements Runnable{
 	public void run() {
 		// TODO Auto-generated method stub
 		while(true) {
-			System.out.println("FIFO，我在正常运行");
+			//System.out.println("FIFO，我在正常运行");
 			Order order = queue.poll();
 			boolean toContinue = true;
 			if(order==null) {

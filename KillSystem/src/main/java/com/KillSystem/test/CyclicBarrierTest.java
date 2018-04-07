@@ -8,6 +8,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 
+
 /**
  * @author xcxcxcxcx
  * 
@@ -17,6 +18,7 @@ import java.util.concurrent.Executors;
  * 每个线程的run方法是向createOrder发起请求，并计算发起请求到获得数据的响应时间。
  * 
  * 测试发现，发起的大多数请求都被网关过滤，网上查资料指出可能是端口被占用。
+ * 改用ab进行测试。
  * 
  * 2018年4月5日
  *
@@ -27,7 +29,7 @@ public class CyclicBarrierTest {
         //如果将参数改为4，但是下面只加入了3个选手，这永远等待下去  
         //Waits until all parties have invoked await on this barrier.   
         CyclicBarrier barrier = new CyclicBarrier(800);  
-  
+        
         ExecutorService executor = Executors.newFixedThreadPool(2000);  
         for (int i = 0;i < 800;i++) {
         	Runner a = new Runner(barrier, i+"号选手");

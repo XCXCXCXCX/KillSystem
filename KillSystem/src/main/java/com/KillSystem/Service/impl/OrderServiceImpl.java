@@ -308,6 +308,7 @@ public class OrderServiceImpl implements OrderService{
         order.setOrder_id(orderNo+"_pay");
         if(!orderDaoImpl.orderIsExistInRedis(order)){
         	System.out.println("该支付订单已失效，请重新下单！");
+        	goodsDaoImpl.setBackGoodsStock(order);
             return ServerResponse.createByErrorMessage("该支付订单已失效，请重新下单！");
         }
         if(Integer.parseInt(orderDaoImpl.getPayState(order))>=1){

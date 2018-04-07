@@ -21,4 +21,5 @@ public interface GoodsService extends BaseService<Goods>{
 	Goods getGoodsById(Goods goods);
 	long decrGoodsStock(Order order);
 	long incrGoodsStock(Order order);
+	boolean checkGoodsStockInRedis(Order order);
 }
