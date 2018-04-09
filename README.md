@@ -34,7 +34,34 @@ ROOT文件夹内容为nginx中配置的静态文件访问区域，KillSystem文�
 
 所需jar包已引入依赖，pom.xml无需修改。
 
-三、项目开发
+三、数据库表设计
+
+mysql数据库表：
+
+       user表{tel_num varchar(11) PRI,username varchar(20) NOT NULL,passwd varchar(20) NOT NULL,register_date date}、
+       
+       goods表{goods_id int(11) PRI,goods_name varchar(20) NOT NULL,goods_price int(11) NOT NULL,
+       goods_stock int(11) NOT NULL,begin_time datetime NOT NULL,end_time datetime NOT NULL,goods_info mediumtext}、
+       
+       goods_order表{order_id varchar(32) PRI,tel_num varchar(11) NOT NULL,address varchar(20) NOT NULL,goods_id int(11) NOT NULL,
+       create_time datetime NOT NULL,is_success int(11) NOT NULL}、
+       
+       shippingAddress表{address_id int(11) NOT NULL,user_id varchar(20) NOT NULL,address varchar(50) NOT NULL,
+       tel_num varchar(20) NOT NULL,name varchar(20) NOT NULL}
+
+按照该表结构建表，并导入测试所需数据。
+
+redis数据库表：
+       订单{key,value}->{order_id,order.getTel_num() + "," + order.getAddress() 
+       + ","+ order.getGoods_id() + "," + DateTime.now().toString("YYYY-MM-dd HH-mm-ss")}、
+       
+       支付订单{key,value}->{order_id + "_pay",(0 or 1)}
+       
+       库存{key,value}->{goods_id,(Integer)}
+
+
+
+四、项目开发
 
 由于模块有主次之分，主要写一下关于主要功能模块的开发：
        
@@ -43,3 +70,7 @@ ROOT文件夹内容为nginx中配置的静态文件访问区域，KillSystem文�
        (3)支付模块API
        
 （未完待续）
+
+
+
+如有不足之处望指出，欢迎交流学习！
