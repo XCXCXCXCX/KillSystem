@@ -50,7 +50,7 @@ mysql数据库表：
 
 按照该表结构建表，并导入测试所需数据。
 
-redis数据库表：
+redis中数据的结构：
        订单{key,value}->{order_id,order.getTel_num() + "," + order.getAddress() 
        + ","+ order.getGoods_id() + "," + DateTime.now().toString("YYYY-MM-dd HH-mm-ss")}、
        
