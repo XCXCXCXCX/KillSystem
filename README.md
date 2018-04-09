@@ -37,11 +37,10 @@ ROOT文件夹内容为nginx中配置的静态文件访问区域，KillSystem文�
 三、数据库表设计
 
 mysql数据库表：
-
-       user表{tel_num varchar(11) PRI,username varchar(20) NOT NULL,passwd varchar(20) NOT NULL,register_date date}、
        
-       goods表{goods_id int(11) PRI,goods_name varchar(20) NOT NULL,goods_price int(11) NOT NULL,
-       goods_stock int(11) NOT NULL,begin_time datetime NOT NULL,end_time datetime NOT NULL,goods_info mediumtext}、
+       user表{tel_num varchar(11) PRI,username varchar(20) NOT NULL,passwd varchar(20) NOT NULL,register_date date}、
+       
+       goods表{goods_id int(11) PRI,goods_name varchar(20) NOT NULL,goods_price int(11) NOT NULL,goods_stock int(11) NOT NULL,begin_time datetime NOT NULL,end_time datetime NOT NULL,goods_info mediumtext}、
        
        goods_order表{order_id varchar(32) PRI,tel_num varchar(11) NOT NULL,address varchar(20) NOT NULL,goods_id int(11) NOT NULL,
        create_time datetime NOT NULL,is_success int(11) NOT NULL}、
