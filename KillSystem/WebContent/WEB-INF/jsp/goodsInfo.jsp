@@ -28,50 +28,62 @@ text-align:center; /* 文字等内容居中 */
 <script src="https://ciphertrick.com/demo/jquerysession/js/jquerysession.js"></script>
 
 <script language="javascript" type="text/javascript">  
-$(function(){ 
-	var nowTime = new Date(year,month,day,hour,minute,second);
+$(function(){
 	var beginTime = $("#begintime").text();
 	var endTime = $("#endtime").text();
-	if(nowTime <= begintime && nowTime >= endtime){
-		$('#but').attr('disabled',"true");//添加disabled属性 
-	}else{
-		$('#but').attr('disabled',"false");//添加disabled属性 
-	}
-	var now = new Date();
+	var beginDate = new Date(beginTime);
+	var endDate = new Date(endTime);
 	$.post("/KillSystem/getSystemTime.do", {},  
               	            function (response) {  
               	                if (response.status == "0") {
-									now = new Date(response.data);
+              	                	var data = response.data;
+              	                	var now = new Date(data);
+              	                	var year = now.getFullYear();
+              	              		var month = now.getMonth() + 1;
+              	              		var day = now.getDate();
+              	              		var hour = now.getHours();
+              	              		var minute = now.getMinutes();
+              	              		var second = now.getSeconds();
+              	              		setInterval(function(){
+              	              			$("#year").text(year+"年");
+              	              			$("#month").text(month+"月");
+              	              			$("#day").text(day+"日");
+              	              			$("#hour").text(hour+"时");
+              	              			$("#minute").text(minute+"分");
+              	              			$("#second").text(second+"秒");
+              	              		
+              	              			var nowTime = new Date(year+"-"+month+"-"+day+" "+hour+":"+minute+":"+second+".00");
+              	              			
+              	              			if(nowTime<= beginDate && nowTime >= endDate){
+              	              				alert("当前时段不可以抢购！");
+              	              				$('#buy').hide();//添加disabled属性 
+              	              			}else{
+              	              				$('#buy').show();//添加disabled属性 
+              	              			}
+              	              		
+              	              			second = second + 1;
+              	              			if(second == 60){
+              	              				second = 0;
+              	              				minute = minute + 1;
+              	              			}
+              	              			if(minute == 60){
+              	              				minute = 0;
+              	              				hour = hour + 1;
+              	              			}
+              	              			if(hour == 25){
+              	              				hour = 1;
+              	              				window.location.reload();
+              	              			}
+              	              		},1000);
               	                }
               	            }, 'json'); 
+	$.post("/KillSystem/sortNewCount.do", {},  
+	            function (response) {  
+	                if (response.status == "0") {
+						$("#countGoods").text(response.data);
+	                }
+	            }, 'json'); 
 	
-	var year = now.getFullYear();
-	var month = now.getMonth() + 1;
-	var day = now.getDay() + 1;
-	var hour = now.getHours();
-	var minute = now.getMinutes();
-	var second = now.getSeconds();
-	setInterval(function(){
-		$("#year").text(year+"年");
-		$("#month").text(month+"月");
-		$("#day").text(day+"日");
-		$("#hour").text(hour+"时");
-		$("#minute").text(minute+"分");
-		$("#second").text(second+"秒");
-		second = second + 1;
-		if(second == 60){
-			second = 0;
-			minute = minute + 1;
-		}
-		if(minute == 60){
-			minute = 0;
-			hour = hour + 1;
-		}
-		if(hour == 25){
-			hour = 1;
-			window.location.reload();
-		}
-	},1000);
 	
 	$("#logout").click(function(){
 		alert("logout");
@@ -106,7 +118,7 @@ $(function(){
 
 	<ul class="layui-nav">
 		<li class="layui-nav-item">
-			<a href="http://localhost/KillSystem/sort.do">控制台<span class="layui-badge">9</span></a>
+			<a href="http://localhost/KillSystem/sort.do">控制台<span id="countGoods" class="layui-badge">5</span></a>
 		</li>
 		<li class="layui-nav-item">
 			<a href="http://localhost/KillSystem/sort.do">去抢购<span class="layui-badge-dot"></span></a>
@@ -121,14 +133,14 @@ $(function(){
 	</ul> 
  		
  	<div class="align-center">
- 		<a class="top">-</a>
+ 		<a class="top">-------------------------</a>
  		商品名:<a id="goodsname" class="top">${thisGoods.getGoods_name()}</a>
 		价格:<a id="goodsprice" class="top">${thisGoods.getGoods_price()}</a>
 		库存:<a id="goodsstock" class="top">${thisGoods.getGoods_stock()}</a>
 		活动开始时间:<a id="begintime" class="top">${thisGoods.getBegin_time()}</a>
 		活动结束时间:<a id="endtime" class="top">${thisGoods.getEnd_time()}</a>
-		<a id="buy" class="top">!!立即抢购!!</a>
-		<a class="top">-</a>
+		<a id="buy" style="font-weight:bold;font-size:18px;" class="top">立即抢购</a>
+		<a class="top">-------------------------</a>
  	</div>
  	
  	<div class="align-center">

@@ -29,4 +29,5 @@ public interface OrderService extends BaseService<Order>{
 	String getPayState(Order order);
 	ServerResponse pay(Order order,String path);
 	ServerResponse aliCallback(Map<String, String> params);
+	boolean orderIsExist(String tel_num, int goods_id);
 }

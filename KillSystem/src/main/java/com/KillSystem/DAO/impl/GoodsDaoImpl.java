@@ -180,5 +180,11 @@ public class GoodsDaoImpl implements GoodsDao {
 		}
 	}
 
+	@Override
+	public int countGoods() {
+		// TODO Auto-generated method stub
+		return goodsMapper.countGoods();
+	}
+
 	
 }

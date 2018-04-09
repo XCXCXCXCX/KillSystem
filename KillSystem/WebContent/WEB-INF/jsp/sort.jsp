@@ -27,41 +27,48 @@
 <script language="javascript" type="text/javascript">  
 $(function(){
 	
-	var now = new Date();
 	$.post("/KillSystem/getSystemTime.do", {},  
               	            function (response) {  
               	                if (response.status == "0") {
-									now = new Date(response.data);
+									var now = new Date(response.data);
+									var year = now.getFullYear();
+									var month = now.getMonth() + 1;
+									var day = now.getDate();
+									var hour = now.getHours();
+									var minute = now.getMinutes();
+									var second = now.getSeconds();
+									setInterval(function(){
+										$("#year").text(year+"年");
+										$("#month").text(month+"月");
+										$("#day").text(day+"日");
+										$("#hour").text(hour+"时");
+										$("#minute").text(minute+"分");
+										$("#second").text(second+"秒");
+										second = second + 1;
+										if(second == 60){
+											second = 0;
+											minute = minute + 1;
+										}
+										if(minute == 60){
+											minute = 0;
+											hour = hour + 1;
+										}
+										if(hour == 25){
+											hour = 1;
+											window.location.reload();
+										}
+									},1000);
               	                }
               	            }, 'json'); 
 	
-	var year = now.getFullYear();
-	var month = now.getMonth() + 1;
-	var day = now.getDay() + 1;
-	var hour = now.getHours();
-	var minute = now.getMinutes();
-	var second = now.getSeconds();
-	setInterval(function(){
-		$("#year").text(year+"年");
-		$("#month").text(month+"月");
-		$("#day").text(day+"日");
-		$("#hour").text(hour+"时");
-		$("#minute").text(minute+"分");
-		$("#second").text(second+"秒");
-		second = second + 1;
-		if(second == 60){
-			second = 0;
-			minute = minute + 1;
-		}
-		if(minute == 60){
-			minute = 0;
-			hour = hour + 1;
-		}
-		if(hour == 25){
-			hour = 1;
-			window.location.reload();
-		}
-	},1000);
+	
+	$.post("/KillSystem/sortNewCount.do", {},  
+            function (response) {  
+                if (response.status == "0") {
+					$("#countGoods").text(response.data);
+                }
+            }, 'json'); 
+	
 	
 	if($("#username").text()=="null"){
 		window.location.href="/";
@@ -112,7 +119,7 @@ $(function(){
 
 	<ul class="layui-nav">
 		<li class="layui-nav-item">
-			<a href="http://localhost/KillSystem/sort.do">控制台<span class="layui-badge">9</span></a>
+			<a href="http://localhost/KillSystem/sort.do">控制台<span id="countGoods" class="layui-badge">5</span></a>
 		</li>
 		<li class="layui-nav-item">
 			<a href="http://localhost/KillSystem/sort.do">去抢购<span class="layui-badge-dot"></span></a>

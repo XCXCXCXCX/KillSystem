@@ -63,4 +63,9 @@
         WHERE order_id = #{order_id}
     </select>
     
+    <select id="selectBytelnumAndgoodsid" parameterType="com.KillSystem.domain.Order" resultType="com.KillSystem.domain.Order">
+        SELECT order_id,tel_num,address,goods_id,create_time,is_success FROM goods_order
+        WHERE tel_num = #{tel_num} AND goods_id = #{goods_id}
+    </select>
+    
 </mapper>

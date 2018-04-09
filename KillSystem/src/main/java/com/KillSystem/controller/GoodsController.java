@@ -80,11 +80,10 @@ public class GoodsController {
 	// todo
 	@RequestMapping("/sortNewCount.do")
 	@ResponseBody
-	public ServerResponse sortNewCount(Goods goods, String pageNo, HttpSession session, HttpServletRequest request) {
-		// goods.setCreate_time(new DateTime().now());
-		// PageInfo<Map<String,Goods>> p = goodsService.select(goods, 1, 10);
-		// int count = p.getList().size();
-		// return ServerResponse.createBySuccess("查询最新商品数成功！", count);
-		return null;
+	public ServerResponse sortNewCount(HttpSession session) {
+		if (session.getAttribute("tel_num") == null || session.getAttribute("passwd") == null) {
+			return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户登录已过期");
+		}
+		return ServerResponse.createBySuccess(goodsService.countGoods());
 	}
 }

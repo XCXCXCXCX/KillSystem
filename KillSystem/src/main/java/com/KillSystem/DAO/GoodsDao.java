@@ -33,6 +33,8 @@ public interface GoodsDao extends BaseDao<Goods>{
 
 	int updateGoodsStock(Goods goods);
 
+	int countGoods();
+
 
 	
 

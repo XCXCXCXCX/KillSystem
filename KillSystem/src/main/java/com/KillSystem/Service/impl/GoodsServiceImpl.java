@@ -107,6 +107,12 @@ public class GoodsServiceImpl implements GoodsService{
 		return goodsDao.checkGoodsStockInRedis(order);
 	}
 
+	@Override
+	public int countGoods() {
+		// TODO Auto-generated method stub
+		return goodsDao.countGoods();
+	}
+
 	
 
 	

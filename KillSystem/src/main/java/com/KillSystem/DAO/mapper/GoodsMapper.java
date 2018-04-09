@@ -24,4 +24,5 @@ public interface GoodsMapper {
 	Goods getGoodsById(Goods goods);
 	int updateGoodsStock(Goods goods);
 	int updateGoodsStockback(Goods goods);
+	int countGoods();
 }

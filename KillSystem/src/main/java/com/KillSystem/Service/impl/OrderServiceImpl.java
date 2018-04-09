@@ -150,11 +150,7 @@ public class OrderServiceImpl implements OrderService{
 	
 	public String getPayState(Order order) {
 		String flag = orderDao.getPayState(order);
-		if(flag == "nil") {
-			return null;
-		}else {
-			return flag;
-		}
+		return flag;
 	}
 	
 	public ServerResponse pay(Order order,String path) {
@@ -313,18 +309,18 @@ public class OrderServiceImpl implements OrderService{
     }
     
     public ServerResponse aliCallback(Map<String,String> params){
-    	System.out.println("支付宝回调啦！");
+    	log.debug("支付宝回调啦！");
         String orderNo = params.get("out_trade_no");
         String tradeStatus = params.get("trade_status");
-        System.out.println(tradeStatus);
+        log.debug(tradeStatus);
         Order order = new Order();
         order.setOrder_id(orderNo);
         order = orderDao.selectByorderIdInRedis(order);
-        if(orderDao.getPayState(order) == "nil"){
+        if(orderDao.getPayState(order) == null){
         	goodsDao.setBackGoodsStock(order);
             return ServerResponse.createByErrorMessage("该支付订单已失效，请重新下单！");
         }
-        if(orderDao.getPayState(order) == "1"){
+        if("1".equals(orderDao.getPayState(order))){
         	return ServerResponse.createBySuccessMessage("支付宝重复调用");
         }
         if("TRADE_SUCCESS".equals(tradeStatus)){
@@ -334,6 +330,12 @@ public class OrderServiceImpl implements OrderService{
         }
         return ServerResponse.createBySuccess();
     }
+
+	@Override
+	public boolean orderIsExist(String tel_num, int goods_id) {
+		// TODO Auto-generated method stub
+		return orderDao.orderIsExist(tel_num,goods_id);
+	}
 
 	
 	

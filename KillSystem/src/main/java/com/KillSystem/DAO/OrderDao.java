@@ -35,4 +35,6 @@ public interface OrderDao extends BaseDao<Order>{
 	Order selectByorderIdInRedis(Order order);
 
 	boolean createOrderAndupdateGoodsStock(Order order, Goods goods);
+
+	boolean orderIsExist(String tel_num, int goods_id);
 }

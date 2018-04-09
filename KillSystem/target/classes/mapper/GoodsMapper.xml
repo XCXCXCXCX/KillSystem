@@ -4,13 +4,14 @@
 	
     <select id="select" resultType="java.util.HashMap">
         SELECT goods_id,goods_name,goods_price,goods_stock,begin_time,end_time FROM goods
+        <if test="goods_name == null and goods_price == 0 and begin_time == null">
+            where end_time >= NOW() - 86400
+        </if>
         <if test="goods_name != null or goods_price != null or begin_time != null">     
         <where>
-        	end_time >= NOW() - 86400
-				
         	<if test="goods_name != null and goods_name != ''">
         	<bind name="pattern" value="'%' + goods_name + '%'" />
-        		AND goods_name LIKE #{pattern}
+        		goods_name LIKE #{pattern}
         	</if>
         	<if test="goods_price != null and goods_price != ''">
         		AND goods_price <![CDATA[
@@ -35,6 +36,10 @@
      <select id="getGoodsById" resultType="com.KillSystem.domain.Goods">
      	SELECT goods_id,goods_name,goods_price,goods_stock,begin_time,end_time,goods_info FROM goods
      		WHERE goods_id = #{goods_id}
+     </select>
+     
+     <select id="countGoods" resultType="java.lang.Integer">
+     	SELECT count(goods_id) FROM goods
      </select>
      
     <insert id="insert" parameterType="com.KillSystem.domain.Goods" useGeneratedKeys="true" keyProperty="goods_id">

@@ -105,8 +105,8 @@ public class OrderController {
 			return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户登录已过期");
 		}
 		
-		//1.(1) 一个ip5分钟内只接受一次请求
-		//	(2) 一个用户不允许购买同一商品多次
+		//1.一个ip5分钟内只接受一次请求
+		//由于会影响到测试效果，先注释掉
 		
 		//2.判断商品是否存在
 		Goods goods = new Goods();
@@ -114,18 +114,28 @@ public class OrderController {
 		if(goodsService.getGoodsById(goods)==null) {
 			return ServerResponse.createByErrorMessage("商品不存在！");
 		}
+		//3. 一个用户不允许购买同一商品多次(在mysql中检查)
+		//ps:在redis中的检查已经封装到createOrderInRedis方法中
+		//由于会影响到测试效果，先注释掉
+		/*
+		String tel_num = (String)session.getAttribute("tel_num");
+		int goods_id = order.getGoods_id();
+		if(orderService.orderIsExist(tel_num,goods_id)) {
+			return ServerResponse.createByErrorMessage("您已抢购过该商品！请稍后再试！");
+		}
+		*/
 		//构造不重复order_id
 		//
 		String order_id = MD5Util.MD5EncodeUtf8(order.getTel_num()+order.getGoods_id()+DateTime.now().toString());
 		order.setOrder_id(order_id);
 		//todo
-		//3.如果该订单关联商品库存为0，返回“商品已抢光”
+		//4.如果该订单关联商品库存为0，返回“商品已抢光”
 		//否则继续进行
 		if(!goodsService.checkGoodsStockInRedis(order)) {
 			return ServerResponse.createByErrorMessage("商品库存已抢光！秒杀接口已关闭！");
 		}
-		//4.检查是否存在该订单
-		if(orderService.orderIsExist(order)) {
+		//5.检查是否存在该订单
+		if(orderService.orderIsExistInRedis(order)) {
 			log.error("订单已经存在！");
 			return ServerResponse.createByErrorMessage("订单已经存在！");
 		}
@@ -154,6 +164,7 @@ public class OrderController {
         //Timer t=new Timer();
         //在3秒后执行MyTask类中的run方法
         //t.schedule(new MyTask(order), 360000);
+		System.out.println("创建订单成功！");
 		return ServerResponse.createBySuccess("创建订单成功！", order);
 		
 	}

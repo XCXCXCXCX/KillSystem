@@ -92,7 +92,8 @@ public class OrderDaoImpl implements OrderDao {
 	public boolean orderIsExistInRedis(Order order) {
 		try {
 			jedis = JedisUtil.getConn();
-			return jedis.get(order.getOrder_id()) == "nil" ? false : true;
+			System.out.println(jedis.get(order.getOrder_id()));
+			return jedis.get(order.getOrder_id()) == null ? false : true;
 		}finally {
 			if(jedis == null) {
 				jedis.close();
@@ -148,9 +149,16 @@ public class OrderDaoImpl implements OrderDao {
 	public long createOrderInRedis(Order order) {
 		try {
 			jedis = JedisUtil.getConn();
+			//在redis中查找，如果该用户购买过该商品，则创建订单失败
+			if (jedis.setnx(order.getTel_num()+","+order.getGoods_id(), order.getOrder_id()) == 0){
+				return 0;
+			}
 			return jedis.setnx(order.getOrder_id(), order.getTel_num() + "," + order.getAddress() + ","
 					+ order.getGoods_id() + "," + DateTime.now().toString("YYYY-MM-dd HH-mm-ss"));
 		}finally {
+			if(jedis.expire(order.getTel_num()+","+order.getGoods_id(), 300)!=1) {
+				log.error("设置超时时间失败！");
+			}
 			if(jedis.expire(order.getOrder_id(), 300)!=1) {
 				log.error("设置超时时间失败！");
 			}
@@ -230,6 +238,13 @@ public class OrderDaoImpl implements OrderDao {
 				JedisUtil.returnConn(jedis);
 			}
 		}
+		
+	}
+
+	@Override
+	public boolean orderIsExist(String tel_num, int goods_id) {
+		// TODO Auto-generated method stub
+		return orderMapper.selectBytelnumAndgoodsid(tel_num,goods_id) == null ? false : true;
 		
 	}
 	

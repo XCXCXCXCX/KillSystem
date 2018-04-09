@@ -22,5 +22,6 @@ public interface OrderMapper {
 	int createOrder(Order order);
 	List<Map<String, Order>> select(Order order);
 	Order selectByorderid(Order order);
+	Order selectBytelnumAndgoodsid(String tel_num, int goods_id);
 	
 }

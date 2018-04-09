@@ -28,6 +28,45 @@ text-align:center; /* 文字等内容居中 */
 		<title>我的收货地址</title>
 		<script type="text/javascript">
 			$(function() {
+				$.post("/KillSystem/getSystemTime.do", {},  
+          	            function (response) {  
+          	                if (response.status == "0") {
+								var now = new Date(response.data);
+								var year = now.getFullYear();
+								var month = now.getMonth() + 1;
+								var day = now.getDate();
+								var hour = now.getHours();
+								var minute = now.getMinutes();
+								var second = now.getSeconds();
+								setInterval(function(){
+									$("#year").text(year+"年");
+									$("#month").text(month+"月");
+									$("#day").text(day+"日");
+									$("#hour").text(hour+"时");
+									$("#minute").text(minute+"分");
+									$("#second").text(second+"秒");
+									second = second + 1;
+									if(second == 60){
+										second = 0;
+										minute = minute + 1;
+									}
+									if(minute == 60){
+										minute = 0;
+										hour = hour + 1;
+									}
+									if(hour == 25){
+										hour = 1;
+										window.location.reload();
+									}
+								},1000);
+          	                }
+          	            }, 'json'); 
+				$.post("/KillSystem/sortNewCount.do", {},  
+			            function (response) {  
+			                if (response.status == "0") {
+								$("#countGoods").text(response.data);
+			                }
+			            }, 'json'); 
 				
 				function StandardPost(url,args){
 			        var form = $("<form method='post'></form>"),
@@ -247,19 +286,18 @@ text-align:center; /* 文字等内容居中 */
 		
 	<ul class="layui-nav">
 		<li class="layui-nav-item">
-			<a href="http://localhost/KillSystem/sort.do">控制台<span class="layui-badge">9</span></a>
+			<a href="http://localhost/KillSystem/sort.do">控制台<span id="countGoods" class="layui-badge">5</span></a>
 		</li>
 		<li class="layui-nav-item">
 			<a href="http://localhost/KillSystem/sort.do">去抢购<span class="layui-badge-dot"></span></a>
 		</li>
 		<li class="layui-nav-item">
 			<a id="username" href="javascript:;"><img src="http://t.cn/RCzsdCq" class="layui-nav-img"><%=session.getAttribute("username")%></a>
-				<p id="userid" hidden><%=session.getAttribute("tel_num")%></p>
 				<dl class="layui-nav-child">
-				<dd><a id="" href="javascript:;">修改信息</a></dd>
 				<dd><a id="logout" href="javascript:;">退出登陆</a></dd>
 				</dl>
 		</li>
+		<span id="year">yyyy</span><span id="month">MM</span><span id="day">dd</span><span id="hour">hh</span ><span id="minute">mm</span><span id="second">ss</span>
 	</ul> 
 		
 		<div class="Caddress">
