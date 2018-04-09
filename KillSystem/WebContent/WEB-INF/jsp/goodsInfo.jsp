@@ -73,6 +73,11 @@ $(function(){
 		}
 	},1000);
 	
+	$("#logout").click(function(){
+		alert("logout");
+		window.location.href="/KillSystem/logout.do";
+	});
+	
 	$("#buy").click(function(){
 		var goodsid = ${thisGoods.getGoods_id()};
 		var goodsname = $("#goodsname").text();
@@ -109,7 +114,6 @@ $(function(){
 		<li class="layui-nav-item">
 			<a id="username" href="javascript:;"><img src="http://t.cn/RCzsdCq" class="layui-nav-img"><%=session.getAttribute("username")%></a>
 				<dl class="layui-nav-child">
-				<dd><a id="" href="javascript:;">修改信息</a></dd>
 				<dd><a id="logout" href="javascript:;">退出登陆</a></dd>
 				</dl>
 		</li>

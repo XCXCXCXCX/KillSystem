@@ -30,6 +30,7 @@ import com.KillSystem.util.PropertiesUtil;
 /**
  * @author xcxcxcxcx
  * 
+ * @Comments
  * 管理员controller
  * 包括管理员登陆，商品的增删改查，订单的删改查
  * 

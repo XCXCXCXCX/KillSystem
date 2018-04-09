@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * 
  * @param <T>
  * 
+ * @Comments
  * 响应对象的封装类
  * 
  * 2018年4月5日

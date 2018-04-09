@@ -6,7 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.KillSystem.DAO.impl.UserDaoImpl;
+import com.KillSystem.DAO.UserDao;
 import com.KillSystem.Service.UserService;
 import com.KillSystem.domain.User;
 
@@ -14,6 +14,7 @@ import com.KillSystem.domain.User;
 /**
  * @author xcxcxcxcx
  * 
+ * @Comments
  * 用户服务实现类
  * 
  * 提供了用户的登陆、注册、登出、检验管理员身份接口
@@ -25,12 +26,12 @@ import com.KillSystem.domain.User;
 public class UserServiceImpl implements UserService{
 	
 	@Autowired
-	private UserDaoImpl userDaoImpl;
+	private UserDao userDao;
 	
 	@Override
 	public User login(User user) {
 		
-		return userDaoImpl.login(user);
+		return userDao.login(user);
 	}
 
 	@Override
@@ -72,7 +73,7 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public int register(User user) {
 		// TODO Auto-generated method stub
-		if(userDaoImpl.selectByTel_num(user)==null&&userDaoImpl.insert(user)==1) {
+		if(userDao.selectByTel_num(user)==null&&userDao.insert(user)==1) {
 			return 1;
 		}
 		return 0;

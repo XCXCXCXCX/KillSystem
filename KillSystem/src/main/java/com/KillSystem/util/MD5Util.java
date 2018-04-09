@@ -6,6 +6,7 @@ import java.security.MessageDigest;
 /**
  * @author xcxcxcxcx
  * 
+ * @Comments
  * 借用了别人的代码，封装了MD5加密字符串
  * 
  * 2018年4月5日

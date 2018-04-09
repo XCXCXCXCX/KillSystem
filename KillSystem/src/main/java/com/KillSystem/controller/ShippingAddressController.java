@@ -24,6 +24,7 @@ import com.github.pagehelper.PageInfo;
 /**
  * @author xcxcxcxcx
  * 
+ * @Comments
  * 收货地址controller
  * 包括收货地址的增删查
  * 
@@ -55,7 +56,7 @@ public class ShippingAddressController {
 	@ResponseBody
 	public ServerResponse insertShippingAddress(ShippingAddress shippingAddress,HttpServletRequest request,HttpSession session,@RequestParam(value = "upload_file",required = false) MultipartFile file) {
 		if (session.getAttribute("tel_num") == null || session.getAttribute("passwd") == null) {
-			return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录");
+			return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户登录已过期");
 		}
 		
 		if(shippingAddressService.insert(shippingAddress) == 1) {
@@ -69,7 +70,7 @@ public class ShippingAddressController {
 	@ResponseBody
 	public ServerResponse deleteShippingAddress(ShippingAddress shippingAddress,HttpServletRequest request,HttpSession session,@RequestParam(value = "upload_file",required = false) MultipartFile file) {
 		if (session.getAttribute("tel_num") == null || session.getAttribute("passwd") == null) {
-			return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录");
+			return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户登录已过期");
 		}
 		
 		if(shippingAddressService.delete(shippingAddress) == 1) {

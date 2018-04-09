@@ -22,6 +22,7 @@ import com.KillSystem.domain.User;
 /**
  * @author xcxcxcxcx
  * 
+ * @Comments
  * 用户controller
  * 包括用户的登陆、登出、注册
  * 
@@ -48,7 +49,6 @@ public class UserController {
 		session.setAttribute("username", acc.getUsername());
 		session.setAttribute("tel_num", acc.getTel_num());
 		session.setAttribute("passwd", acc.getPasswd());
-		System.out.print("验证成功");
 		return "sort";
 	}
 	
@@ -65,8 +65,8 @@ public class UserController {
 		return "toRegister";
 	}
 	
-	@RequestMapping("/loginOut.do")
-	public String loginOut(HttpSession session) {
+	@RequestMapping("/logout.do")
+	public String logout(HttpSession session) {
 		session.invalidate();
 		return "toLogin";
 	}
@@ -74,9 +74,9 @@ public class UserController {
 	@RequestMapping("/getSystemTime.do")
 	@ResponseBody
 	public ServerResponse getSystemTime(HttpSession session) {
-//		if (session.getAttribute("tel_num") == null || session.getAttribute("passwd") == null) {
-//			return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录");
-//		}
+		if (session.getAttribute("tel_num") == null || session.getAttribute("passwd") == null) {
+			return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录");
+		}
 
 		return ServerResponse.createBySuccess(new Date());
 		

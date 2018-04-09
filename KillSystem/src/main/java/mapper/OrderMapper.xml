@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.KillSystem.DAO.mapper.OrderMapper">
      
-    <insert id="createOrder" useGeneratedKeys="true">
+    <insert id="createOrder" >
    		INSERT INTO goods_order VALUES(#{order_id},#{tel_num},#{address},#{goods_id},NOW(),1)
 	</insert>
      

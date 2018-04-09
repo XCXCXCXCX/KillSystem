@@ -94,7 +94,7 @@ $(function(){
 	$("#logout").click(function(){
 		alert("logout");
 		window.location.href="/KillSystem/logout.do";
-	})
+	});
 	layui.use('element', function(){
 		var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
 		//监听导航点击
@@ -120,7 +120,6 @@ $(function(){
 		<li class="layui-nav-item">
 			<a id="username" href="javascript:;"><img src="http://t.cn/RCzsdCq" class="layui-nav-img"><%=session.getAttribute("username")%></a>
 				<dl class="layui-nav-child">
-				<dd><a id="" href="javascript:;">修改信息</a></dd>
 				<dd><a id="logout" href="javascript:;">退出登陆</a></dd>
 				</dl>
 		</li>

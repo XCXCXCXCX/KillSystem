@@ -6,7 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.KillSystem.DAO.impl.GoodsDaoImpl;
+import com.KillSystem.DAO.GoodsDao;
 import com.KillSystem.Service.GoodsService;
 import com.KillSystem.domain.Goods;
 import com.KillSystem.domain.Order;
@@ -17,6 +17,7 @@ import com.github.pagehelper.PageInfo;
 /**
  * @author xcxcxcxcx
  * 
+ * @Comments
  * 商品服务实现类
  * 
  * 提供管理员对商品的增删改查接口
@@ -29,31 +30,31 @@ import com.github.pagehelper.PageInfo;
 public class GoodsServiceImpl implements GoodsService{
 
 	@Autowired
-	private GoodsDaoImpl goodsDaoImpl;
+	private GoodsDao goodsDao;
 	
 	
 	@Override
 	public int insert(Goods goods) {
 		// TODO Auto-generated method stub
-		return goodsDaoImpl.insert(goods);
+		return goodsDao.insert(goods);
 	}
 
 	@Override
 	public int delete(Goods goods) {
 		// TODO Auto-generated method stub
-		return goodsDaoImpl.delete(goods);
+		return goodsDao.delete(goods);
 	}
 
 	@Override
 	public int update(Goods goods) {
 		// TODO Auto-generated method stub
-		return goodsDaoImpl.update(goods);
+		return goodsDao.update(goods);
 	}
 
 	@Override
 	public List<Map<String, Goods>> select(Goods goods) {
 		// TODO Auto-generated method stub
-		return goodsDaoImpl.select(goods);
+		return goodsDao.select(goods);
 	}
 	
 	public PageInfo<Map<String, Goods>> select(Goods goods,int pageNum,int pageSize){
@@ -65,7 +66,7 @@ public class GoodsServiceImpl implements GoodsService{
 
 	public List<Map<String, Goods>> selectById(Goods goods) {
 		// TODO Auto-generated method stub
-		return goodsDaoImpl.selectById(goods);
+		return goodsDao.selectById(goods);
 	}
 	
 	@Override
@@ -79,14 +80,14 @@ public class GoodsServiceImpl implements GoodsService{
 
 	public Goods getGoodsById(Goods goods) {
 		// TODO Auto-generated method stub
-		return goodsDaoImpl.getGoodsById(goods);
+		return goodsDao.getGoodsById(goods);
 	}
 	
 	@Override
 	public long decrGoodsStock(Order order) {
-		long flag = goodsDaoImpl.setGoodsStock(order);
+		long flag = goodsDao.setGoodsStock(order);
 		if(flag < 0) {
-			goodsDaoImpl.setBackGoodsStock(order);
+			goodsDao.setBackGoodsStock(order);
 			return 0;
 		}else {
 			return flag;
@@ -97,13 +98,13 @@ public class GoodsServiceImpl implements GoodsService{
 	@Override
 	public long incrGoodsStock(Order order) {
 		// TODO Auto-generated method stub
-		return goodsDaoImpl.setBackGoodsStock(order);
+		return goodsDao.setBackGoodsStock(order);
 	}
 
 	@Override
 	public boolean checkGoodsStockInRedis(Order order) {
 		// TODO Auto-generated method stub
-		return goodsDaoImpl.checkGoodsStockInRedis(order);
+		return goodsDao.checkGoodsStockInRedis(order);
 	}
 
 	

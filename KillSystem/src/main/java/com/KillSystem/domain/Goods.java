@@ -4,6 +4,7 @@ package com.KillSystem.domain;
 /**
  * @author xcxcxcxcx
  * 
+ * @Comments
  * GoodsBean
  * 
  * 2018年4月5日

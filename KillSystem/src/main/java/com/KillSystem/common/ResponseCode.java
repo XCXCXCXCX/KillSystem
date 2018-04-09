@@ -4,6 +4,7 @@ package com.KillSystem.common;
 /**
  * @author xcxcxcxcx
  * 
+ * @Comments
  * 响应码枚举类
  * 
  * 2018年4月5日

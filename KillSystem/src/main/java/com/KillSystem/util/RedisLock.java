@@ -9,6 +9,7 @@ import redis.clients.jedis.Jedis;
 /**
  * @author xcxcxcxcx
  * 
+ * @Comments
  * 学习了csdn上一篇博客，结合我使用的JedisPool
  * 
  * 使用redis的setnx特性实现分布式锁
@@ -18,7 +19,7 @@ import redis.clients.jedis.Jedis;
  */
 public class RedisLock {
 
-    private static Logger logger = LoggerFactory.getLogger(RedisLock.class);
+    private static Logger log = LoggerFactory.getLogger(RedisLock.class);
 
     private Jedis jedis;
 
@@ -82,7 +83,7 @@ public class RedisLock {
         	obj = jedis.get(key);
         } catch (Exception e) {
         	jedis.close();
-            logger.error("get redis error, key : {}", key);
+            log.error("get redis error, key : {}", key);
         } finally {
         	jedis.close();
         }
@@ -96,7 +97,7 @@ public class RedisLock {
         	obj = jedis.setnx(key, value);
         } catch (Exception e) {
         	jedis.close();
-            logger.error("setNX redis error, key : {}", key);
+            log.error("setNX redis error, key : {}", key);
         }finally {
         	jedis.close();
         }
@@ -110,7 +111,7 @@ public class RedisLock {
         	obj = jedis.getSet(key, value);
         } catch (Exception e) {
         	jedis.close();
-            logger.error("setNX redis error, key : {}", key);
+            log.error("setNX redis error, key : {}", key);
         }finally {
         	jedis.close();
         }

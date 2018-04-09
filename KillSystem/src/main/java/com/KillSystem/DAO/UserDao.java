@@ -5,6 +5,7 @@ import com.KillSystem.domain.User;
 /**
  * @author xcxcxcxcx
  * 
+ * @Comments
  * 用户Dao
  * 增加了 登陆接口、 根据tel_num查询用户接口
  * 

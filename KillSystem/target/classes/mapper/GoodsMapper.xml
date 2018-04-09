@@ -6,9 +6,11 @@
         SELECT goods_id,goods_name,goods_price,goods_stock,begin_time,end_time FROM goods
         <if test="goods_name != null or goods_price != null or begin_time != null">     
         <where>
+        	end_time >= NOW() - 86400
+				
         	<if test="goods_name != null and goods_name != ''">
         	<bind name="pattern" value="'%' + goods_name + '%'" />
-        		goods_name LIKE #{pattern}
+        		AND goods_name LIKE #{pattern}
         	</if>
         	<if test="goods_price != null and goods_price != ''">
         		AND goods_price <![CDATA[

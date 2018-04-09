@@ -8,5 +8,6 @@
 </head>
 <body>
 登陆失败！
+<meta http-equiv="refresh" content="2;url=http://localhost"> 
 </body>
 </html>

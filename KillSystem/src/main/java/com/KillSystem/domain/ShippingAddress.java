@@ -4,6 +4,7 @@ package com.KillSystem.domain;
 /**
  * @author xcxcxcxcx
  * 
+ * @Comments
  * ShippingAddressBean
  * 
  * 2018年4月5日

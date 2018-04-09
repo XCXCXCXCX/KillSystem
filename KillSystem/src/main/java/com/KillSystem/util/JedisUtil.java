@@ -6,6 +6,7 @@ import redis.clients.jedis.JedisPool;
 /**
  * @author xcxcxcxcx
  * 
+ * @Comments
  * JedisUtil提供获取连接、返回连接、关闭连接池方法
  * 
  * 2018年4月5日

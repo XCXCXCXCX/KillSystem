@@ -8,6 +8,7 @@ import redis.clients.jedis.JedisPool;
 /**
  * @author xcxcxcxcx
  * 
+ * @Comments
  * JedisPoolManager枚举类实现线程安全的单例JedisPool
  * 
  * 2018年4月5日

@@ -12,6 +12,7 @@ import java.util.concurrent.Executors;
 /**
  * @author xcxcxcxcx
  * 
+ * @Comments
  * 屏障测试类
  * 
  * 创建800个线程进入屏障准备就绪后同时启动
@@ -71,11 +72,12 @@ class Runner implements Runnable {
             e.printStackTrace();  
         }  
         System.out.println(name+"出发");
-        long startTime=System.currentTimeMillis();
+        /*long startTime=System.currentTimeMillis();
         String ret = HttpRequest.sendPost("http://localhost/KillSystem/createOrder.do", "tel_num=175"+name+"&address=xclzyjia"+name+"&goods_id=1");  
         long endTime=System.currentTimeMillis();
         System.out.println(name+"完成"+count++);
         excTime = (float)(endTime-startTime)/1000;
-        System.out.println(name+":"+excTime+"s");
+        System.out.println(name+":"+excTime+"s");*/
+        
     }  
 }  

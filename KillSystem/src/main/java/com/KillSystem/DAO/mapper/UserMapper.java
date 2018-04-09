@@ -9,6 +9,7 @@ import com.KillSystem.domain.User;
 /**
  * @author xcxcxcxcx
  * 
+ * @Comments
  * 商品mapper
  * 连接mybatis的UserMapper.xml文件
  * 

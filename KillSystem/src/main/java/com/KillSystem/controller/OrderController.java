@@ -36,6 +36,7 @@ import com.google.common.collect.Maps;
 /**
  * @author xcxcxcxcx
  * 
+ * @Comments
  * 订单controller
  * 包括订单的创建、订单的支付、支付宝回调的接口、支付订单状态的轮询
  * 
@@ -45,7 +46,7 @@ import com.google.common.collect.Maps;
 @Controller
 public class OrderController {
 	
-	private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
+	private static final Logger log = LoggerFactory.getLogger(OrderController.class);
 	
 	@Autowired
 	private OrderService orderService;
@@ -100,49 +101,55 @@ public class OrderController {
 	@RequestMapping("/createOrder.do")
 	@ResponseBody
 	public ServerResponse createOrder(Order order,HttpServletRequest request,HttpSession session) {
-//		if (session.getAttribute("tel_num") == null || session.getAttribute("passwd") == null) {
-//			return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录");
-//		}
-		//todo
-		//如果该订单关联商品是静态的，返回“商品已抢光”
-		//否则继续进行
-		if(!goodsService.checkGoodsStockInRedis(order)) {
-			return ServerResponse.createByErrorMessage("商品库存已抢光！秒杀接口已关闭！");
+		if (session.getAttribute("tel_num") == null || session.getAttribute("passwd") == null) {
+			return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户登录已过期");
 		}
-		//判断商品是否存在
+		
+		//1.(1) 一个ip5分钟内只接受一次请求
+		//	(2) 一个用户不允许购买同一商品多次
+		
+		//2.判断商品是否存在
 		Goods goods = new Goods();
 		goods.setGoods_id(order.getGoods_id());
 		if(goodsService.getGoodsById(goods)==null) {
 			return ServerResponse.createByErrorMessage("商品不存在！");
 		}
 		//构造不重复order_id
-		//检查是否存在该订单
+		//
 		String order_id = MD5Util.MD5EncodeUtf8(order.getTel_num()+order.getGoods_id()+DateTime.now().toString());
 		order.setOrder_id(order_id);
+		//todo
+		//3.如果该订单关联商品库存为0，返回“商品已抢光”
+		//否则继续进行
+		if(!goodsService.checkGoodsStockInRedis(order)) {
+			return ServerResponse.createByErrorMessage("商品库存已抢光！秒杀接口已关闭！");
+		}
+		//4.检查是否存在该订单
 		if(orderService.orderIsExist(order)) {
-			System.out.println("订单已经存在！");
+			log.error("订单已经存在！");
 			return ServerResponse.createByErrorMessage("订单已经存在！");
 		}
 		
+		//执行创建订单操作
 		try {
 			
 			//1.在redis中创建订单，若失败，返回“创建订单失败”
 			if(orderService.createOrderInRedis(order) == 0) {
+				log.error("订单已经存在！");
 				return ServerResponse.createByErrorMessage("订单已经存在！");
 			}
 			
 			//2.在redis中库存减一，若失败，撤回创建订单操作并返回“创建订单失败”
 			if(goodsService.decrGoodsStock(order) == 0) {
+				log.error("库存已抢光！");
 				return ServerResponse.createByErrorMessage("库存已抢光！");
 			}
 			
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.error("createOrder操作超时!", e);
-			System.out.println("创建订单失败！");
+			log.error("redis中创建订单失败！", e);
 			return ServerResponse.createByErrorMessage("创建订单失败！");
 		}
-		System.out.println("创建订单成功！");
 		//创建定时器对象
         //Timer t=new Timer();
         //在3秒后执行MyTask类中的run方法
@@ -159,12 +166,12 @@ public class OrderController {
 	@RequestMapping("/pay.do")
 	@ResponseBody
 	public ServerResponse pay(Order order,HttpServletRequest request,HttpSession session) {
-//		if (session.getAttribute("tel_num") == null || session.getAttribute("passwd") == null) {
-//			return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录");
-//		}
+		if (session.getAttribute("tel_num") == null || session.getAttribute("passwd") == null) {
+			return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户登录已过期");
+		}
 		//hasPay = true;
 		
-		if(!orderService.orderIsExist(order)) {
+		if(!orderService.orderIsExistInRedis(order)) {
 			//撤回库存减一的操作
 			goodsService.incrGoodsStock(order);
 			return ServerResponse.createByErrorMessage(order.getOrder_id() + "订单已失效，请重新创建订单");
@@ -197,7 +204,7 @@ public class OrderController {
             }
             params.put(name,valueStr);
         }
-        logger.info("支付宝回调,sign:{},trade_status:{},参数:{}",params.get("sign"),params.get("trade_status"),params.toString());
+        log.info("支付宝回调,sign:{},trade_status:{},参数:{}",params.get("sign"),params.get("trade_status"),params.toString());
 
         //非常重要,验证回调的正确性,是不是支付宝发的.并且呢还要避免重复通知.
 
@@ -209,7 +216,7 @@ public class OrderController {
                 return ServerResponse.createByErrorMessage("非法请求,验证不通过,再恶意请求我就报警找网警了");
             }
         } catch (AlipayApiException e) {
-            logger.error("支付宝验证回调异常",e);
+            log.error("支付宝验证回调异常",e);
         }
 
         //todo 验证各种数据
@@ -226,9 +233,9 @@ public class OrderController {
 	@RequestMapping("/payIsSuccess.do")
 	@ResponseBody
 	public ServerResponse payIsSuccess(Order order,HttpServletRequest request,HttpSession session) {
-//		if (session.getAttribute("tel_num") == null || session.getAttribute("passwd") == null) {
-//			return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录");
-//		}
+		if (session.getAttribute("tel_num") == null || session.getAttribute("passwd") == null) {
+			return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户登录已过期");
+		}
 		//查询该订单是否支付成功：在redis中查询key{订单号+pay}的value值是否为1，若为1，返回支付成功，若为0，返回未支付。
 		String flag = orderService.getPayState(order);
 		if(flag == null) {

@@ -11,6 +11,7 @@ import com.github.pagehelper.PageInfo;
 /**
  * @author xcxcxcxcx
  * 
+ * @Comments
  * 订单服务
  * 提供了管理员的订单分页查询、获取支付订单状态、验证订单是否存在、订单支付、支付宝回调等接口
  * 
@@ -24,6 +25,7 @@ public interface OrderService extends BaseService<Order>{
 	long createPayInRedis(Order order);
 	String updateOrderPayInRedis(Order order);
 	boolean orderIsExist(Order order);
+	boolean orderIsExistInRedis(Order order);
 	String getPayState(Order order);
 	ServerResponse pay(Order order,String path);
 	ServerResponse aliCallback(Map<String, String> params);

@@ -12,8 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.KillSystem.DAO.impl.GoodsDaoImpl;
-import com.KillSystem.DAO.impl.OrderDaoImpl;
+import com.KillSystem.DAO.GoodsDao;
+import com.KillSystem.DAO.OrderDao;
 import com.KillSystem.Service.OrderService;
 import com.KillSystem.common.ServerResponse;
 import com.KillSystem.domain.Goods;
@@ -40,6 +40,7 @@ import com.google.common.collect.Maps;
 /**
  * @author xcxcxcxcx
  * 
+ * @Comments
  * 订单服务实现类
  * 
  * 提供了管理员的增删改查接口
@@ -71,10 +72,10 @@ public class OrderServiceImpl implements OrderService{
 
 	
 	@Autowired
-	private OrderDaoImpl orderDaoImpl;
+	private OrderDao orderDao;
 	
 	@Autowired
-	private GoodsDaoImpl goodsDaoImpl;
+	private GoodsDao goodsDao;
 	
 	@Override
 	public int insert(Order t) {
@@ -85,25 +86,25 @@ public class OrderServiceImpl implements OrderService{
 	@Override
 	public int delete(Order order) {
 		// TODO Auto-generated method stub
-		return orderDaoImpl.delete(order);
+		return orderDao.delete(order);
 	}
 
 	@Override
 	public int update(Order order) {
 		// TODO Auto-generated method stub
-		return orderDaoImpl.update(order);
+		return orderDao.update(order);
 	}
 
 	@Override
 	public List<Map<String, Order>> select(Order order) {
 		// TODO Auto-generated method stub
-		return orderDaoImpl.select(order);
+		return orderDao.select(order);
 	}
 
 	@Override
 	public int updateOrderState(Order order) {
 		// TODO Auto-generated method stub
-		return orderDaoImpl.updateOrderState(order);
+		return orderDao.updateOrderState(order);
 	}
 
 	@Override
@@ -118,32 +119,38 @@ public class OrderServiceImpl implements OrderService{
 	@Override
 	public long createOrderInRedis(Order order) {
 		// TODO Auto-generated method stub
-		return orderDaoImpl.createOrderInRedis(order);
+		return orderDao.createOrderInRedis(order);
 	}
 	
 	
 	@Override
 	public long createPayInRedis(Order order) {
 		// TODO Auto-generated method stub
-		return orderDaoImpl.createPayInRedis(order);
+		return orderDao.createPayInRedis(order);
 	}
 	
 	
 	@Override
 	public String updateOrderPayInRedis(Order order) {
 		// TODO Auto-generated method stub
-		return orderDaoImpl.updateOrderPayInRedis(order);
+		return orderDao.updateOrderPayInRedis(order);
 	}
 	
 	@Override
 	public boolean orderIsExist(Order order) {
 		// TODO Auto-generated method stub
-		return orderDaoImpl.orderIsExist(order);
+		return orderDao.orderIsExist(order);
+	}
+	
+	@Override
+	public boolean orderIsExistInRedis(Order order) {
+		// TODO Auto-generated method stub
+		return orderDao.orderIsExistInRedis(order);
 	}
 	
 	public String getPayState(Order order) {
-		String flag = orderDaoImpl.getPayState(order);
-		if(flag == "nio") {
+		String flag = orderDao.getPayState(order);
+		if(flag == "nil") {
 			return null;
 		}else {
 			return flag;
@@ -165,7 +172,7 @@ public class OrderServiceImpl implements OrderService{
         // 如果同时传入了【打折金额】,【不可打折金额】,【订单总金额】三者,则必须满足如下条件:【订单总金额】=【打折金额】+【不可打折金额】
         Goods goods = new Goods();
         goods.setGoods_id(order.getGoods_id());
-        goods = goodsDaoImpl.getGoodsById(goods);
+        goods = goodsDao.getGoodsById(goods);
         String totalAmount = String.valueOf(goods.getGoods_price());
 
         // (必填) 付款条码，用户支付宝钱包手机app点击“付款”产生的付款条码
@@ -227,6 +234,7 @@ public class OrderServiceImpl implements OrderService{
         switch (result.getTradeStatus()) {
             case SUCCESS:
                 log.info("支付宝预支付成功: )");
+                
                 AlipayTradePrecreateResponse response = result.getResponse();
                 dumpResponse(response);
                 File folder = new File(path);
@@ -250,13 +258,18 @@ public class OrderServiceImpl implements OrderService{
                 log.info("qrPath:" + qrPath);
                 String qrUrl = PropertiesUtil.getProperty("ftp.server.http.prefix")+targetFile.getName();
                 resultMap.put("qrUrl",qrUrl);
+                
+                //直接测试回调中的代码
+                //String flag = orderDao.updateOrderPayInRedis(order);
+            	//InitFIFOListener.queue.offer(order);
+                
                 return ServerResponse.createBySuccess("支付宝预下单成功！！！",resultMap);
 
             case FAILED:
                 log.error("支付宝预下单失败!!!");
                 
                 //库存加一
-                goodsDaoImpl.setBackGoodsStock(order);
+                goodsDao.setBackGoodsStock(order);
                 //删除订单
                 
                 //删除支付订单
@@ -267,7 +280,7 @@ public class OrderServiceImpl implements OrderService{
                 log.error("系统异常，预下单状态未知!!!");
               
                 //库存加一
-                goodsDaoImpl.setBackGoodsStock(order);
+                goodsDao.setBackGoodsStock(order);
                 //删除订单
 
                 //删除支付订单
@@ -278,7 +291,7 @@ public class OrderServiceImpl implements OrderService{
                 log.error("不支持的交易状态，交易返回异常!!!");
                 
                 //库存加一
-                goodsDaoImpl.setBackGoodsStock(order);
+                goodsDao.setBackGoodsStock(order);
                 //删除订单
 
                 //删除支付订单
@@ -305,30 +318,23 @@ public class OrderServiceImpl implements OrderService{
         String tradeStatus = params.get("trade_status");
         System.out.println(tradeStatus);
         Order order = new Order();
-        order.setOrder_id(orderNo+"_pay");
-        if(!orderDaoImpl.orderIsExistInRedis(order)){
-        	System.out.println("该支付订单已失效，请重新下单！");
-        	goodsDaoImpl.setBackGoodsStock(order);
+        order.setOrder_id(orderNo);
+        order = orderDao.selectByorderIdInRedis(order);
+        if(orderDao.getPayState(order) == "nil"){
+        	goodsDao.setBackGoodsStock(order);
             return ServerResponse.createByErrorMessage("该支付订单已失效，请重新下单！");
         }
-        if(Integer.parseInt(orderDaoImpl.getPayState(order))>=1){
-        	System.out.println("支付宝重复调用");
+        if(orderDao.getPayState(order) == "1"){
         	return ServerResponse.createBySuccessMessage("支付宝重复调用");
         }
         if("TRADE_SUCCESS".equals(tradeStatus)){
-        	System.out.println("回调成功啦！");
-        	String flag = orderDaoImpl.updateOrderPayInRedis(order);
-        	System.out.println(flag);
+        	String flag = orderDao.updateOrderPayInRedis(order);
         	InitFIFOListener.queue.offer(order);
-            if("已支付".equals(flag)) {
-            	return ServerResponse.createByErrorMessage("订单已支付，回调忽略");
-            }else if("不存在".equals(flag)) {
-            	return ServerResponse.createByErrorMessage("订单不存在，回调忽略");
-            }else if("支付成功".equals(flag)) {
-            	return ServerResponse.createBySuccessMessage("订单支付成功");
-            }
+            return ServerResponse.createBySuccessMessage("订单支付成功");
         }
         return ServerResponse.createBySuccess();
     }
+
+	
 	
 }

@@ -17,6 +17,7 @@ import com.google.common.collect.Lists;
 /**
  * @author xcxcxcxcx
  * 
+ * @Comments
  * 文件服务实现类
  * 封装了文件上传的服务
  * 
@@ -26,7 +27,7 @@ import com.google.common.collect.Lists;
 @Service("iFileService")
 public class FileServiceImpl implements IFileService {
 
-    private Logger logger = LoggerFactory.getLogger(FileServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(FileServiceImpl.class);
 
 
     public String upload(MultipartFile file,String path){
@@ -35,7 +36,7 @@ public class FileServiceImpl implements IFileService {
         //abc.jpg
         String fileExtensionName = fileName.substring(fileName.lastIndexOf(".")+1);
         String uploadFileName = UUID.randomUUID().toString()+"."+fileExtensionName;
-        logger.info("开始上传文件,上传文件的文件名:"+fileName+",上传的路径:"+path+",新文件名:"+uploadFileName);
+        log.info("开始上传文件,上传文件的文件名:"+fileName+",上传的路径:"+path+",新文件名:"+uploadFileName);
         System.out.println(fileName+","+path+","+uploadFileName);
         File fileDir = new File(path);
         if(!fileDir.exists()){
@@ -55,7 +56,7 @@ public class FileServiceImpl implements IFileService {
 
             targetFile.delete();
         } catch (IOException e) {
-            logger.error("上传文件异常",e);
+            log.error("上传文件异常",e);
             return null;
         }
         //A:abc.jpg

@@ -12,6 +12,7 @@ import com.KillSystem.domain.Order;
  * 
  * @param <T>
  * 
+ * @Comments
  * 基础Dao接口提供基本增删改查
  * 
  * 2018年4月5日

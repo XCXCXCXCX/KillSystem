@@ -6,7 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.KillSystem.DAO.impl.ShippingAddressDaoImpl;
+import com.KillSystem.DAO.ShippingAddressDao;
 import com.KillSystem.Service.ShippingAddressService;
 import com.KillSystem.domain.ShippingAddress;
 import com.KillSystem.domain.User;
@@ -17,6 +17,7 @@ import com.github.pagehelper.PageInfo;
 /**
  * @author xcxcxcxcx
  * 
+ * @Comments
  * 收货地址服务实现类
  * 
  * 提供了用户的收货地址增删改查接口
@@ -28,18 +29,18 @@ import com.github.pagehelper.PageInfo;
 public class ShippingAddressServiceImpl implements ShippingAddressService{
 
 	@Autowired
-	private ShippingAddressDaoImpl shippingAddressDaoImpl;
+	private ShippingAddressDao shippingAddressDao;
 	
 	@Override
 	public int insert(ShippingAddress shippingAddress) {
 		// TODO Auto-generated method stub
-		return shippingAddressDaoImpl.insert(shippingAddress);
+		return shippingAddressDao.insert(shippingAddress);
 	}
 
 	@Override
 	public int delete(ShippingAddress shippingAddress) {
 		// TODO Auto-generated method stub
-		return shippingAddressDaoImpl.delete(shippingAddress);
+		return shippingAddressDao.delete(shippingAddress);
 	}
 
 	@Override
@@ -55,7 +56,7 @@ public class ShippingAddressServiceImpl implements ShippingAddressService{
 	}
 	
 	public List<Map<String,ShippingAddress>> selectByuserid(User user){
-		return shippingAddressDaoImpl.selectByuserid(user);
+		return shippingAddressDao.selectByuserid(user);
 	}
 	
 	public PageInfo<Map<String, ShippingAddress>> selectByuserid(User user,int pageNum,int pageSize){
@@ -66,6 +67,6 @@ public class ShippingAddressServiceImpl implements ShippingAddressService{
 	}
 
 	public ShippingAddress selectByaddressid(ShippingAddress shippingAddress) {
-		return shippingAddressDaoImpl.selectByaddressid(shippingAddress);
+		return shippingAddressDao.selectByaddressid(shippingAddress);
 	}
 }

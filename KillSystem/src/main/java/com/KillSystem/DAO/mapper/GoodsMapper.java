@@ -8,6 +8,7 @@ import com.KillSystem.domain.Goods;
 /**
  * @author xcxcxcxcx
  * 
+ * @Comments
  * 商品mapper
  * 连接mybatis的GoodsMapper.xml文件
  * 

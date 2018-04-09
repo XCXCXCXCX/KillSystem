@@ -12,6 +12,7 @@ import java.util.Map;
 /**
  * @author xcxcxcxcx
  * 
+ * @Comments
  * 用于模拟发起http请求的封装类
  * 
  * 2018年4月5日

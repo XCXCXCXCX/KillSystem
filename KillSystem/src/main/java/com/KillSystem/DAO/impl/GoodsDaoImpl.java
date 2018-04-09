@@ -3,8 +3,11 @@ package com.KillSystem.DAO.impl;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.KillSystem.DAO.GoodsDao;
 import com.KillSystem.DAO.mapper.GoodsMapper;
@@ -18,6 +21,7 @@ import redis.clients.jedis.Jedis;
 /**
  * @author xcxcxcxcx
  * 
+ * @Comments
  * 商品Dao实现类
  * Dao接口只是实现基本功能
  * 需要添加功能时，直接在这里添加实现方法。
@@ -30,72 +34,100 @@ import redis.clients.jedis.Jedis;
 @Repository
 public class GoodsDaoImpl implements GoodsDao {
 
+	private static  final Logger log = LoggerFactory.getLogger(GoodsDaoImpl.class);
+	
 	@Autowired
 	private GoodsMapper goodsMapper;
-
+	
 	private Jedis jedis;
 
+	@Transactional
 	@Override
 	public int insert(Goods goods) {
 		// TODO Auto-generated method stub
 		return goodsMapper.insert(goods);
 	}
 
+	@Transactional
 	@Override
 	public int delete(Goods goods) {
 		// TODO Auto-generated method stub
 		return goodsMapper.delete(goods);
 	}
 
+	@Transactional
 	@Override
 	public int update(Goods goods) {
 		// TODO Auto-generated method stub
 		return goodsMapper.update(goods);
 	}
 
+	@Transactional
 	@Override
 	public List<Map<String, Goods>> select(Goods goods) {
 		// TODO Auto-generated method stub
 		return goodsMapper.select(goods);
 	}
 
+	@Transactional
+	@Override
 	public List<Map<String, Goods>> selectById(Goods goods) {
 		return goodsMapper.selectById(goods);
 	}
 
+	@Transactional
+	@Override
 	public Goods getGoodsById(Goods goods) {
 		return goodsMapper.getGoodsById(goods);
 	}
 
-	public int updateGoodsStock(Goods goods) {
-		return goodsMapper.updateGoodsStock(goods);
+	@Transactional
+	@Override
+	public int updateGoodsStock(Goods goods){
+		
+		try {
+			return goodsMapper.updateGoodsStock(goods);
+		}catch (RuntimeException e) {
+			log.error("mysql更新库存失败"+goods.getGoods_stock());
+			throw e;
+		}
+		
 	}
 
-	public int updateGoodsStockBack(Goods goods) {
+	@Transactional
+	@Override
+	public int updateGoodsStockBack(Goods goods){
 		// TODO Auto-generated method stub
-		return goodsMapper.updateGoodsStockback(goods);
+		try {
+			return goodsMapper.updateGoodsStockback(goods);
+		}catch (RuntimeException e) {
+			log.error("mysql撤回库存失败"+goods.getGoods_stock());
+			throw e;
+		}
 	}
 	
+	
 	// todo setGoodsStock
+	@Override
 	public long setGoodsStock(Order order) {
 		try {
 			jedis = JedisUtil.getConn();
 			return jedis.decr(String.valueOf(order.getGoods_id()));
 		} finally {
-			System.out.println("getNumActive:"+JedisPoolManager.INSTANCE.getJedisPool().getNumActive());
-			System.out.println("getNumIdle:"+JedisPoolManager.INSTANCE.getJedisPool().getNumIdle());
-			System.out.println("getNumWaiters:"+JedisPoolManager.INSTANCE.getJedisPool().getNumWaiters());
+//			System.out.println("getNumActive:"+JedisPoolManager.INSTANCE.getJedisPool().getNumActive());
+//			System.out.println("getNumIdle:"+JedisPoolManager.INSTANCE.getJedisPool().getNumIdle());
+//			System.out.println("getNumWaiters:"+JedisPoolManager.INSTANCE.getJedisPool().getNumWaiters());
 			if(jedis == null) {
 				jedis.close();				
 			}else {
 				JedisUtil.returnConn(jedis);
-				System.out.println("库存减少的时候归还了连接！");
 			}
 			
 		}
 	}
 	
 	//todo setBack
+	@Override
 	public long setBackGoodsStock(Order order) {
 		try {
 			jedis = JedisUtil.getConn();
@@ -105,13 +137,13 @@ public class GoodsDaoImpl implements GoodsDao {
 				jedis.close();
 			}else {
 				JedisUtil.returnConn(jedis);
-				System.out.println("库存撤回的时候归还了连接！");
 			}
 			
 		}
 	}
 	
 	//init stock
+	@Override
 	public void initGoodsStock() {
 		try {
 			jedis = JedisUtil.getConn();
@@ -133,6 +165,7 @@ public class GoodsDaoImpl implements GoodsDao {
 		}
 	}
 
+	@Override
 	public boolean checkGoodsStockInRedis(Order order) {
 		try {
 			jedis = JedisUtil.getConn();

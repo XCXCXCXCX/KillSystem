@@ -22,6 +22,7 @@ import com.github.pagehelper.PageInfo;
 /**
  * @author xcxcxcxcx
  * 
+ * @Comments
  * 商品controller
  * 包括商品的搜索，查看商品详情，最新商品数和最新商品条目的查询
  * 
@@ -48,7 +49,7 @@ public class GoodsController {
 		session.setAttribute("goods_name", goods.getGoods_name());
 		session.setAttribute("goods_price", goods.getGoods_price());
 		session.setAttribute("begin_time", goods.getBegin_time());
-		PageInfo<Map<String, Goods>> p = goodsService.select(goods, pageno, 4);
+		PageInfo<Map<String, Goods>> p = goodsService.select(goods, pageno, 3);
 		int k = 0;
 		while (k < p.getSize()) {
 			DateTime begin = new DateTime(p.getList().get(k).get("begin_time"));
@@ -84,16 +85,6 @@ public class GoodsController {
 		// PageInfo<Map<String,Goods>> p = goodsService.select(goods, 1, 10);
 		// int count = p.getList().size();
 		// return ServerResponse.createBySuccess("查询最新商品数成功！", count);
-		return null;
-	}
-
-	// todo
-	@RequestMapping("/sortNew.do")
-	@ResponseBody
-	public ServerResponse sortNew(Goods goods, String pageNo, HttpSession session, HttpServletRequest request) {
-		// goods.setCreate_time(new DateTime().now());
-		// PageInfo<Map<String,Goods>> p = goodsService.select(goods, 1, 10);
-		// return ServerResponse.createBySuccess("查询最新商品成功！", p);
 		return null;
 	}
 }
