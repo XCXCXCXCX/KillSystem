@@ -12,9 +12,17 @@
 
 二、环境部署：
 
-windows 10上搭建web服务器（tomcat 8.5）、nginx服务器（1.12.2）、FTP服务器（使用FTPServer工具）、mysql（5.7.19）、redis（3.0.503）、maven(3.5.2)
+windows 10上搭建web服务器(tomcat 8.5)、nginx服务器(1.12.2)、FTP服务器(使用FTPServer工具)、mysql(5.7.19)、redis(3.0.503)、maven(3.5.2)
+
+（查阅相关博文进行安装，如果需要相关压缩包，留下邮箱，我会尽快打包发你）
 
 ROOT文件夹内容为nginx中配置的静态文件访问区域，KillSystem文件夹为web服务器下部署的项目。
+将ROOT文件夹内容粘贴到tomcat路径下的静态资源ROOT目录，KillSystem文件夹为部署在tomcat上的项目，部署成功后，如我的电脑中的状态为：
+D:\tomcat\apache-tomcat-8.5.16\wtpwebapps目录中有KillSystem和ROOT两个文件夹
+
+在nginx中配置html/js/css/png等静态资源的访问路径为D:\tomcat\apache-tomcat-8.5.16\wtpwebapps\ROOT
+
+在eclipse下导入maven项目KillSystem
 
 条件允许建议在linux服务器下进行开发，redis的性能在linux下表现卓越。
 
