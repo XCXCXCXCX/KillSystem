@@ -73,11 +73,11 @@ redis中数据的结构：
 
 由于模块有主次之分，主要写一下关于主要功能模块的开发：
        
-       (1)管理员商品管理模块[![baidu]](http://baidu.com)  
+       (1)[管理员商品管理模块](https://blog.csdn.net/xc1158840657/article/details/79901031) 
        
-       (2)商品抢购模块
+       (2)[商品抢购模块](https://blog.csdn.net/xc1158840657)
        
-       (3)支付模块
+       (3)[支付模块](https://blog.csdn.net/xc1158840657)
        
 
 
