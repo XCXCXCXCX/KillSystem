@@ -59,6 +59,7 @@ mysql数据库表：
 按照该表结构建表，并导入测试所需数据。
 
 redis中数据的结构：
+
        订单{key,value}->{order_id,order.getTel_num() + "," + order.getAddress() 
        + ","+ order.getGoods_id() + "," + DateTime.now().toString("YYYY-MM-dd HH-mm-ss")}、
        
@@ -72,11 +73,13 @@ redis中数据的结构：
 
 由于模块有主次之分，主要写一下关于主要功能模块的开发：
        
-       (1)管理员商品管理模块API
-       (2)商品抢购模块API
-       (3)支付模块API
+       (1)[管理员商品管理模块](https://blog.csdn.net/xc1158840657/article/details/79901031) 
+       
+       (2)[商品抢购模块](https://blog.csdn.net/xc1158840657/article/details/79912822)
+       
+       (3)[支付模块](https://blog.csdn.net/xc1158840657/article/details/79941818)
        
-（未完待续）
+
 
 
 
