@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context-4.3.xsd
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+	http://www.springframework.org/schema/aop 
+	http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+  
+<!-- 对象资源池初始化配置  -->  
+<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">  
+    <property name="maxTotal" value="2000"/>  
+    <property name="maxIdle" value="1000" />  
+    <property name="minIdle" value="200"/>  
+    <property name="maxWaitMillis" value="1500"/>  
+    <property name="testOnBorrow" value="false" />  
+    <property name="testOnReturn" value="false" />  
+    <property name="testWhileIdle" value="true" />  
+    <property name="numTestsPerEvictionRun" value="10" />  
+    <property name="timeBetweenEvictionRunsMillis" value="3000" />  
+</bean>  
+      
+<!-- redis 单机资源池 -->  
+<bean id="jedisPool" class="redis.clients.jedis.JedisPool" scope="singleton" lazy-init="true" >
+    <constructor-arg  index="0"  ref="jedisPoolConfig" />    
+    <constructor-arg  index="1"  value="localhost" type="java.lang.String"/>    
+    <constructor-arg  index="2"  value="6379" type="int" />  
+    <constructor-arg  index="3"  value="1000" type="int" />  
+    <constructor-arg  index="4"  value="xc1996" type="java.lang.String" /> 
+</bean>  
+
+</beans>
