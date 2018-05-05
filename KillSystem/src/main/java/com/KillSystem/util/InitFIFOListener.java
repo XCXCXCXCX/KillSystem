@@ -54,12 +54,12 @@ public class InitFIFOListener{
 					Order order = InitFIFOListener.queue.poll();
 					boolean toContinue = true;
 					if(order == null) {
-						try {
-							this.wait(6000);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+//						try {
+//							this.wait(6000);
+//						} catch (InterruptedException e) {
+//							// TODO Auto-generated catch block
+//							e.printStackTrace();
+//						}
 						continue;
 					}
 					log.info("FIFO队列开始处理一个请求了！");

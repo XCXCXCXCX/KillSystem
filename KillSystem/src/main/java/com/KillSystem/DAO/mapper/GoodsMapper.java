@@ -25,4 +25,5 @@ public interface GoodsMapper {
 	int updateGoodsStock(Goods goods);
 	int updateGoodsStockback(Goods goods);
 	int countGoods();
+	int updateGoodsImgurl(Goods goods);
 }

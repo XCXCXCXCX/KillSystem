@@ -211,5 +211,14 @@ public class GoodsDaoImpl implements GoodsDao {
 		return goodsMapper.countGoods();
 	}
 
+	@Override
+	public int updateGoodsImgurl(int goods_id, String path) {
+		// TODO Auto-generated method stub
+		Goods goods = new Goods();
+		goods.setGoods_id(goods_id);
+		goods.setImg_url(path);
+		return goodsMapper.updateGoodsImgurl(goods);
+	}
+
 	
 }

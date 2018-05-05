@@ -64,6 +64,20 @@
         			var goods_id = $("#goods" + counter + "id").text();
             		$("#inputGoodsId").val(goods_id);
             		$("#whichGoods").val(goods_id);
+            		editor = new Simditor({ 
+                 		textarea: $('#txt-content'),
+                 		placeholder: '这里输入文字...'+$('#inputGoodsId').val(),
+                 	    toolbar: toolbar,
+                 	    pasteImage: true,
+                 	    defaultImage: '',
+                 		upload: {
+                         url: '/KillSystem/admin/upload.do?goods_id='+goods_id,
+                         params: null,
+                         fileKey: "upload_file",
+                         connectionCount: 1,
+                         leaveConfirm: "正在上传,确定要取消上传文件吗?"
+                       	}
+                 	});
             		document.getElementById("editText").style.display="";
       		  };
         	}
@@ -72,20 +86,7 @@
         		$("#upd" + i).click(updHandler(i));
         		$("#info" + i).click(infoHandler(i));
         	}  
-        	var editor = new Simditor({ 
-        		textarea: $('#txt-content'),
-        		placeholder: '这里输入文字...',
-        	    toolbar: toolbar,
-        	    pasteImage: true,
-        	    defaultImage: '/simditor/images/image.png',
-        		upload: {
-                url: '/KillSystem/admin/upload.do',
-                params: null,
-                fileKey: "upload_file",
-                connectionCount: 1,
-                leaveConfirm: "正在上传,确定要取消上传文件吗?"
-              	}
-        	});
+        	var editor;
         	$("#infoSubmit").click(function(){
         		var goods_id = $("#inputGoodsId").val();
         		$("#inputGoodsId").val(goods_id);

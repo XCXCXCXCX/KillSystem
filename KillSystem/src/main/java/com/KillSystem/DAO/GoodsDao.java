@@ -35,6 +35,8 @@ public interface GoodsDao extends BaseDao<Goods>{
 
 	int countGoods();
 
+	int updateGoodsImgurl(int goods_id, String path);
+
 
 	
 

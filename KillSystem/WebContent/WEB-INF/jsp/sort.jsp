@@ -26,7 +26,6 @@
 
 <script language="javascript" type="text/javascript">  
 $(function(){
-	
 	$.post("/KillSystem/getSystemTime.do", {},  
               	            function (response) {  
               	                if (response.status == "0") {
@@ -73,6 +72,12 @@ $(function(){
 	if($("#username").text()=="null"){
 		window.location.href="/";
 	}
+	$("#inputBegintime").click(function(){
+		if($("#inputBegintime").val()==null||$("#inputBegintime").val()==""){
+			$("#inputBegintime").val("2018-01-01 00:00:00.00");
+		}
+		
+	});
 	$("#btn1").click(function(){
 		if($("#accessibility0").text()=="可抢购"){
 			var goods_id = $("#goods_id0").text();
@@ -110,6 +115,7 @@ $(function(){
 			layer.msg(elem.text());
 		});
 	});
+	
 });
 </script>
 
@@ -119,13 +125,13 @@ $(function(){
 
 	<ul class="layui-nav">
 		<li class="layui-nav-item">
-			<a href="http://localhost/KillSystem/sort.do">控制台<span id="countGoods" class="layui-badge">5</span></a>
+			<a href="http://localhost/KillSystem/sortNew.do">最新推出<span id="countGoods" class="layui-badge">5</span></a>
 		</li>
 		<li class="layui-nav-item">
 			<a href="http://localhost/KillSystem/sort.do">去抢购<span class="layui-badge-dot"></span></a>
 		</li>
 		<li class="layui-nav-item">
-			<a id="username" href="javascript:;"><img src="http://t.cn/RCzsdCq" class="layui-nav-img"><%=session.getAttribute("username")%></a>
+			<a id="username" href="javascript:;"><img src="http://localhost/FTP/81940517-541b-4579-96c0-c157532e1c8d.png" class="layui-nav-img"><%=session.getAttribute("username")%></a>
 				<dl class="layui-nav-child">
 				<dd><a id="logout" href="javascript:;">退出登陆</a></dd>
 				</dl>
@@ -136,13 +142,14 @@ $(function(){
  	<form action="http://localhost/KillSystem/sort.do" method="post">
         商品名:<input type="text" name="goods_name" value="${goods_name}" />
         价格低于(请输入数字):<input type="text" name="goods_price" value="${goods_price}" />
-        活动时间早于(格式为yy-MM-dd HH:mm:ss 可省略时分秒):<input type="text" name="begin_time" value="${begin_time}" />
+        活动时间早于(格式为yy-MM-dd HH:mm:ss 可省略时分秒):<input id="inputBegintime" type="text" name="begin_time" value="${begin_time}" />
         <input type="submit" value="搜索" />
     </form>
     <div>
     	<c:if test="${page.getList().size() > 0}">
     	<p id="goods_id0" hidden>${page.getList().get(0).get("goods_id")}</p>
     	<p class="div-left">
+    		<img src="${page.getList().get(0).get("img_url")}" alt="图片无法显示" height="200" width="200">
 			<a class="top">${page.getList().get(0).get("goods_name")}</a>
 			<a class="top">价格:${page.getList().get(0).get("goods_price")}</a>
 			<a class="top">库存:${page.getList().get(0).get("goods_stock")}</a>
@@ -156,6 +163,7 @@ $(function(){
 		<c:if test="${page.getList().size() > 1}">
 		<p id="goods_id1" hidden>${page.getList().get(1).get("goods_id")}</p>
     	<p class="div-left">
+    		<img src="${page.getList().get(1).get("img_url")}" alt="图片无法显示" height="200" width="200">
     		<a class="top">${page.getList().get(1).get("goods_name")}</a>
 			<a class="top">价格:${page.getList().get(1).get("goods_price")}</a>
 			<a class="top">库存:${page.getList().get(1).get("goods_stock")}</a>
@@ -169,11 +177,26 @@ $(function(){
 		<c:if test="${page.getList().size() > 2}">
 		<p id="goods_id2" hidden>${page.getList().get(2).get("goods_id")}</p>
 		<p class="div-left">
+			<img src="${page.getList().get(2).get("img_url")}" alt="图片无法显示" height="200" width="200">
     		<a class="top">${page.getList().get(2).get("goods_name")}</a>
 			<a class="top">价格:${page.getList().get(2).get("goods_price")}</a>
 			<a class="top">库存:${page.getList().get(2).get("goods_stock")}</a>
 			<a class="top">活动开始时间:${page.getList().get(2).get("begin_time")}</a>
 			<a class="top">活动结束时间:${page.getList().get(2).get("end_time")}</a>
+			<a id="accessibility2" class="top">${msg2}</a>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			&nbsp;&nbsp;&nbsp;&nbsp;<button id="btn3" type="button">查看详情</button>
+		</p>
+    	</c:if>
+    	<c:if test="${page.getList().size() > 3}">
+		<p id="goods_id2" hidden>${page.getList().get(3).get("goods_id")}</p>
+		<p class="div-left">
+			<img src="${page.getList().get(3).get("img_url")}" alt="图片无法显示" height="200" width="200">
+    		<a class="top">${page.getList().get(3).get("goods_name")}</a>
+			<a class="top">价格:${page.getList().get(3).get("goods_price")}</a>
+			<a class="top">库存:${page.getList().get(3).get("goods_stock")}</a>
+			<a class="top">活动开始时间:${page.getList().get(3).get("begin_time")}</a>
+			<a class="top">活动结束时间:${page.getList().get(3).get("end_time")}</a>
 			<a id="accessibility2" class="top">${msg2}</a>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			&nbsp;&nbsp;&nbsp;&nbsp;<button id="btn3" type="button">查看详情</button>

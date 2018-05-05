@@ -7,7 +7,7 @@
 <title>登陆失败！</title>
 </head>
 <body>
-登陆失败！
+登陆失败！我是windows服务器返回的session:<%=session.getAttribute("username") %>
 <meta http-equiv="refresh" content="2;url=http://localhost"> 
 </body>
 </html>

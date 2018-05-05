@@ -128,7 +128,7 @@ public class AdminController {
 	// 指定请求参数中的value="upload_file"，与前台开发中指定fileKey参数对应
 	@RequestMapping("/upload.do")
 	@ResponseBody
-	public ServerResponse upload(HttpServletRequest request, HttpSession session,
+	public ServerResponse upload(@RequestParam(value="goods_id",required=false)int goods_id,HttpServletRequest request, HttpSession session,
 			@RequestParam(value = "upload_file", required = false) MultipartFile file) {
 		String username = (String) session.getAttribute("username");
 		String passwd = (String) session.getAttribute("passwd");
@@ -139,7 +139,7 @@ public class AdminController {
 		//获取上传到web服务器的path路径
 		String path = request.getSession().getServletContext().getRealPath("upload");
 		//把该web服务器下的需要上传到FTP服务器的文件上传到FTP服务器
-		String targetFileName = iFileService.upload(file, path);
+		String targetFileName = iFileService.upload(file, path,goods_id);
 		//把文件的uri和url封装后返回前台
 		String url = PropertiesUtil.getProperty("ftp.server.http.prefix") + targetFileName;
 		System.out.println(url);

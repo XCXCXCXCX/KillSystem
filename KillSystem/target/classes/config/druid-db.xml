@@ -16,16 +16,12 @@
     <context:annotation-config></context:annotation-config>
     <context:component-scan base-package="com.KillSystem.*.impl"/>
     <context:component-scan base-package="com.KillSystem.util"/>
-    
-    <!-- 初始化全局(FIFO队列) -->  
- 	<bean id="initFIFO" class="com.KillSystem.util.InitFIFOListener" init-method="initMethod" >  
- 	</bean> 
  	
  	<!-- 初始化全局变量计数器 -->
     
 	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close"> 
     	<!-- 基本属性 url、user、password -->
-    	<property name="url" value="jdbc:mysql://127.0.0.1:3306/killsystem" />
+    	<property name="url" value="jdbc:mysql://127.0.0.1:3306/killsystem?autoReconnect=true&amp;useSSL=true" />
     	<property name="username" value="root" />
     	<property name="password" value="admin" />
 
@@ -88,5 +84,9 @@
 
     <!-- 使用annotation注解方式配置事务 -->
     <tx:annotation-driven transaction-manager="transactionManager" />
+    
+    <!-- 初始化全局(FIFO队列) -->  
+ 	<bean id="initFIFO" class="com.KillSystem.util.InitFIFOListener" init-method="initMethod" >  
+ 	</bean> 
     
 </beans>

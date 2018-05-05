@@ -49,7 +49,7 @@ public class GoodsController {
 		session.setAttribute("goods_name", goods.getGoods_name());
 		session.setAttribute("goods_price", goods.getGoods_price());
 		session.setAttribute("begin_time", goods.getBegin_time());
-		PageInfo<Map<String, Goods>> p = goodsService.select(goods, pageno, 3);
+		PageInfo<Map<String, Goods>> p = goodsService.select(goods, pageno, 4);
 		int k = 0;
 		while (k < p.getSize()) {
 			DateTime begin = new DateTime(p.getList().get(k).get("begin_time"));
@@ -77,6 +77,30 @@ public class GoodsController {
 		return new ModelAndView("goodsInfo","thisGoods",goods);
 	}
 
+	//todo
+	@RequestMapping("/sortNew.do")
+	public ModelAndView sortNew(Goods goods, HttpSession session, HttpServletRequest request) {
+		if (session.getAttribute("tel_num") == null || session.getAttribute("passwd") == null) {
+			return new ModelAndView("fail", null);
+		}
+		int pageno = 1;
+		PageInfo<Map<String, Goods>> p = goodsService.selectById(goods, pageno, 4);
+		int k = 0;
+		while (k < p.getSize()) {
+			DateTime begin = new DateTime(p.getList().get(k).get("begin_time"));
+			DateTime end = new DateTime(p.getList().get(k).get("end_time"));
+			if (end.isAfterNow() && begin.isBeforeNow()) {
+				request.setAttribute("msg" + k, "正在抢购中");
+			} else if (begin.isAfterNow()) {
+				request.setAttribute("msg" + k, "还未上线");
+			} else if (end.isBeforeNow()) {
+				request.setAttribute("msg" + k, "已经下线");
+			}
+			k++;
+		}
+		return new ModelAndView("sort", "page", p);
+	}
+	
 	// todo
 	@RequestMapping("/sortNewCount.do")
 	@ResponseBody

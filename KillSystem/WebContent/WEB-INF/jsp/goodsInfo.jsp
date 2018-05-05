@@ -118,13 +118,13 @@ $(function(){
 
 	<ul class="layui-nav">
 		<li class="layui-nav-item">
-			<a href="http://localhost/KillSystem/sort.do">控制台<span id="countGoods" class="layui-badge">5</span></a>
+			<a href="http://localhost/KillSystem/sortNew.do">最新推出<span id="countGoods" class="layui-badge">5</span></a>
 		</li>
 		<li class="layui-nav-item">
 			<a href="http://localhost/KillSystem/sort.do">去抢购<span class="layui-badge-dot"></span></a>
 		</li>
 		<li class="layui-nav-item">
-			<a id="username" href="javascript:;"><img src="http://t.cn/RCzsdCq" class="layui-nav-img"><%=session.getAttribute("username")%></a>
+			<a id="username" href="javascript:;"><img src="http://localhost/FTP/81940517-541b-4579-96c0-c157532e1c8d.png" class="layui-nav-img"><%=session.getAttribute("username")%></a>
 				<dl class="layui-nav-child">
 				<dd><a id="logout" href="javascript:;">退出登陆</a></dd>
 				</dl>

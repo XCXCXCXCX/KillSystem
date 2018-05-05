@@ -3,7 +3,7 @@
 <mapper namespace="com.KillSystem.DAO.mapper.GoodsMapper">
 	
     <select id="select" resultType="java.util.HashMap">
-        SELECT goods_id,goods_name,goods_price,goods_stock,begin_time,end_time FROM goods
+        SELECT goods_id,goods_name,goods_price,goods_stock,begin_time,end_time,img_url FROM goods
         <if test="goods_name == null and goods_price == 0 and begin_time == null">
             where end_time >= NOW() - 86400
         </if>
@@ -29,8 +29,8 @@
     </select>
     
     <select id="selectById" parameterType="com.KillSystem.domain.Goods" resultType="java.util.HashMap">
-        SELECT goods_id,goods_name,goods_price,goods_stock,begin_time,end_time FROM goods
-        order by goods_id
+        SELECT goods_id,goods_name,goods_price,goods_stock,begin_time,end_time,img_url FROM goods
+        order by goods_id desc
     </select>
      
      <select id="getGoodsById" resultType="com.KillSystem.domain.Goods">
@@ -39,7 +39,9 @@
      </select>
      
      <select id="countGoods" resultType="java.lang.Integer">
-     	SELECT count(goods_id) FROM goods
+     	SELECT count(goods_id) FROM goods 
+     	where goods_id > (SELECT MAX(goods_id) FROM goods) - 4
+     	AND end_time >= NOW()
      </select>
      
     <insert id="insert" parameterType="com.KillSystem.domain.Goods" useGeneratedKeys="true" keyProperty="goods_id">
@@ -87,6 +89,12 @@
 	<update id="updateGoodsStockback"  parameterType="com.KillSystem.domain.Goods">  
         UPDATE goods
         SET goods_stock = goods_stock + 1
+        WHERE goods_id = #{goods_id}     
+	</update>
+     
+     <update id="updateGoodsImgurl" parameterType="com.KillSystem.domain.Goods">  
+        UPDATE goods
+        SET img_url = #{img_url}
         WHERE goods_id = #{goods_id}     
 	</update>
      

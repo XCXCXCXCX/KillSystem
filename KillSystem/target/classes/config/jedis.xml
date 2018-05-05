@@ -17,7 +17,7 @@
     <property name="maxTotal" value="2000"/>  
     <property name="maxIdle" value="1000" />  
     <property name="minIdle" value="200"/>  
-    <property name="maxWaitMillis" value="1500"/>  
+    <property name="maxWaitMillis" value="5000"/>  
     <property name="testOnBorrow" value="false" />  
     <property name="testOnReturn" value="false" />  
     <property name="testWhileIdle" value="true" />  
@@ -30,7 +30,7 @@
     <constructor-arg  index="0"  ref="jedisPoolConfig" />    
     <constructor-arg  index="1"  value="localhost" type="java.lang.String"/>    
     <constructor-arg  index="2"  value="6379" type="int" />  
-    <constructor-arg  index="3"  value="1000" type="int" />  
+    <constructor-arg  index="3"  value="5000" type="int" />  
     <constructor-arg  index="4"  value="xc1996" type="java.lang.String" /> 
 </bean>  
 

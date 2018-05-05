@@ -18,7 +18,15 @@ public class Goods {
 	private int goods_stock;
 	private String begin_time;
 	private String end_time;
+	public String getImg_url() {
+		return img_url;
+	}
+	public void setImg_url(String img_url) {
+		this.img_url = img_url;
+	}
 	private String goods_info;
+	private String img_url;
+	
 	public int getGoods_id() {
 		return goods_id;
 	}
